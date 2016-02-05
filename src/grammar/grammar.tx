@@ -68,7 +68,7 @@ SelectorView:
 ;
 
 Property:
-	name=ID type=[View] 'label' '=' label=STRING ('@' param?=[View])?
+	name=ID type=[View] 'label' '=' label=STRING ('@' param=[Page])?
 ;
 
 Object:

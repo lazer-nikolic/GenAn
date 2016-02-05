@@ -27,4 +27,4 @@ if __name__ == "__main__":
                                  debug = False)
     
     # Create model
-    my_model = my_mm.model_from_file('../../grammar/test.gn')
+    my_model = my_mm.model_from_file('../../test/test.gn')
