@@ -1,0 +1,79 @@
+Module:
+	entity += Entity
+;
+Entity:
+	Object|View|Page
+;
+
+//Default je center
+Position:
+	'center'|'left'|'right'|'top'|'bottom'
+;
+
+Size:
+	'small'|'medium'|'large'
+;
+
+Color:
+	'red'|'blue'|'green'|'black'|'white'|'yellow'
+;
+Style:
+	('color' '=' Color) |
+	('size' '=' Size)
+;
+
+
+/*
+Component:
+	'component' name=ID ':'
+		'type' '=' BasicType
+		subcomponents *= Component
+			('label' label=STRING)?
+			styles *= Style[',']
+	';'
+;
+*/
+
+
+View:
+	'view' name=ID ':' 
+		views *= Selector
+	';'
+;
+ViewOnPage:
+	Selector 'position' '=' position=Position (Style)*
+;
+
+Page:
+	'page' name=ID ':' 
+		'title' '=' title=STRING
+		views *= ViewOnPage
+	';'
+;
+
+Query:
+	 'all'
+;
+
+Selector:
+	SelectorObject|SelectorView
+;
+
+SelectorObject:
+	'show' object=[Object] ('('Query')')? '.' property=[Property]
+;
+
+SelectorView:
+	'show' view=[View]
+;
+
+Property:
+	name=ID type=[View] 'label' '=' label=STRING ('@' param?=[View])?
+;
+
+Object:
+	'object' name=ID ':'
+		properties *= Property
+	';'
+;
+
