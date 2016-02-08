@@ -69,3 +69,7 @@ site
 # Test stuff
 test/
 *.gn
+
+#PyDev stuff
+.project
+.pydevproject

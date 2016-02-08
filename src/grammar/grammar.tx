@@ -22,19 +22,6 @@ Style:
 	('size' '=' Size)
 ;
 
-
-/*
-Component:
-	'component' name=ID ':'
-		'type' '=' BasicType
-		subcomponents *= Component
-			('label' label=STRING)?
-			styles *= Style[',']
-	';'
-;
-*/
-
-
 View:
 	'view' name=ID ':' 
 		views *= Selector
