@@ -1,13 +1,8 @@
 Module:
-	entity += Entity
+	entity += Concept
 ;
-Entity:
+Concept:
 	Object|View|Page
-;
-
-//Default je center
-Position:
-	'center'|'left'|'right'|'top'|'bottom'
 ;
 
 Size:
@@ -28,12 +23,13 @@ View:
 	';'
 ;
 ViewOnPage:
-	Selector 'position' '=' position=Position (Style)*
+	Selector 'position' '=' position=/[^\s]+/ (Style)*
 ;
 
 Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
+		('layout' '=' layout=[Layout])?
 		views *= ViewOnPage
 	';'
 ;
@@ -64,3 +60,6 @@ Object:
 	';'
 ;
 
+Layout:
+	name = ID positions *= STRING
+;
