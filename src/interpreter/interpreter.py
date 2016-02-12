@@ -3,6 +3,7 @@ Created on 03.02.2016.
 
 @author: Lazar
 '''
+import os
 from textx.metamodel import metamodel_from_file
 
 from concepts.layout import Layout
@@ -15,33 +16,39 @@ from concepts.page import page_processor
 
 
 if __name__ == "__main__":
-    
+
     builtins = {x : View(None,x, []) for x in View.basic_type_names}
     layouts = {
-               'border' : Layout('border', ['top','bottom','center','left','right'], None),
+               'border' : Layout('border', ['top','bottom','center',
+                                            'left','right'], None),
                'grid' : Layout('grid', [], None)
                }
-    
-    builtins.update(layouts) 
-    
+
+    builtins.update(layouts)
+
     obj_processors = {
                       'SelectorObject' : selector_object_processor,
                       'Page' : page_processor
                       }
-    
-    my_mm = metamodel_from_file('../grammar/grammar.tx',
+
+    this_dir = os.path.dirname(__file__)
+    my_mm = metamodel_from_file(os.path.join(this_dir,
+                                             '..', 'grammar', 'grammar.tx'),
                                  classes = [
-                                            View, 
-                                            Object, 
-                                            Property, 
-                                            SelectorObject, 
+                                            View,
+                                            Object,
+                                            Property,
+                                            SelectorObject,
                                             SelectorView
                                             ],
                                  builtins = builtins,
                                  debug = False)
-    
+
     my_mm.register_obj_processors(obj_processors)
     # Create model
-    my_model = my_mm.model_from_file('../../test/test.gn')
-    my_model
-    
+    my_model = my_mm.model_from_file(os.path.join(this_dir,
+                                                  '..', '..',
+                                                  'test', 'test.gn'))
+
+    print(my_model.entity)
+

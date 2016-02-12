@@ -1,0 +1,34 @@
+object user:
+	name text label='Name'
+	username text label='User name'
+	pass password label='Password'
+	email email label='Email'
+	articles link label='Articles' @articles_for_user
+;
+
+object article:
+	title text label='Name'
+	description text label='Description'
+	author text label='Author'
+;
+
+page user_page:
+	title = 'Details for user'
+	show user.name position=top size=large
+	show user.username position=center
+	show user.password position=center
+	show user.email position=center
+	show user.comments position=center
+;
+
+
+view articles_list:
+	show article.title
+	show article.description
+	show article.author
+;
+
+page articles_for_user:
+	title='Articles for user'
+	show articles_list position=center
+;
