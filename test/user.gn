@@ -1,0 +1,7 @@
+object user:
+	name text label='Name'
+	username text label='User name'
+	pass password label='Password'
+	email email label='Email'
+	articles link label='Articles' @articles_for_user
+;
