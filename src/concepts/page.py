@@ -10,13 +10,15 @@ from concepts.layout import Layout
 
 
 def page_processor(page):
-    #Default layout je border
+    # Default layout je border
     if not page.layout:
-        page.layout = Layout('border', ['top','bottom','center','left','right'], None)
-        
+        page.layout = Layout('border', ['top', 'bottom', 'center', 'left', 'right'], None)
+
     for view_on_page in page.views:
         if not view_on_page.position in page.layout.positions:
-            raise TextXSemanticError("Position '{0}' is not supported by {1} layout".format(view_on_page.position, page.layout.name))
+            raise TextXSemanticError(
+                "Position '{0}' is not supported by {1} layout".format(view_on_page.position, page.layout.name))
+
 
 class Page(object):
     '''
@@ -27,6 +29,5 @@ class Page(object):
         self.name = name
         self.title = title
         self.views = views
-        self.layout = layout 
+        self.layout = layout
         self.parent = parent
-        

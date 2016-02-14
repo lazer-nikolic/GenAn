@@ -17,7 +17,8 @@ class SelectorObject(object):
     classdocs
     '''
 
-    def __init__(self, object, property,parent, query=None):
+    def __init__(self, object, property, parent, query=None):
+        parent.selector = self
         self.object = object
         self.property = property
         self.query = query

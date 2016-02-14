@@ -11,6 +11,7 @@ from concepts.property import Property
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
 from concepts.view import View
+from concepts.view_on_page import ViewOnPage
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -37,7 +38,8 @@ if __name__ == "__main__":
                                     Object,
                                     Property,
                                     SelectorObject,
-                                    SelectorView
+                                    SelectorView,
+                                    ViewOnPage
                                 ],
                                 builtins=builtins,
                                 debug=False)
