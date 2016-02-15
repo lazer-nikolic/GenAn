@@ -63,3 +63,8 @@ Object:
 Layout:
 	name = ID positions *= STRING
 ;
+
+// Special rule for comments. Comments start with //
+Comment:
+  /\/\/.*$/
+;

@@ -1,4 +1,10 @@
 {% macro ng_model(o, prop) %}{{o.name}}.{{prop.name}}{% endmacro %}
+
 {% macro ng_directive(o, name) %}
     {% raw %} {{{% endraw %}{{ model(o, name) }}{% raw %}}} {% endraw %}
+{% endmacro %}
+
+
+{% macro ng_model_options() %}
+    {% raw %}{{% endraw %} updateOn: 'default blur', debounce: {% raw %}{{% endraw %} 'default': 500, 'blur': 0 {% raw %}}}{% endraw %}
 {% endmacro %}
