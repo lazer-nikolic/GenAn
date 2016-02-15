@@ -1,5 +1,5 @@
 Module:
-	entity += Concept
+	concept += Concept
 ;
 Concept:
 	Object|View|Page
