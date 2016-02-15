@@ -1,0 +1,4 @@
+{% macro ng_model(o, prop) %}{{o.name}}.{{prop.name}}{% endmacro %}
+{% macro ng_directive(o, name) %}
+    {% raw %} {{{% endraw %}{{ model(o, name) }}{% raw %}}} {% endraw %}
+{% endmacro %}

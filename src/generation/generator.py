@@ -3,6 +3,8 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
+import os
+from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
 class Generator(object):
@@ -27,13 +29,22 @@ class Generator(object):
             class_name = concept.__class__.__name__
             self.visitors[class_name](concept)
 
-    def generate_basic(self, comp):
+    def generate_basic(self, comp, o, prop):
         # TODO: Generate stuff
         print("Generating basic component {0}".format(comp.name))
 
-    def generate_view(self, view):
+        env = Environment(trim_blocks=True, lstrip_blocks=True,
+                          loader=FileSystemLoader([os.path.join("..", "generation", "templates"),
+                                                   os.path.join("..", "generation", "templates", "views", "basic")
+                                                   ]))
+
+        template = env.get_template("input.html")
+        rendered = template.render(o=o, prop=prop, type=prop.type.name)
+        print(rendered)
+
+    def generate_view(self, view, o, prop):
         if view.name in self.builtins:
-            self.generate_basic(view)
+            self.generate_basic(view, o, prop)
         else:
             # TODO: Generate stuff
             print("Generating view {0}".format(view.name))
@@ -57,12 +68,12 @@ class Generator(object):
         # TODO: Generate stuff
         print("Generating object {0}".format(object.name))
         for prop in object.properties:
-            self.generate_view(prop.type)
+            self.generate_view(prop.type, object, prop)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
         # SelectorObject contains an object
         if hasattr(selector, "view"):
-            self.generate_view(selector.view)
+            self.generate_view(selector.view, selector.object, selector.property)
         elif hasattr(selector, "object"):
-            self.generate_object(selector.object)
+            self.generate_object(selector.object, selector.object, selector.property)

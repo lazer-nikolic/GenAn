@@ -1,0 +1,3 @@
+{% import 'common.jinja' as common %}
+<label for="{{o.name}}.{{prop.name}}"> {{prop.label}} </label>
+<input type="{{type}}" name="{{o.name}}.{{prop.name}}" ng-model="{{ common.ng_model(o, prop) }}">
