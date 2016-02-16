@@ -3,6 +3,10 @@ Created on 03.02.2016.
 
 @author: Lazar
 '''
+import getopt
+import sys
+from optparse import OptionParser
+
 import os
 from concepts.layout import Layout
 from concepts.object import Object
@@ -15,7 +19,11 @@ from concepts.view_on_page import ViewOnPage
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
+
 if __name__ == "__main__":
+
+    output_file = os.path.join(os.path.dirname(__file__), "..", "..", 'gen_test')
+
     builtins = {x: View(None, x, []) for x in View.basic_type_names}
     layouts = {
         'border': Layout('border', ['top', 'bottom', 'center',
@@ -52,5 +60,15 @@ if __name__ == "__main__":
                                                   'test', 'test.gn'))
     print(my_model.concept)
 
-    generator = Generator(my_model, builtins, "C:/temp")
+    generator = Generator(my_model, builtins, output_file)
     generator.generate()
+
+
+# if __name__ == "__main__":
+#     parser = OptionParser()
+#     parser.add_option("-o", "--output", dest="output_file",
+#                       help="generate to OUTPUT", metavar="OUTPUT")
+#
+#     (options, args) = parser.parse_args()
+#     option_dict = vars(options)
+#     main(option_dict['output_file'])

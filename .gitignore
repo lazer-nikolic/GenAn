@@ -96,3 +96,6 @@ site
 
 ## File-based project format:
 *.iws
+
+#Generator test
+gen_test/

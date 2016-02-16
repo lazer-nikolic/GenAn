@@ -47,7 +47,6 @@ class Generator(object):
                 self.visitors[class_name](concept)
 
     def generate_basic(self, comp, o, prop):
-        print("Generating basic component {0}".format(comp.name))
         if prop.type.name is "option" or prop.type.name is "menuItem":
             print("Property type escaped.")
             return
@@ -73,7 +72,7 @@ class Generator(object):
                 os.makedirs(path)
             file = open(full_path, 'w+')
 
-            print("Generating view {0}".format(view.name))
+            print("Generating view {0} into {1}".format(view.name, full_path))
             self.generate_ctrl(view)
             for selector in view.views:
                 print(self.generate_selector(selector), file=file)
@@ -99,7 +98,7 @@ class Generator(object):
             os.makedirs(path)
         file = open(full_path, 'w+')
 
-        print("Generating page {0}".format(page.name))
+        print("Generating page {0} into {1}".format(page.name, full_path))
         self.generate_ctrl(page)
         for view_on_page in page.views:
             selector = view_on_page.selector
@@ -114,7 +113,6 @@ class Generator(object):
         print("Generating controller for {0}".format(concept.name))
 
     def generate_object_selector(self, o, prop):
-        print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
 
     def generate_selector(self, selector):
