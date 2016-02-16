@@ -7,7 +7,7 @@ import os
 from concepts.layout import Layout
 from concepts.object import Object
 from concepts.page import page_processor
-from concepts.property import Property
+from concepts.property import Property, property_processor
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
 from concepts.view import View
@@ -27,7 +27,8 @@ if __name__ == "__main__":
 
     obj_processors = {
         'SelectorObject': selector_object_processor,
-        'Page': page_processor
+        'Page': page_processor,
+        'Property': property_processor
     }
 
     this_dir = os.path.dirname(__file__)

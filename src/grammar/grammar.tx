@@ -50,8 +50,32 @@ SelectorView:
 	'show' view=[View]
 ;
 
+HtmlClass:
+	'class' '=' '{' htmlClasses += HtmlClassValue[","]  '}'
+;
+
+HtmlClassValue:
+	ClassKeyPair|ClassKey
+;
+
+ClassKey:
+	key=STRING
+;
+
+ClassKeyPair:
+	key=STRING ':' value=STRING
+;
+
+PropertyList:
+	'parameters' '=' '{' propertyList += STRING[","] '}'
+;
+
+ReferencedParameter:
+	'@' page=[Page]
+;
+
 Property:
-	name=ID type=[View] 'label' '=' label=STRING ('@' param=[Page])?
+	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)?
 ;
 
 Object:
@@ -62,4 +86,9 @@ Object:
 
 Layout:
 	name = ID positions *= STRING
+;
+
+// Special rule for comments. Comments start with //
+Comment:
+  /\/\/.*$/
 ;

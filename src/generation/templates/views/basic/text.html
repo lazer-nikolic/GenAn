@@ -1,0 +1,9 @@
+{% import 'common.jinja' as common %}
+<md-input-container class="md-block">
+            <label for="{{o.name}}.{{prop.name}}" translate="{{prop.label.upper()}}"> {{prop.label}} </label>
+            <input type="{{type}}" name="{{o.name}}.{{prop.name}}" {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}"
+            ng-model-options="{{common.ng_model_options()}}">
+            {% if 'required' in prop.classes %}
+            {{common.messageRequred(o.name+"."+prop.name ,"Required text field.") }}
+            {% endif %}
+</md-input-container>

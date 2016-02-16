@@ -33,13 +33,16 @@ class Generator(object):
     def generate_basic(self, comp, o, prop):
         # TODO: Generate stuff
         print("Generating basic component {0}".format(comp.name))
-
+        if prop.type.name is "option" or prop.type.name is "menuItem":
+            print("Property type escaped.")
+            return;
+        
         env = Environment(trim_blocks=True, lstrip_blocks=True,
                           loader=FileSystemLoader([os.path.join("..", "generation", "templates"),
                                                    os.path.join("..", "generation", "templates", "views", "basic")
                                                    ]))
-
-        template = env.get_template("input.html")
+        
+        template = env.get_template("{0}.html".format(prop.type))
         rendered = template.render(o=o, prop=prop, type=prop.type.name)
         print(rendered)
 
