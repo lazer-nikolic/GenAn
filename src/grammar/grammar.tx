@@ -43,7 +43,7 @@ Selector:
 ;
 
 SelectorObject:
-	'show' object=[Object] ('('Query')')? '.' property=[Property]
+	'show' object=[Object] '.' property=[Property]
 ;
 
 SelectorView:
