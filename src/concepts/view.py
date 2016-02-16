@@ -5,7 +5,7 @@ Created on 08.02.2016.
 '''
 
 class View:
-    basic_type_names = ['text', 'number', 'check', 'option', 'link', 'ref', 'email', 'password', 'menuitem', 'menu', 'button', 'radio', 'form', 'label', 'image', 'date']
+    basic_type_names = ['text', 'number', 'checkbox', 'link', 'ref', 'email', 'password', 'menuitem', 'menu', 'button', 'radio', 'form', 'label', 'image', 'date', 'combobox']
     
     def __init__(self, parent, name, views):
         self.name = name
