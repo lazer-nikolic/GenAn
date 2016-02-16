@@ -22,9 +22,8 @@ page user_page:
 	title = 'Details for user'
 	show user.name position=top size=large
 	show user.username position=center
-	show user.password position=center
-	show user.email position=center
-	show user.comments position=center
+	show user.pass position=center
+	show user.mail position=center
 ;
 
 

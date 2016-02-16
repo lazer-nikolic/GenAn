@@ -10,7 +10,7 @@ class ViewOnPage(object):
     classdocs
     '''
 
-    def __init__(self,  position, parent):
+    def __init__(self,  position, parent, selector):
         self.position = position
         self.parent = parent
-        self.selector = None
+        self.selector = selector

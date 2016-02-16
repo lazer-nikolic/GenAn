@@ -19,7 +19,6 @@ def page_processor(page):
             raise TextXSemanticError(
                 "Position '{0}' is not supported by {1} layout".format(view_on_page.position, page.layout.name))
 
-
 class Page(object):
     '''
     classdocs
