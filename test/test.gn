@@ -9,7 +9,7 @@ object user:
 	articles link label='Articles' @articles_for_user
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
-	married checkbox label='Maried'
+	married checkbox label='Married'
 ;
 
 object article:
@@ -22,9 +22,8 @@ page user_page:
 	title = 'Details for user'
 	show user.name position=top size=large
 	show user.username position=center
-	show user.password position=center
-	show user.email position=center
-	show user.comments position=center
+	show user.pass position=center
+	show user.mail position=center
 ;
 
 

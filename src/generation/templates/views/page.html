@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{page.title}}</title>
 </head>
 <body>
-{% include '/frame/header.html'%}
-
-{% include 'view.html'%}
-
-{% include '/frame/footer.html'%}
+{% for view in views %}
+{{view}}
+{% endfor %}
 </body>
 </html>

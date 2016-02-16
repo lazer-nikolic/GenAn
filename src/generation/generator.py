@@ -7,6 +7,22 @@ import os
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
+def get_template(template_name, **kwargs):
+    """
+    get_template(template_name, **kwargs)
+    Gets template under generation/templates folder and its subfolders.
+    Takes additional parameters required for the template to be rendered.
+    """
+    env = Environment(trim_blocks=True, lstrip_blocks=True,
+                      loader=FileSystemLoader([os.path.join("..", "generation", "templates"),
+                                               os.path.join("..", "generation", "templates", "views"),
+                                               os.path.join("..", "generation", "templates", "views", "basic")
+                                               ]))
+
+    template = env.get_template("{0}.html".format(template_name))
+    return template.render(kwargs)
+
+
 class Generator(object):
     '''
     classdocs
@@ -18,8 +34,7 @@ class Generator(object):
         self.builtins = builtins
         self.visitors = {
             'View': self.generate_view,
-            'Page': self.generate_page,
-            'Object': self.generate_object
+            'Page': self.generate_page
         }
         self.routes = {}
 
@@ -28,48 +43,49 @@ class Generator(object):
             os.makedirs(self.path)
         for concept in self.model.concept:
             class_name = concept.__class__.__name__
-            self.visitors[class_name](concept)
+            if class_name in self.visitors:
+                self.visitors[class_name](concept)
 
     def generate_basic(self, comp, o, prop):
-        # TODO: Generate stuff
         print("Generating basic component {0}".format(comp.name))
         if prop.type.name is "option" or prop.type.name is "menuItem":
             print("Property type escaped.")
-            return;
-        
-        env = Environment(trim_blocks=True, lstrip_blocks=True,
-                          loader=FileSystemLoader([os.path.join("..", "generation", "templates"),
-                                                   os.path.join("..", "generation", "templates", "views", "basic")
-                                                   ]))
-        
-        template = env.get_template("{0}.html".format(prop.type))
-        rendered = template.render(o=o, prop=prop, type=prop.type.name)
-        print(rendered)
+            return
 
-    def generate_view(self, view, o, prop):
+        return get_template(prop.type, o=o, prop=prop, type=prop.type.name)
 
-        path = os.path.join(self.path, "app", "views", view.name)
-        file_path = "{0}.html".format(view.name)
-        full_path = os.path.join(path, file_path)
-        self.routes[view.name] = {
-            'path': "/{0}".format(view.name),
-            'template': "/{0}".format(full_path),
-            'controller': "{0}Ctrl".format(view.name).title()
-        }
+    def generate_view(self, view, o=None, prop=None):
 
-        if not os.path.exists(path):
-            os.makedirs(path)
         if view.name in self.builtins:
-            self.generate_basic(view, o, prop)
+            return self.generate_basic(view, o, prop)
         else:
-            # TODO: Generate stuff
+            # Subviews for this view
+            views = []
+            path = os.path.join(self.path, "app", "views", view.name)
+            file_path = "{0}.html".format(view.name)
+            full_path = os.path.join(path, file_path)
+            self.routes[view.name] = {
+                'path': "/{0}".format(view.name),
+                'template': "/{0}".format(full_path),
+                'controller': "{0}Ctrl".format(view.name).title()
+            }
+            if not os.path.exists(path):
+                os.makedirs(path)
+            file = open(full_path, 'w+')
+
             print("Generating view {0}".format(view.name))
             self.generate_ctrl(view)
             for selector in view.views:
-                self.generate_selector(selector)
+                print(self.generate_selector(selector), file=file)
+
+            rendered = get_template("view", views=views)
+            print(rendered, file=file)
+
+            return "<ng-include src={0}></ng-include>".format(view.name)
 
     def generate_page(self, page):
-
+        # Contains contained views
+        views = []
         path = os.path.join(self.path, "app", "views", page.name)
         file_path = "{0}.html".format(page.name)
         full_path = os.path.join(path, file_path)
@@ -81,28 +97,30 @@ class Generator(object):
 
         if not os.path.exists(path):
             os.makedirs(path)
+        file = open(full_path, 'w+')
 
-        # TODO: Generate stuff
         print("Generating page {0}".format(page.name))
         self.generate_ctrl(page)
         for view_on_page in page.views:
             selector = view_on_page.selector
-            self.generate_selector(selector)
+            views.append(self.generate_selector(selector))
+
+        rendered = get_template("page", page=page, views=views)
+
+        print(rendered, file=file)
 
     def generate_ctrl(self, concept):
         # TODO: Generate stuff
         print("Generating controller for {0}".format(concept.name))
 
-    def generate_object(self, object):
-        # TODO: Generate stuff
-        print("Generating object {0}".format(object.name))
-        for prop in object.properties:
-            self.generate_view(prop.type, object, prop)
+    def generate_object_selector(self, o, prop):
+        print("Generating object {0}".format(o.name))
+        return self.generate_view(prop.type, o, prop)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
         # SelectorObject contains an object
         if hasattr(selector, "view"):
-            self.generate_view(selector.view, selector.object, selector.property)
+            return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
-            self.generate_object(selector.object, selector.object, selector.property)
+            return self.generate_object_selector(selector.object, selector.property)

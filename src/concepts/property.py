@@ -3,18 +3,21 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
+
+
 def property_processor(property_object):
-    classesString ="";
+    classesString = "";
     if not property_object.classes is None:
         for x in property_object.classes.htmlClasses:
             if hasattr(x, 'value'):
-                classesString+=" "+x.key+"=\""+x.value+"\"";
+                classesString += " " + x.key + "=\"" + x.value + "\"";
             else:
-                classesString+=" "+x.key;
-        property_object.classes=classesString
+                classesString += " " + x.key;
+        property_object.classes = classesString
     else:
-        property_object.classes=""
-        
+        property_object.classes = ""
+
+
 class Property(object):
     '''
     classdocs
@@ -25,7 +28,6 @@ class Property(object):
         self.type = type
         self.ref_param = ref_param
         self.label = label
-        self.parent = parent       
-        self.params = params       
+        self.parent = parent
+        self.params = params
         self.classes = classes
-        

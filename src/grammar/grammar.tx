@@ -23,7 +23,7 @@ View:
 	';'
 ;
 ViewOnPage:
-	Selector 'position' '=' position=/[^\s]+/ (Style)*
+	selector=Selector 'position' '=' position=/[^\s]+/ (Style)*
 ;
 
 Page:

@@ -52,5 +52,5 @@ if __name__ == "__main__":
                                                   'test', 'test.gn'))
     print(my_model.concept)
 
-    generator = Generator(my_model, builtins, '')
+    generator = Generator(my_model, builtins, "C:/temp")
     generator.generate()

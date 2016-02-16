@@ -11,7 +11,7 @@ class SelectorView(object):
     '''
 
     def __init__(self, view, parent):
-        parent.selector = self
         self.view = view
         self.parent = parent
+
 
