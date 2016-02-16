@@ -21,10 +21,11 @@ class Generator(object):
             'Page': self.generate_page,
             'Object': self.generate_object
         }
+        self.routes = {}
 
     def generate(self):
-        # if not os.path.exists(self.path):
-        #     os.makedirs(self.path)
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
         for concept in self.model.concept:
             class_name = concept.__class__.__name__
             self.visitors[class_name](concept)
@@ -43,6 +44,18 @@ class Generator(object):
         print(rendered)
 
     def generate_view(self, view, o, prop):
+
+        path = os.path.join(self.path, "app", "views", view.name)
+        file_path = "{0}.html".format(view.name)
+        full_path = os.path.join(path, file_path)
+        self.routes[view.name] = {
+            'path': "/{0}".format(view.name),
+            'template': "/{0}".format(full_path),
+            'controller': "{0}Ctrl".format(view.name).title()
+        }
+
+        if not os.path.exists(path):
+            os.makedirs(path)
         if view.name in self.builtins:
             self.generate_basic(view, o, prop)
         else:
@@ -53,6 +66,19 @@ class Generator(object):
                 self.generate_selector(selector)
 
     def generate_page(self, page):
+
+        path = os.path.join(self.path, "app", "views", page.name)
+        file_path = "{0}.html".format(page.name)
+        full_path = os.path.join(path, file_path)
+        self.routes[page.name] = {
+            'path': "/{0}".format(page.name),
+            'template': "/{0}".format(full_path),
+            'controller': "{0}Ctrl".format(page.name).title()
+        }
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         # TODO: Generate stuff
         print("Generating page {0}".format(page.name))
         self.generate_ctrl(page)
