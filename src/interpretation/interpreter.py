@@ -20,55 +20,39 @@ from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
 
-if __name__ == "__main__":
+class Interpreter:
+    def __init__(self):
+        builtins = {x: View(None, x, []) for x in View.basic_type_names}
+        layouts = {
+            'border': Layout('border', ['top', 'bottom', 'center',
+                                        'left', 'right'], None),
+            'grid': Layout('grid', [], None)
+        }
 
-    output_file = os.path.join(os.path.dirname(__file__), "..", "..", 'gen_test')
+        builtins.update(layouts)
 
-    builtins = {x: View(None, x, []) for x in View.basic_type_names}
-    layouts = {
-        'border': Layout('border', ['top', 'bottom', 'center',
-                                    'left', 'right'], None),
-        'grid': Layout('grid', [], None)
-    }
+        self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
+        self.builtins = builtins
+        self.obj_processors = {
+            'SelectorObject': selector_object_processor,
+            'Page': page_processor,
+            'Property': property_processor
+        }
 
-    builtins.update(layouts)
+    def load_model(self, file_path):
+        # Create model
+        meta_model = metamodel_from_file(self.grammar_path,
+                                         classes=[
+                                             View,
+                                             Object,
+                                             Property,
+                                             SelectorObject,
+                                             SelectorView,
+                                             ViewOnPage
+                                         ],
+                                         builtins=self.builtins,
+                                         debug=False)
 
-    obj_processors = {
-        'SelectorObject': selector_object_processor,
-        'Page': page_processor,
-        'Property': property_processor
-    }
+        meta_model.register_obj_processors(self.obj_processors)
 
-    this_dir = os.path.dirname(__file__)
-    my_mm = metamodel_from_file(os.path.join(this_dir,
-                                             '..', 'grammar', 'grammar.tx'),
-                                classes=[
-                                    View,
-                                    Object,
-                                    Property,
-                                    SelectorObject,
-                                    SelectorView,
-                                    ViewOnPage
-                                ],
-                                builtins=builtins,
-                                debug=False)
-
-    my_mm.register_obj_processors(obj_processors)
-    # Create model
-    my_model = my_mm.model_from_file(os.path.join(this_dir,
-                                                  '..', '..',
-                                                  'test', 'test.gn'))
-    print(my_model.concept)
-
-    generator = Generator(my_model, builtins, output_file)
-    generator.generate()
-
-
-# if __name__ == "__main__":
-#     parser = OptionParser()
-#     parser.add_option("-o", "--output", dest="output_file",
-#                       help="generate to OUTPUT", metavar="OUTPUT")
-#
-#     (options, args) = parser.parse_args()
-#     option_dict = vars(options)
-#     main(option_dict['output_file'])
+        return meta_model.model_from_file(file_path)
