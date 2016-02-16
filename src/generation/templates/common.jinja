@@ -4,7 +4,12 @@
     {% raw %} {{{% endraw %}{{ model(o, name) }}{% raw %}}} {% endraw %}
 {% endmacro %}
 
-
 {% macro ng_model_options() %}
     {% raw %}{{% endraw %} updateOn: 'default blur', debounce: {% raw %}{{% endraw %} 'default': 500, 'blur': 0 {% raw %}}}{% endraw %}
+{% endmacro %}
+
+{% macro messageRequred(selector, message) %}
+<div ng-messages="{{selector}}.$error" role="alert" multiple>
+		<div ng-message="required" class="my-message">{{message}}</div>
+	    </div>
 {% endmacro %}

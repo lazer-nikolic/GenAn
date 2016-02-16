@@ -1,14 +1,14 @@
 object user:
-	name text label='Name'
+	name text label='Name' class={'required'}
 	username text label='User name'
 	pass password label='Password'
-	num number label='Age' class={'required', 'step':'1'}
+	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
 	myLabel label label = 'Hello World'
 	birthDate date label = 'Birth date'
 	articles link label='Articles' @articles_for_user
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
-	tvType radio label='Gender' parameters = { 'PLASMA', 'LCD', 'LED' }
+	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
 	married checkbox label='Maried'
 ;
 

@@ -1,9 +1,10 @@
 {% import 'common.jinja' as common %}
 <md-input-container class="md-block">
             <label for="{{o.name}}.{{prop.name}}" translate="{{prop.label.upper()}}"> {{prop.label}} </label>
-            <input type="{{type}}" name="{{o.name}}.{{prop.name}}"  ng-model="{{ common.ng_model(o, prop) }}"
+            <input type="{{type}}" name="{{o.name}}.{{prop.name}}" {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}"
             ng-model-options="{{common.ng_model_options()}}">
-            <div ng-messages="{{o.name}}.{{prop.name}}.$error" role="alert" multiple>
-            <div ng-message="required" class="my-message">Message for required fields.</div>
-            <div ng-message="valid" class="my-message">Email is not valid.</div>
+            {% if 'required' in prop.classes %}
+            {{common.messageRequred(o.name+"."+prop.name ,"Required email field.") }}
+            {% endif %}
+            <span class="error" ng-show="{{o.name}}.{{prop.name}}.$error.email">Not valid email!</span>
 </md-input-container>

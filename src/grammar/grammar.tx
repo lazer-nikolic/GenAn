@@ -71,11 +71,11 @@ PropertyList:
 ;
 
 ReferencedParameter:
-	'@' param=[Page]
+	'@' page=[Page]
 ;
 
 Property:
-	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | param=ReferencedParameter )? (classes = HtmlClass)?
+	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)?
 ;
 
 Object:
