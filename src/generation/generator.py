@@ -68,6 +68,8 @@ class Generator(object):
                                       shell=True, cwd=base_path)
                 subprocess.check_call(["npm", "install", "ejs", "--save"],
                                       shell=True, cwd=base_path)
+                subprocess.check_call(["npm", "install", "debug", "--save"],
+                                      shell=True, cwd=base_path)
                 # Enable objects generation
                 self.visitors['Object'] = self.generate_object
                 print("GENAN: Finished the backend generation.")
@@ -173,7 +175,7 @@ class Generator(object):
         :param object:
         :return:
         '''
-        base_path = os.path.join(self.path, "genanApp")
+        base_path = os.path.join(self.path, self.app_name)
         models_path = os.path.join(base_path, "models")
         routes_path = os.path.join(base_path, "routes")
 
