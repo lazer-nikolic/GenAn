@@ -6,12 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-{% for object in objects}
-var users = require('./routes/{{object.name}}');
+{% for object in objects %}
+var {{object.name}} = require('./routes/{{object.name}}');
 {% endfor %}
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/todoApp', function(err) {
+mongoose.connect('mongodb://localhost/{{app_name}}', function(err) {
     if(err) {
         console.log('connection error', err);
     } else {
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //routes
 app.use('/', routes);
-{% for object in objects}
+{% for object in objects %}
 app.use('/{{object.name}}', {{object.name}});
 {% endfor %}
 // catch 404 and forward to error handler

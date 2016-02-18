@@ -4,6 +4,8 @@ Created on 08.02.2016.
 @author: Lazar
 '''
 import json
+import subprocess
+import zipfile
 
 import os
 from jinja2 import Environment, PackageLoader, FileSystemLoader
@@ -37,13 +39,41 @@ class Generator(object):
         self.builtins = builtins
         self.visitors = {
             'View': self.generate_view,
-            'Page': self.generate_page,
-            'Object': self.generate_object
+            'Page': self.generate_page
         }
+
+        # List of objects required for backend routes
+        self.objects = []
         self.routes = {}
 
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
+
+        answer = input("GENAN: Do you want to generate node.js backend for your application? [y/n] ")
+        while not answer.lower() in ["y", "n", "yes", " no"]:
+            answer = input("GENAN: Do you want to generate node.js backend for your application? [y/n] ")
+
+        self.app_name = input("GENAN: Name of your application (default: genanApp): ")
+        if self.app_name == '':
+            self.app_name = "genanApp"
+
+        if answer.lower() in ["y", "yes"]:
+            # Call express to set up node.js server
+            try:
+                base_path = os.path.join(self.path, self.app_name)
+                subprocess.check_call(["express", base_path], shell=True)
+                print("GENAN: Installing dependencies...")
+                subprocess.check_call(["npm", "install"], shell=True, cwd=base_path)
+                subprocess.check_call(["npm", "install", "mongoose", "--save"],
+                                      shell=True, cwd=base_path)
+                subprocess.check_call(["npm", "install", "ejs", "--save"],
+                                      shell=True, cwd=base_path)
+                # Enable objects generation
+                self.visitors['Object'] = self.generate_object
+                print("GENAN: Finished the backend generation.")
+            except subprocess.CalledProcessError:
+                print("ERROR: Unable to generate the backend. Terminating process.")
+                # TODO: Rollback
 
 
     def generate(self):
@@ -53,6 +83,11 @@ class Generator(object):
             class_name = concept.__class__.__name__
             if class_name in self.visitors:
                 self.visitors[class_name](concept)
+
+        if self.objects:
+            render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
+            app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
+            print(render_app, file=app_file)
 
     def generate_basic(self, comp, o, prop):
         if prop.type.name is "option" or prop.type.name is "menuItem":
@@ -138,12 +173,9 @@ class Generator(object):
         :param object:
         :return:
         '''
-        base_path = os.path.join(self.path, "app")
+        base_path = os.path.join(self.path, "genanApp")
         models_path = os.path.join(base_path, "models")
         routes_path = os.path.join(base_path, "routes")
-        file_path = "{0}.js".format(object.name.title())
-
-        models_full_path = os.path.join(models_path, file_path)
 
         rendered_model = get_template("model.js", o=object, persistent_types=self.type_mapper)
         rendered_rest = get_template("rest.js", o=object)
@@ -158,3 +190,4 @@ class Generator(object):
         print(rendered_model, file=file_model)
         file_rest = open(os.path.join(routes_path, "{0}.js".format(object.name)), 'w+')
         print(rendered_rest, file=file_rest)
+        self.objects.append(object)
