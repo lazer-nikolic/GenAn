@@ -1,0 +1,8 @@
+{
+  "text": "String",
+  "password": "String",
+  "email": "String",
+  "number": "Number",
+  "date": "Date",
+  "boolean": "Boolean"
+}

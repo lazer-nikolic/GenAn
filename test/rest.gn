@@ -1,0 +1,11 @@
+object Film:
+    title text label='Title'
+    description text label='Title'
+    imdb_rating number label='Rating'
+;
+
+object Actor:
+    first_name text label='First Name'
+    last_name text label='Last Name'
+    age number label='age'
+;

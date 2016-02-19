@@ -13,3 +13,6 @@
 		<div ng-message="required" class="my-message">{{message}}</div>
 	    </div>
 {% endmacro %}
+
+{% macro open_bracket() %}{% raw %}{{% endraw %}{% endmacro %}
+{% macro closed_bracket() %}{% raw %}}{% endraw %}{% endmacro %}
