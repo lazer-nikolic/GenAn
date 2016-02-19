@@ -1,9 +1,13 @@
 {% import 'common.jinja' as common %}
 <fieldset class="standard">
 	<legend>{{prop.label}}</legend>
-    <md-radio-group ng-model="{{ common.ng_model(o, prop) }}" {{prop.classes}}>
-	{% for option in prop.params.propertyList %}
-		<md-radio-button value="{{option}}">{{option}}</md-radio-button>
-	{% endfor%}
-    </md-radio-group>
+{% for option in prop.params.propertyList %}
+<div class="radio">
+  <label>
+    <input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="radio" name="{{prop.name}}" >
+    {{option}}
+  </label>
+</div>
+{% endfor%}
+
 </fieldset>

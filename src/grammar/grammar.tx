@@ -34,20 +34,20 @@ Page:
 	';'
 ;
 
-Query:
-	 'all'
-;
-
 Selector:
-	SelectorObject|SelectorView
+	  SelectorObject|SelectorView|DataShow
 ;
 
 SelectorObject:
-	'show' object=[Object] '.' property=[Property]
+	 ('show')? object=[Object] '.' property=[Property]
 ;
 
 SelectorView:
 	'show' view=[View]
+;
+
+DataShow:
+	type=[View] 'data_show' '=' '{' data+=SelectorObject[","]  '}'
 ;
 
 HtmlClass:
@@ -75,7 +75,7 @@ ReferencedParameter:
 ;
 
 Property:
-	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)?
+	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)? ('ref' '=' ref=STRING)?
 ;
 
 Object:

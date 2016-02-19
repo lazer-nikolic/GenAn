@@ -15,6 +15,7 @@ from concepts.property import Property, property_processor
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
 from concepts.view import View
+from concepts.data_show import DataShow, data_show_processor
 from concepts.view_on_page import ViewOnPage
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
@@ -28,7 +29,7 @@ class Interpreter:
                                         'left', 'right'], None),
             'grid': Layout('grid', [], None)
         }
-
+       
         builtins.update(layouts)
 
         self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
@@ -36,7 +37,8 @@ class Interpreter:
         self.obj_processors = {
             'SelectorObject': selector_object_processor,
             'Page': page_processor,
-            'Property': property_processor
+            'Property': property_processor,
+            'DataShow': data_show_processor
         }
 
     def load_model(self, file_path):
@@ -48,7 +50,8 @@ class Interpreter:
                                              Property,
                                              SelectorObject,
                                              SelectorView,
-                                             ViewOnPage
+                                             ViewOnPage,
+                                             DataShow
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

@@ -16,9 +16,9 @@ def get_template(template_name, **kwargs):
     env = Environment(trim_blocks=True, lstrip_blocks=True,
                       loader=FileSystemLoader([os.path.join("..", "generation", "templates"),
                                                os.path.join("..", "generation", "templates", "views"),
-                                               os.path.join("..", "generation", "templates", "views", "basic")
+                                               os.path.join("..", "generation", "templates", "views", "basic"),
+                                               os.path.join("..", "generation", "templates", "views", "data_show")
                                                ]))
-
     template = env.get_template("{0}.html".format(template_name))
     return template.render(kwargs)
 
@@ -47,10 +47,7 @@ class Generator(object):
                 self.visitors[class_name](concept)
 
     def generate_basic(self, comp, o, prop):
-        if prop.type.name is "option" or prop.type.name is "menuItem":
-            print("Property type escaped.")
-            return
-
+        print("Generating basic component {0}".format(comp.name))
         return get_template(prop.type, o=o, prop=prop, type=prop.type.name)
 
     def generate_view(self, view, o=None, prop=None):
@@ -72,7 +69,7 @@ class Generator(object):
                 os.makedirs(path)
             file = open(full_path, 'w+')
 
-            print("Generating view {0} into {1}".format(view.name, full_path))
+            print("Generating view {0}".format(view.name))
             self.generate_ctrl(view)
             for selector in view.views:
                 print(self.generate_selector(selector), file=file)
@@ -98,7 +95,7 @@ class Generator(object):
             os.makedirs(path)
         file = open(full_path, 'w+')
 
-        print("Generating page {0} into {1}".format(page.name, full_path))
+        print("Generating page {0}".format(page.name))
         self.generate_ctrl(page)
         for view_on_page in page.views:
             selector = view_on_page.selector
@@ -113,12 +110,25 @@ class Generator(object):
         print("Generating controller for {0}".format(concept.name))
 
     def generate_object_selector(self, o, prop):
+        print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
+    
+    #def generate_data_show(self, data_show):
+       # return 
 
     def generate_selector(self, selector):
         # SelectorView contains a view
         # SelectorObject contains an object
+        
         if hasattr(selector, "view"):
             return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
             return self.generate_object_selector(selector.object, selector.property)
+        elif hasattr(selector, "type"):
+            return get_template(selector.type.name, data=selector.data);
+        else:
+            print("selector '{0}' ERROR".format(selector))    
+            
+        
+        
+        

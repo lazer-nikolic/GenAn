@@ -1,0 +1,22 @@
+{% import 'common.jinja' as common %}
+<div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="single_{{data[0].object.name}} in ctrl.{{data[0].object.name}}">
+<div class="thumbnail">
+{% for head in data -%}
+	{% if head.property.type.name == 'image' -%} 
+   <img src="{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}">
+    {% endif -%}
+ {% endfor -%}
+   
+   <div class="caption">
+     {% for head in data -%}
+            {% if head.property.type.name != 'image' -%} 
+            {% if loop.first -%}
+            <h4>{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</h4>
+            {% else %}
+            <p> {% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</p>
+            {% endif %}
+            {% endif %}
+         	{% endfor %}
+   </div>
+</div>
+</div>

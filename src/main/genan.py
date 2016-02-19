@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     generator = Generator(model, interpreter.builtins, output_file)
     generator.generate()
-
+    print("done...")
 
 # if __name__ == "__main__":
 #     parser = OptionParser()

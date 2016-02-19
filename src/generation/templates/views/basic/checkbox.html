@@ -1,4 +1,5 @@
 {% import 'common.jinja' as common %}
-<md-input-container class="md-block">
-	<md-checkbox {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" aria-label="{{prop.label}}">{{prop.label}}</md-checkbox>
-</md-input-container>
+<div class="form-group">
+<label class="btn btn-success" translate="{{prop.label.upper()}}">{{prop.label}}</label>
+    <input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="checkbox" translate="{{prop.label.upper()}}> 
+</div>

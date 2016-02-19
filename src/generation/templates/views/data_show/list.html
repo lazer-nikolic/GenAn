@@ -1,0 +1,28 @@
+{% import 'common.jinja' as common %}
+<ul class="list-group" ng-hide="ctrl.{{data[0].object.name}}.length<1">
+   <li class="list-group-item">
+      <h3>{% raw -%} {{ {% endraw -%}ctrl.{{data[0].object.name}}.length{% raw -%} }} {% endraw -%} items in list</h3>
+   </li>
+   <li class="list-group-item" ng-repeat="single_{{data[0].object.name}} in ctrl.{{data[0].object.name}}">
+      <div class="media">
+        {% for head in data -%}
+	{% if head.property.type.name == 'image' -%} 
+         <div class="media-left"> 
+            <a href="#"> <img class="media-object img-circle" src="{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}" width="64" height="64"> </a> 
+         </div>
+         {% endif -%}
+ {% endfor -%}
+         <div class="media-body">
+            {% for head in data -%}
+            {% if head.property.type.name != 'image' -%} 
+            {% if loop.first -%}
+            <h4 class="media-heading">{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</h4>
+            {% else %}
+            <p> {% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</p>
+            {% endif %}
+            {% endif %}
+         	{% endfor %}
+         </div>
+      </div>
+   </li>
+</ul>
