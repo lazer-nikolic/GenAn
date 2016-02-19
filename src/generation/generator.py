@@ -7,6 +7,8 @@ import json
 import subprocess
 import zipfile
 
+import shutil
+
 import os
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
@@ -74,22 +76,28 @@ class Generator(object):
                 self.visitors['Object'] = self.generate_object
                 print("GENAN: Finished the backend generation.")
             except subprocess.CalledProcessError:
-                print("ERROR: Unable to generate the backend. Terminating process.")
-                # TODO: Rollback
+                print("ERROR: Unable to generate the backend. Cleaning up...")
+                shutil.rmtree(base_path)
 
 
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        for concept in self.model.concept:
-            class_name = concept.__class__.__name__
-            if class_name in self.visitors:
-                self.visitors[class_name](concept)
+        try:
+            for concept in self.model.concept:
+                class_name = concept.__class__.__name__
+                if class_name in self.visitors:
+                    self.visitors[class_name](concept)
 
-        if self.objects:
-            render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
-            app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
-            print(render_app, file=app_file)
+            if self.objects:
+                render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
+                app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
+                print(render_app, file=app_file)
+        except Exception as e:
+            print(e)
+            print("ERROR: Generation failed. Cleaning up...")
+            shutil.rmtree(self.path)
+
 
     def generate_basic(self, comp, o, prop):
         if prop.type.name is "option" or prop.type.name is "menuItem":
