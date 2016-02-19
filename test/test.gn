@@ -1,6 +1,8 @@
 object user:
 	name text label='Name' class={'required'}
 	username text label='User name'
+	first_name text label='First name'
+	last_name text label='Last name'
 	pass password label='Password'
 	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
@@ -21,13 +23,19 @@ object article:
 
 page user_page:
 	title = 'Details for user'
+	sidebar:
+	    'Articles' @articles_for_user
+	    'More articles' @articles_for_user
+	    'Even more articles!' @articles_for_user
+	    'Whole lotta articles' @articles_for_user
+	;
 	show user.name position=top size=large
 	show user.username position=center
 	show user.pass position=center
 	show user.mail position=center
-	show user.articles position=center
-	show user.tvType position=center
-	show user.slika position=center
+	show user.articles position=bottom
+	show user.tvType position=left
+	show user.slika position=right
 ;
 
 

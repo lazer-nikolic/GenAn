@@ -27,7 +27,7 @@ def get_template(template_name, **kwargs):
                                                os.path.join("..", "generation", "templates", "views", "data_show")
                                                ]))
 
-    template = env.get_template(template_name)
+    template = env.get_template("{0}".format(template_name))
     return template.render(kwargs)
 
 
@@ -52,11 +52,14 @@ class Generator(object):
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
-        answer = input("GENAN: Do you want to generate node.js backend for your application? [y/n] ")
+        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                       " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
-            answer = input("GENAN: Do you want to generate node.js backend for your application? [y/n] ")
+            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                           " Do you want to generate node.js backend for your application? [y/n] ")
 
-        self.app_name = input("GENAN: Name of your application (default: genanApp): ")
+        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                              " Name of your application (default: genanApp): ")
         if self.app_name == '':
             self.app_name = "genanApp"
 
@@ -65,7 +68,7 @@ class Generator(object):
             try:
                 base_path = os.path.join(self.path, self.app_name)
                 subprocess.check_call(["express", base_path], shell=True)
-                print("GENAN: Installing dependencies...")
+                print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Installing dependencies...")
                 subprocess.check_call(["npm", "install"], shell=True, cwd=base_path)
                 subprocess.check_call(["npm", "install", "mongoose", "--save"],
                                       shell=True, cwd=base_path)
@@ -75,9 +78,9 @@ class Generator(object):
                                       shell=True, cwd=base_path)
                 # Enable objects generation
                 self.visitors['Object'] = self.generate_object
-                print("GENAN: Finished the backend generation.")
+                print(BColors.OKGREEN + "SUCCESS:" + BColors.ENDC + " Finished the backend generation.")
             except subprocess.CalledProcessError:
-                print("ERROR: Unable to generate the backend. Cleaning up...")
+                print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Unable to generate the backend. Cleaning up...")
                 shutil.rmtree(base_path)
 
 
@@ -85,8 +88,8 @@ class Generator(object):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
             os.makedirs(os.path.join(self.path, "app", "styles"))
-            shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
-                        os.path.join(self.path, "app", "styles", "page.css"))
+        shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
+                    os.path.join(self.path, "app", "styles", "page.css"))
         try:
             for concept in self.model.concept:
                 class_name = concept.__class__.__name__
@@ -98,8 +101,8 @@ class Generator(object):
                 app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
                 print(render_app, file=app_file)
         except Exception as e:
-            print(e)
-            print("ERROR: Generation failed. Cleaning up...")
+            print(BColors.FAIL + e)
+            print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Generation failed. Cleaning up...")
             shutil.rmtree(self.path)
 
 
@@ -185,9 +188,9 @@ class Generator(object):
         elif hasattr(selector, "object"):
             return self.generate_object_selector(selector.object, selector.property)
         elif hasattr(selector, "type"):
-            return get_template(selector.type.name, data=selector.data);
+            return get_template("{0}.html".format(selector.type.name), data=selector.data)
         else:
-            print("selector '{0}' ERROR".format(selector))    
+            print(BColors.FAIL + "selector '{0}' ERROR".format(selector))
 
     def generate_object(self, object):
         '''
@@ -214,3 +217,14 @@ class Generator(object):
         file_rest = open(os.path.join(routes_path, "{0}.js".format(object.name)), 'w+')
         print(rendered_rest, file=file_rest)
         self.objects.append(object)
+
+
+class BColors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'

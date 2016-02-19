@@ -3,5 +3,7 @@ object user:
 	username text label='User name'
 	pass password label='Password'
 	email email label='Email'
+	first_name text label='First name'
+	last_name text label='Last name'
 	articles link label='Articles' @articles_for_user
 ;

@@ -30,6 +30,7 @@ Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
 		('layout' '=' layout=[Layout])?
+		(sidebar=Sidebar)?
 		views *= ViewOnPage
 	';'
 ;
@@ -86,6 +87,16 @@ Object:
 
 Layout:
 	name = ID positions *= STRING
+;
+
+RefLink:
+    label=STRING ref=ReferencedParameter
+;
+
+Sidebar:
+    'sidebar' ':'
+        links*=RefLink
+    ';'
 ;
 
 // Special rule for comments. Comments start with //

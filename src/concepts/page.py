@@ -3,6 +3,7 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
+from concepts.sidebar import Sidebar
 from textx.exceptions import TextXSemanticError
 
 from concepts import view_on_page
@@ -17,16 +18,18 @@ def page_processor(page):
     for view_on_page in page.views:
         if not view_on_page.position in page.layout.positions:
             raise TextXSemanticError(
-                "Position '{0}' is not supported by {1} layout".format(view_on_page.position, page.layout.name))
+                    "Position '{0}' is not supported by {1} layout".format(view_on_page.position, page.layout.name))
+
 
 class Page(object):
     '''
     classdocs
     '''
 
-    def __init__(self, name, title, views, parent, layout):
+    def __init__(self, name, title, views, parent, layout, sidebar):
         self.name = name
         self.title = title
         self.views = views
         self.layout = layout
+        self.sidebar = sidebar
         self.parent = parent
