@@ -83,6 +83,9 @@ class Generator(object):
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
+            os.makedirs(os.path.join(self.path, "app", "styles"))
+            shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
+                        os.path.join(self.path, "app", "styles", "page.css"))
         try:
             for concept in self.model.concept:
                 class_name = concept.__class__.__name__
@@ -137,7 +140,7 @@ class Generator(object):
 
     def generate_page(self, page):
         # Contains contained views
-        views = []
+        positions = {}
         path = os.path.join(self.path, "app", "views", page.name)
         file_path = "{0}.html".format(page.name)
         full_path = os.path.join(path, file_path)
@@ -155,9 +158,13 @@ class Generator(object):
         self.generate_ctrl(page)
         for view_on_page in page.views:
             selector = view_on_page.selector
-            views.append(self.generate_selector(selector))
+            # Default value is 'center'
+            position = view_on_page.position if view_on_page.position else 'center'
+            if position not in positions:
+                positions[position] = []
+            positions[position].append(self.generate_selector(selector))
 
-        rendered = get_template("page.html", page=page, views=views)
+        rendered = get_template("page.html", page=page, positions=positions)
 
         print(rendered, file=file)
 

@@ -2,11 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../../styles/page.css">
     <title>{{page.title}}</title>
 </head>
 <body>
-{% for view in views %}
-{{view}}
-{% endfor %}
+<div class="container">
+    <div class="left-box">
+        {% for view in positions['left'] %}
+            {{view}}
+        {% endfor %}
+    </div>
+    <div class="right-box">
+        {% for view in positions['right'] %}
+        {{view}}
+        {% endfor %}
+    </div>
+    <div class="top-box">
+        {% for view in positions['top'] %}
+        {{view}}
+        {% endfor %}
+    </div>
+    <div class="buttom-box">
+        {% for view in positions['bottom'] %}
+        {{view}}
+        {% endfor %}
+    </div>
+    <div class="center-box">
+        {% for view in positions['center'] %}
+        {{view}}
+        {% endfor %}
+    </div>
+
+</div>
+
 </body>
 </html>
