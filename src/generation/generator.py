@@ -66,8 +66,11 @@ class Generator(object):
         if answer.lower() in ["y", "yes"]:
             # Call express to set up node.js server
             try:
+                print(self.path)
                 base_path = os.path.join(self.path, self.app_name)
-                subprocess.check_call(["express", base_path], shell=True)
+                if not os.path.exists(base_path):
+                    os.makedirs(base_path)
+                subprocess.check_call(["express"], shell=True, cwd=base_path)
                 print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Installing dependencies...")
                 subprocess.check_call(["npm", "install"], shell=True, cwd=base_path)
                 subprocess.check_call(["npm", "install", "mongoose", "--save"],
@@ -87,6 +90,7 @@ class Generator(object):
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
+        if not os.path.exists(os.path.join(self.path, "app", "styles")):
             os.makedirs(os.path.join(self.path, "app", "styles"))
         shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
                     os.path.join(self.path, "app", "styles", "page.css"))
