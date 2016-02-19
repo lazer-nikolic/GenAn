@@ -4,9 +4,10 @@ object user:
 	pass password label='Password'
 	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
+	slika image label='google.com' ref= ' s' 
 	myLabel label label = 'Hello World'
 	birthDate date label = 'Birth date'
-	articles link label='Articles' @articles_for_user
+	articles link label='Articles' @articles_for_user ref='ssss'
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
 	married checkbox label='Married'
@@ -24,13 +25,17 @@ page user_page:
 	show user.username position=center
 	show user.pass position=center
 	show user.mail position=center
+	show user.articles position=center
+	show user.tvType position=center
+	show user.slika position=center
 ;
 
 
 view articles_list:
-	show article.title
+	show article.title 
 	show article.description
 	show article.author
+	thumbnail data_show={ user.pass,  user.num, user.slika}
 ;
 
 page articles_for_user:

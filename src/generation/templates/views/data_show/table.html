@@ -1,0 +1,25 @@
+{% import 'common.jinja' as common %}
+<table
+	class="table table-striped table-bordered table-condensed table-hover">
+	<thead ng-hide="ctrl.{{data[0].object.name}}.length<1">
+		<tr>
+		 {% for head in data %}
+		 {% if head.property.type.name =! 'image' -%} 
+			<th><a ng-click="  {% if loop.first -%}orderProp = '{{head.property.name}}'; {% endif %} reverseSort = !reverseSort" translate="{{head.property.label.upper()}}">{{head.property.label}}</a></th>
+		 {% endif %}
+		 {% endfor%}
+		</tr>
+	</thead>
+	<tbody>
+		<div class="input-group">
+			<tr	ng-repeat="single_{{data[0].object.name}} in ctrl.{{data[0].object.name}}">
+			 {% for head in data %}
+			 {% if head.property.type.name =! 'image' -%} 
+			 <td>{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</td>
+			 {% endif %}
+			 {% endfor%}
+			</tr>
+		</div>
+	</tbody>
+</table>
+
