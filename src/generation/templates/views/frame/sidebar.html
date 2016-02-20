@@ -1,0 +1,14 @@
+ {% if menu == 'true' %}
+ 	 <div class="col-sm-3 col-md-2 sidebar" id="sidebar">
+ {% else %}
+ 	 <div class="col-sm-3 col-md-2 sidebar-no-menu" id="sidebar">
+ {% endif %}
+        <ul class="nav nav-sidebar">
+          {% for sidebar in sidebar.links %}
+          <li>
+              <a href="{{sidebar.ref}}" >{{sidebar.label}}</a>
+         </li>
+          {% endfor %}
+        </ul>
+</div>
+        

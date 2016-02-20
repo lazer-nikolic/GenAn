@@ -29,7 +29,7 @@ ViewOnPage:
 Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
-		(layout=Layout | menubar=Menubar | sidebar=Sidebar)*
+		(layout=Layout | menubar=Menubar | sidebar=Sidebar | footer=Footer)*
 		views *= ViewOnPage
 	';'
 ;
@@ -106,14 +106,22 @@ Sidebar:
     ';'
 ;
 
+Footer:
+	'footer' paragraph=STRING (side=Side)?
+;
+
+Side:
+	'left'|'right'
+;
+
 Menu:
-    'menu' name=ID ':'
-        items*=RefLink
-    ';'
+    ('menu' name=ID (side=Side)? ':'
+        items*=RefLink 
+    ';')| ref = RefLink (side=Side)?
 ;
 
 Menubar:
-    'menubar' ':'
+    'menubar' (brandName=STRING)? ':'
         menus*=Menu
     ';'
 ;

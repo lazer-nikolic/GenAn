@@ -22,6 +22,7 @@ from concepts.data_show import DataShow, data_show_processor
 from concepts.form import Form
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
+from concepts.footer import Footer
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -64,7 +65,8 @@ class Interpreter:
                                              Menubar,
                                              Menu,
                                              Form,
-                                             RefLink
+                                             RefLink,
+                                             Footer
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

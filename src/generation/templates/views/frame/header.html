@@ -1,1 +1,63 @@
-Header
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+      {% if brand_name != '' -%}
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">{{brand_name}}</a>
+        </div>
+       {% endif %}
+        
+        {% if menuLeft|count >0 %}
+        <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav">
+            {% for menu in menuLeft %}
+            
+            {% if menu.ref is none %}
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                 aria-expanded="false">
+                {{menu.name}} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+              {% for item in menu.items %}
+                <li><a href="/{{item.ref}}">{{item.label}}</a></li>
+              {% endfor %}
+              </ul>
+            </li>
+            {% else %}
+            <li><a href="{{menu.ref.ref}}">{{menu.ref.label}}</a></li>
+            
+            {% endif %}
+            {% endfor %}
+            </ul>
+		{% endif %}
+
+ {% if menuRight|count >0 %}
+        <div id="navbar" class="navbar-collapse collapse">
+           <ul class="nav navbar-nav right">
+            {% for menu in menuRight %}
+            
+            {% if menu.ref is none %}
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                 aria-expanded="false">
+                {{menu.name}} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+              {% for item in menu.items %}
+                <li><a href="/{{item.ref}}">{{item.label}}</a></li>
+              {% endfor %}
+              </ul>
+            </li>
+            {% else %}
+            <li><a href="{{menu.ref.ref}}">{{menu.ref.label}}</a></li>
+            
+            {% endif %}
+            {% endfor %}
+            </ul>
+		{% endif %}
+
+
+
+        </div>
+      </div>
+    </nav>
