@@ -52,13 +52,13 @@ class Generator(object):
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
-        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
                        " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
-            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
                            " Do you want to generate node.js backend for your application? [y/n] ")
 
-        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
                               " Name of your application (default: genanApp): ")
         if self.app_name == '':
             self.app_name = "genanApp"
@@ -180,8 +180,16 @@ class Generator(object):
         print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
     
-    #def generate_data_show(self, data_show):
-       # return 
+    def generate_form(self, obj, action):
+        formInputs = []
+        for property in obj.properties:
+            if property.type is 'image': #Za sliku se unosi string, a ne prikazuje se!
+                render = get_template("text.html", o=obj, prop=property, type=property.type.name)
+                formInputs.append(render)
+            else:
+                render = self.generate_basic(obj, obj, property)
+                formInputs.append(render)
+        return get_template("form.html", formInputs=formInputs, obj=obj,action=action)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
@@ -193,8 +201,10 @@ class Generator(object):
             return self.generate_object_selector(selector.object, selector.property)
         elif hasattr(selector, "type"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
+        elif hasattr(selector, "action"):
+            return self.generate_form(obj=selector.obj,action = selector.action)
         else:
-            print(BColors.FAIL + "selector '{0}' ERROR".format(selector))
+            print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 
     def generate_object(self, object):
         '''
