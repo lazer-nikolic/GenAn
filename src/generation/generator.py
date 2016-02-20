@@ -142,7 +142,6 @@ class Generator(object):
                     print(self.generate_row(row), file=file)
                     row_selectors.clear()
                 else:
-                    # row_selectors.append(self.generate_selector(view_selector.selector))
                     row_selectors.append(view_selector)
 
             if row_selectors:
@@ -250,7 +249,6 @@ class Generator(object):
         for sub_view in row.selectors:
             rendered_selector[sub_view.selector] = self.generate_selector(sub_view.selector)
         row_selectors = [sub_view.selector for sub_view in row.selectors]
-        print(row_selectors)
         return get_template("row.html", sub_views=row.selectors, rendered_selector=rendered_selector)
 
 
