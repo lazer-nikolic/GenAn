@@ -4,12 +4,13 @@ Created on 08.02.2016.
 @author: Lazar
 '''
 
-class View:
+class View(object):
 
     basic_type_names = ['text', 'number', 'checkbox', 'link', 
                         'email', 'password', 'menuitem', 'menu',
                         'button', 'radio', 'form', 'label', 'image', 
-                        'date', 'combobox', 'list', 'table', 'thumbnail']
+                        'date', 'combobox', 'list', 'table',
+                        'thumbnail', "row"]
 
     def __init__(self, parent, name, views):
         self.name = name

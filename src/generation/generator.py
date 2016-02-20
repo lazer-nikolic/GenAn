@@ -10,6 +10,7 @@ import zipfile
 import shutil
 
 import os
+from concepts.row import Row
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
@@ -52,13 +53,13 @@ class Generator(object):
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
-        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                        " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
-            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                            " Do you want to generate node.js backend for your application? [y/n] ")
 
-        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                               " Name of your application (default: genanApp): ")
         if self.app_name == '':
             self.app_name = "genanApp"
@@ -86,7 +87,6 @@ class Generator(object):
                 print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Unable to generate the backend. Cleaning up...")
                 shutil.rmtree(base_path)
 
-
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -108,7 +108,6 @@ class Generator(object):
             print(BColors.FAIL + e)
             print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Generation failed. Cleaning up...")
             shutil.rmtree(self.path)
-
 
     def generate_basic(self, comp, o, prop):
         return get_template("{0}.html".format(prop.type), o=o, prop=prop, type=prop.type.name)
@@ -134,8 +133,22 @@ class Generator(object):
 
             print("Generating view {0}".format(view.name))
             self.generate_ctrl(view)
-            for selector in view.views:
-                print(self.generate_selector(selector), file=file)
+
+            row_selectors = []
+
+            for view_selector in view.views:
+                if view_selector.__class__.__name__ == 'str':
+                    row = Row(row_selectors, view)
+                    print(self.generate_row(row), file=file)
+                    row_selectors.clear()
+                else:
+                    # row_selectors.append(self.generate_selector(view_selector.selector))
+                    row_selectors.append(view_selector)
+
+            if row_selectors:
+                row = Row(row_selectors, view)
+                print(self.generate_row(row), file=file)
+                row_selectors.clear()
 
             rendered = get_template("view.html", views=views)
             print(rendered, file=file)
@@ -179,22 +192,21 @@ class Generator(object):
     def generate_object_selector(self, o, prop):
         print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
-    
+
     def generate_form(self, obj, action):
         formInputs = []
         for property in obj.properties:
-            if property.type is 'image': #Za sliku se unosi string, a ne prikazuje se!
+            if property.type is 'image':  # Za sliku se unosi string, a ne prikazuje se!
                 render = get_template("text.html", o=obj, prop=property, type=property.type.name)
                 formInputs.append(render)
             else:
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
-        return get_template("form.html", formInputs=formInputs, obj=obj,action=action)
+        return get_template("form.html", formInputs=formInputs, obj=obj, action=action)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
         # SelectorObject contains an object
-        
         if hasattr(selector, "view"):
             return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
@@ -202,7 +214,7 @@ class Generator(object):
         elif hasattr(selector, "type"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
         elif hasattr(selector, "action"):
-            return self.generate_form(obj=selector.obj,action = selector.action)
+            return self.generate_form(obj=selector.obj, action=selector.action)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 
@@ -231,6 +243,15 @@ class Generator(object):
         file_rest = open(os.path.join(routes_path, "{0}.js".format(object.name)), 'w+')
         print(rendered_rest, file=file_rest)
         self.objects.append(object)
+
+    def generate_row(self, row):
+        print("Generating row... ")
+        rendered_selector = {}
+        for sub_view in row.selectors:
+            rendered_selector[sub_view.selector] = self.generate_selector(sub_view.selector)
+        row_selectors = [sub_view.selector for sub_view in row.selectors]
+        print(row_selectors)
+        return get_template("row.html", sub_views=row.selectors, rendered_selector=rendered_selector)
 
 
 class BColors:

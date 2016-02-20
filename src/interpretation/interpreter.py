@@ -14,12 +14,15 @@ from concepts.menubar import Menubar
 from concepts.object import Object
 from concepts.page import page_processor, Page
 from concepts.property import Property, property_processor
+from concepts.row import Row
+from concepts.row_separator import RowSeparator
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
 from concepts.sidebar import Sidebar
 from concepts.view import View
 from concepts.data_show import DataShow, data_show_processor
 from concepts.form import Form
+from concepts.view_in_view import ViewInView
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
 from generation.generator import Generator
@@ -64,7 +67,10 @@ class Interpreter:
                                              Menubar,
                                              Menu,
                                              Form,
-                                             RefLink
+                                             RefLink,
+                                             Row,
+                                             ViewInView,
+                                             RowSeparator
                                          ],
                                          builtins=self.builtins,
                                          debug=False)
