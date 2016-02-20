@@ -11,7 +11,7 @@ def property_processor(property_object):
         if type is property_object.type.name:
             if property_object.ref is '':
                 if type is 'link' and not property_object.ref_param is None:
-                    property_object.ref = property_object.ref_param.page.name 
+                    property_object.ref = "#/"+property_object.ref_param.page.name 
                 else:
                     raise TextXSemanticError("Type {0} must have ref='example.com' / @refToPage - for link".format(property_object.type))
     

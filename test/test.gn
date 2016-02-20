@@ -6,7 +6,7 @@ object user:
 	pass password label='Password'
 	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
-	slika image label='google.com' ref= ' s' 
+	slika image label='google.com' class = {'width':'130', 'height':'130'} ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png' 
 	myLabel label label = 'Hello World'
 	birthDate date label = 'Birth date'
 	articles link label='Articles' @articles_for_user ref='ssss'
@@ -27,7 +27,7 @@ page user_page:
 	    'Articles' @articles_for_user
 	    'More articles' @articles_for_user
 	    'Even more articles!' @articles_for_user
-	    'Whole lotta articles' @articles_for_user
+	    'Google' ref='http://google.com'
 	;
 	menubar:
 	    menu File:
@@ -58,6 +58,7 @@ view articles_list:
 	show article.description
 	show article.author
 	thumbnail data_show={ user.pass,  user.num, user.slika}
+	form for user action=create
 ;
 
 page articles_for_user:

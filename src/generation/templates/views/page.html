@@ -52,7 +52,7 @@
               </a>
               <ul class="dropdown-menu">
               {% for item in menu.items %}
-                <li><a href="/{{item.ref.page.name}}">{{item.label}}</a></li>
+                <li><a href="/{{item.ref}}">{{item.label}}</a></li>
               {% endfor %}
               </ul>
             </li>
@@ -74,7 +74,7 @@
         <ul class="nav nav-sidebar">
           {% for sidebar in page.sidebar.links %}
           <li>
-              <a href="/{{sidebar.ref.page.name}}" >{{sidebar.label}}</a>
+              <a href="/{{sidebar.ref}}" >{{sidebar.label}}</a>
          </li>
           {% endfor %}
         </ul>

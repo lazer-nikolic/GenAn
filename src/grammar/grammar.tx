@@ -35,11 +35,19 @@ Page:
 ;
 
 Selector:
-	  SelectorObject|SelectorView|DataShow
+	  SelectorObject|SelectorView|DataShow|Form
 ;
 
 SelectorObject:
 	 ('show')? object=[Object] '.' property=[Property]
+;
+
+Form:
+	'form' 'for' obj=[Object] 'action' '=' action=FormAction 
+;
+
+FormAction:
+	'create'|'update'
 ;
 
 SelectorView:
@@ -89,7 +97,7 @@ Layout:
 ;
 
 RefLink:
-    label=STRING ref=ReferencedParameter
+    label=STRING ref=ReferencedParameter|( 'ref' '=' aps_ref=STRING)
 ;
 
 Sidebar:

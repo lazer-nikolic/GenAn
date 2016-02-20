@@ -1,0 +1,7 @@
+{% import 'common.jinja' as common %}
+<form name="{{obj.name}}" role="form" novalidate ng-submit="ctrl.submit()" {% if action=='create' %} method="POST" {% else %} method="PUT" {%endif%}>
+{% for input in formInputs %}
+	{{input}}
+{% endfor %}
+<button type="submit" class="btn btn-default" translate="OK"> OK </button>
+</form>
