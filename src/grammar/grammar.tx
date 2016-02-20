@@ -29,8 +29,7 @@ ViewOnPage:
 Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
-		('layout' '=' layout=[Layout])?
-		(sidebar=Sidebar)?
+		(layout=Layout | menubar=Menubar | sidebar=Sidebar)*
 		views *= ViewOnPage
 	';'
 ;
@@ -86,7 +85,7 @@ Object:
 ;
 
 Layout:
-	name = ID positions *= STRING
+	'layout' name = ID positions *= STRING
 ;
 
 RefLink:
@@ -96,6 +95,18 @@ RefLink:
 Sidebar:
     'sidebar' ':'
         links*=RefLink
+    ';'
+;
+
+Menu:
+    'menu' name=ID ':'
+        items*=RefLink
+    ';'
+;
+
+Menubar:
+    'menubar' ':'
+        menus*=Menu
     ';'
 ;
 

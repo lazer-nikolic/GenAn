@@ -9,11 +9,14 @@ from optparse import OptionParser
 
 import os
 from concepts.layout import Layout
+from concepts.menu import Menu
+from concepts.menubar import Menubar
 from concepts.object import Object
 from concepts.page import page_processor
 from concepts.property import Property, property_processor
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
+from concepts.sidebar import Sidebar
 from concepts.view import View
 from concepts.data_show import DataShow, data_show_processor
 from concepts.view_on_page import ViewOnPage
@@ -51,7 +54,11 @@ class Interpreter:
                                              SelectorObject,
                                              SelectorView,
                                              ViewOnPage,
-                                             DataShow
+                                             DataShow,
+                                             Sidebar,
+                                             Layout,
+                                             Menubar,
+                                             Menu
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

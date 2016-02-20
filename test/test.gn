@@ -29,6 +29,20 @@ page user_page:
 	    'Even more articles!' @articles_for_user
 	    'Whole lotta articles' @articles_for_user
 	;
+	menubar:
+	    menu File:
+            'New' @articles_for_user
+            'Open' @articles_for_user
+            'Close' @articles_for_user
+	    ;
+	    menu Edit:
+            'Undo' @articles_for_user
+            'Redo' @articles_for_user
+            'Cut' @articles_for_user
+            'Copy' @articles_for_user
+            'Paste' @articles_for_user
+	    ;
+	;
 	show user.name position=top size=large
 	show user.username position=center
 	show user.pass position=center
