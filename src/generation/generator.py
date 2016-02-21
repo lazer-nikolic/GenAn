@@ -217,10 +217,14 @@ class Generator(object):
             return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
             return self.generate_object_selector(selector.object, selector.property)
-        elif hasattr(selector, "type"):
+        elif hasattr(selector, "data"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
         elif hasattr(selector, "action"):
             return self.generate_form(obj=selector.obj, action=selector.action)
+        elif hasattr(selector, "paragraph"):
+            return get_template("paragraph.html", paragrpah=selector.paragraph)
+        elif hasattr(selector, "jumbo"):
+            return get_template("jumbo.html", jumbo = selector)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 

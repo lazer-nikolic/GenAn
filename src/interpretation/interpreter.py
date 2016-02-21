@@ -27,6 +27,9 @@ from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
 from concepts.footer import Footer
 from concepts.use import Use
+from concepts.jumbo import Jumbo, jumbo_procesor
+from concepts.jumbo_parameters import JumboParameters
+from concepts.paragraph import Paragraph
 from concepts.addition_parameters import AdditionParameters
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
@@ -50,7 +53,8 @@ class Interpreter:
             'Page': page_processor,
             'Property': property_processor,
             'DataShow': data_show_processor,
-            'RefLink': ref_link_procesor
+            'RefLink': ref_link_procesor,
+            'Jumbo': jumbo_procesor
         }
 
     def load_model(self, file_path):
@@ -76,7 +80,10 @@ class Interpreter:
                                              Row,
                                              ViewInView,
                                              RowSeparator,
-                                            AdditionParameters
+                                             AdditionParameters,
+                                             Paragraph,
+                                             Jumbo,
+                                             JumboParameters
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

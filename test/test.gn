@@ -21,10 +21,10 @@ object article:
 	author text label='Author'
 ;
 
-footer mainFooter 'Moj novi footer' right color=black;
+footer mainFooter 'Moj novi footer' right ;
 
 sidebar mainSidebar:
-		color=red
+		color=gray
 	    'Articles' @articles_for_user
 	    'More articles' @articles_for_user
 	    'Even more articles!' @articles_for_user
@@ -32,7 +32,6 @@ sidebar mainSidebar:
 	;
 
 menubar mainMenu 'GenAn':
-		color=blue
 	    menu File:
             'New' ref='http://google.com'
             'Open' @articles_for_user
@@ -65,12 +64,25 @@ page user_page:
 	use footer mainFooter
 	use sidebar mainSidebar
 	
+	jumbo: heading='Jumbo head' 
+			text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+				Etiam dictum viverra turpis, a tristique ligula feugiat iaculis. Nam cursus 
+				risus vel iaculis dictum.'
+		  imgPath='http://smartassistans.se/wp-content/themes/smartassistans/img/jumbotron.jpg'
+		  {'Next' ref='http://google.com'}
+		  position=top
+	
 	show user.name position=right size=large
 	show user.username position=center
 	show user.pass position=center
 	show user.mail position=center
 	show user.tvType position=left
 	show user.slika position=left
+	
+	paragraph 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+				Etiam dictum viverra turpis, a tristique ligula feugiat iaculis. Nam cursus 
+				risus vel iaculis dictum.' 
+				position=center
 ;
 
 view user_view:
