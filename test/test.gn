@@ -79,7 +79,7 @@ view articles_list:
 	show article.author at 4 size 4
 	thumbnail data_show={ user.pass,  user.num, user.slika}
 	!row 2
-	form for user action=create
+	form for user actions=create update
 ;
 
 page articles_for_user:

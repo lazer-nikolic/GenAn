@@ -52,11 +52,11 @@ SelectorObject:
 ;
 
 Form:
-	'form' 'for' obj=[Object] 'action' '=' action=FormAction 
+	'form' 'for' obj=[Object] 'actions' '=' actions+=FormAction
 ;
 
 FormAction:
-	'create'|'update'
+	'create'|'update'|'delete'|'view'|'resetInput'
 ;
 
 SelectorView:
