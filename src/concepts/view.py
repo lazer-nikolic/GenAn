@@ -30,7 +30,6 @@ class View(object):
                 else:
                     last_row_number = view_selector.number
                     row_number = view_selector.number
-                    print("%d" % view_selector.number)
                 self.rows.append(row)
                 row = Row(self, row_number)
             else:
