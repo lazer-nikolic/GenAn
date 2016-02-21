@@ -29,13 +29,42 @@ page user_page:
 	    'Even more articles!' @articles_for_user
 	    'Google' ref='http://google.com'
 	;
-	show user.name position=top size=large
+	
+	menubar 'GenAn':
+	    menu File:
+            'New' ref='http://google.com'
+            'Open' @articles_for_user
+            'Close' @articles_for_user
+	    ;
+	    
+	    menu Edit left:
+            'Undo' @articles_for_user
+            'Redo' @articles_for_user
+            'Cut' @articles_for_user
+            'Copy' @articles_for_user
+            'Paste' @articles_for_user
+	    ;
+	    
+	    'Google link' ref='http://google.com' left
+	    'About' ref='http://google.com' 
+	    
+	     menu Profile right:
+            'Log in' @articles_for_user
+            'Log out' ref='http://google.com'
+	    ;
+	    
+	    'Login' ref='http://google.com' right
+	    
+	;
+
+	footer 'Moj novi footer' right
+			
+	show user.name position=right size=large
 	show user.username position=center
 	show user.pass position=center
 	show user.mail position=center
-	show user.articles position=bottom
 	show user.tvType position=left
-	show user.slika position=right
+	show user.slika position=left
 ;
 
 

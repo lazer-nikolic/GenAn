@@ -2,18 +2,28 @@
 <!DOCTYPE html>
 <!-- saved from url=(0045)https://getbootstrap.com/examples/dashboard/# -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content=""/>
+    <meta name="author" content="GenAn"/>
 
     <title>{{page.title}}</title>
 
     <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous">
+    </script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous">
+    </script>
+
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" href="../../styles/page.css">
@@ -26,47 +36,26 @@
   </head>
 
   <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Genan</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav left">
-            <li><a href="#">File</a></li>
-            <li><a href="#">Edit</a></li>
-            <li><a href="#">View</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-           <ul class="nav navbar-nav left">
-                <li><a href="#">Login</a></li>
-           </ul>
-          </form>
-        </div>
-      </div>
-    </nav>
-
+  {{header}}
+  
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-        {% if page.sidebar %}
-        <ul class="nav nav-sidebar">
-          {% for sidebar in page.sidebar.links %}
-          <li>
-              <a href="/{{sidebar.ref}}" >{{sidebar.label}}</a>
-         </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-        </div>
+      {{sidebar}}
+        {% if sidebar !='' -%}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        {%else%}
+        	<div class="col-sm-12 main">
+        {%endif%}
+        
+        {% if positions['top']|count > 0 %}
             <div class="page-header">
               {% for view in positions['top'] %}
               {{view}}
               {% endfor %}
             </div>
+        {% endif %}    
+        
+        
             <div class="col-md-3">
               {% for view in positions['left'] %}
               {{view}}
@@ -85,11 +74,17 @@
           </div>
         </div>
     </div>
+    {{footer}}
+   
+   
+<script>
+var sidebarWidth = document.getElementById("sidebar").offsetWidth;
+document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
 
-      <footer class="footer">
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-      </div>
-    </footer>
-
-</body></html>
+window.onresize = function(event) {
+	var sidebarWidth = document.getElementById("sidebar").offsetWidth;
+	document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
+};
+</script>
+</body>
+</html>

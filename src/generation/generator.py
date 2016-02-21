@@ -25,6 +25,7 @@ def get_template(template_name, **kwargs):
                                                os.path.join("..", "generation", "templates", "backend"),
                                                os.path.join("..", "generation", "templates", "views", "basic"),
                                                os.path.join("..", "generation", "templates", "views", "data_show"),
+                                               os.path.join("..", "generation", "templates", "views", "frame"),
                                                os.path.join("..", "generation", "templates", "controllers")
                                                ]))
 
@@ -59,12 +60,11 @@ class Generator(object):
             answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
                            " Do you want to generate node.js backend for your application? [y/n] ")
 
-        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
-                              " Name of your application (default: genanApp): ")
-        if self.app_name == '':
-            self.app_name = "genanApp"
-
         if answer.lower() in ["y", "yes"]:
+            self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+                              " Name of your application (default: genanApp): ")
+            if self.app_name == '':
+                self.app_name = "genanApp"
             # Call express to set up node.js server
             try:
                 print(self.path)
@@ -170,9 +170,34 @@ class Generator(object):
             if position not in positions:
                 positions[position] = []
             positions[position].append(self.generate_selector(selector))
+        
+        menuExist ='false'
+        sidebarExist='false'    
+        menuRender=""
+        if not page.menubar is None:
+            menuRight=[]
+            menuLeft=[]
+            menuExist='true'
+            for x in page.menubar.menus:
+                if len(x.side) == 0:
+                    menuLeft.append(x)
+                else:
+                    if x.side[0] =='left':
+                        menuLeft.append(x)
+                    else:
+                        menuRight.append(x)
+            menuRender = get_template("header.html", menuRight=menuRight, menuLeft=menuLeft, brand_name=page.menubar.brandName)
+            
+        sidebarRend = ""
+        if not page.sidebar is None:
+            sidebarRend = get_template("sidebar.html", sidebar=page.sidebar, menu=menuExist)
+            sidebarExist='true'
 
-        rendered = get_template("page.html", page=page, positions=positions)
-
+        footerRend = ""
+        if not page.footer is None:
+            footerRend = get_template("footer.html", footer=page.footer, sidebarExist=sidebarExist)
+            
+        rendered = get_template("page.html", page=page, positions=positions, sidebar=sidebarRend, footer=footerRend, header=menuRender)
         print(rendered, file=file)
 
     def generate_ctrl(self, concept):

@@ -9,16 +9,20 @@ from optparse import OptionParser
 
 import os
 from concepts.layout import Layout
+from concepts.menu import Menu
+from concepts.menubar import Menubar
 from concepts.object import Object
-from concepts.page import page_processor
+from concepts.page import page_processor, Page
 from concepts.property import Property, property_processor
 from concepts.selector_object import SelectorObject, selector_object_processor
 from concepts.selector_view import SelectorView
+from concepts.sidebar import Sidebar
 from concepts.view import View
 from concepts.data_show import DataShow, data_show_processor
 from concepts.form import Form
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
+from concepts.footer import Footer
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -50,13 +54,19 @@ class Interpreter:
                                          classes=[
                                              View,
                                              Object,
+                                             Page,
                                              Property,
                                              SelectorObject,
                                              SelectorView,
                                              ViewOnPage,
                                              DataShow,
+                                             Sidebar,
+                                             Layout,
+                                             Menubar,
+                                             Menu,
                                              Form,
-                                             RefLink
+                                             RefLink,
+                                             Footer
                                          ],
                                          builtins=self.builtins,
                                          debug=False)
