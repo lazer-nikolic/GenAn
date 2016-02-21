@@ -10,7 +10,7 @@ Size:
 ;
 
 Color:
-	'red'|'blue'|'green'|'black'|'white'|'yellow'
+	'red'|'blue'|'green'|'black'|'white'|'yellow'|'gray'
 ;
 Style:
 	('color' '=' Color) |
@@ -50,7 +50,7 @@ Use:
 ;
 
 Selector:
-	  SelectorObject|SelectorView|DataShow|Form
+	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph
 ;
 
 SelectorObject:
@@ -58,11 +58,11 @@ SelectorObject:
 ;
 
 Form:
-	'form' 'for' obj=[Object] 'action' '=' action=FormAction 
+	'form' 'for' obj=[Object] 'actions' '=' actions+=FormAction
 ;
 
 FormAction:
-	'create'|'update'
+	'create'|'update'|'delete'|'view'|'resetInput'
 ;
 
 SelectorView:
@@ -71,6 +71,18 @@ SelectorView:
 
 DataShow:
 	type=[View] 'data_show' '=' '{' data+=SelectorObject[","]  '}'
+;
+
+Paragraph:
+	'paragraph' paragraph = STRING 
+;
+
+Jumbo:
+	'jumbo' ':' (jumbo += JumboParameters)
+;
+
+JumboParameters:
+	('heading' '=' heading=STRING) | ('text' '=' text=STRING) | ('{'ref = RefLink '}')| ('imgPath' '=' imgPath=STRING)
 ;
 
 HtmlClass:

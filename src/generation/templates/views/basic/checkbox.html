@@ -1,5 +1,15 @@
 {% import 'common.jinja' as common %}
 <div class="form-group">
-<label class="btn btn-success" translate="{{prop.label.upper()}}">{{prop.label}}</label>
-    <input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="checkbox" translate="{{prop.label.upper()}}"> 
+{% if prop.params.propertyList|count>0 %}
+<fieldset class="standard">
+<legend>{{prop.label}}</legend>
+	{% for option in prop.params.propertyList %}
+	<input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="checkbox" name="{{prop.name}}" translate="{{option.upper()}}"> 
+	{{option}}</br>
+	{% endfor%}
+</fieldset>
+{% else %}
+	<input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="checkbox" name="{{prop.name}}" translate="{{prop.label.upper()}}"> 
+	{{prop.label}}
+{%endif%}
 </div>

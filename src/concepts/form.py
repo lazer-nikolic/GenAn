@@ -10,7 +10,7 @@ class Form(object):
     classdocs
     '''
 
-    def __init__(self, parent, obj, action):
+    def __init__(self, parent, obj, actions):
         self.obj = obj
-        self.action = action
+        self.actions = actions
         self.parent = parent

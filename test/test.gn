@@ -8,11 +8,11 @@ object user:
 	mail email label='Email' 
 	slika image label='google.com' ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png'  class = {'width':'160', 'height':'130'} 
 	myLabel label label = 'Hello World'
-	birthDate date label = 'Birth date'
+	birthDate date label = 'Birth date' 
 	articles link label='Articles'  @articles_for_user
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
-	married checkbox label='Married'
+	married checkbox label='Married' parameters={'Pera', 'Djura', 'Sima'}
 ;
 
 object article:
@@ -21,10 +21,10 @@ object article:
 	author text label='Author'
 ;
 
-footer mainFooter 'Moj novi footer' right color=black;
+footer mainFooter 'Moj novi footer' right ;
 
 sidebar mainSidebar:
-		color=red
+		color=gray
 	    'Articles' @articles_for_user
 	    'More articles' @articles_for_user
 	    'Even more articles!' @articles_for_user
@@ -32,7 +32,6 @@ sidebar mainSidebar:
 	;
 
 menubar mainMenu 'GenAn':
-		color=blue
 	    menu File:
             'New' ref='http://google.com'
             'Open' @articles_for_user
@@ -65,12 +64,25 @@ page user_page:
 	use footer mainFooter
 	use sidebar mainSidebar
 	
+	jumbo: heading='Jumbo head' 
+			text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+				Etiam dictum viverra turpis, a tristique ligula feugiat iaculis. Nam cursus 
+				risus vel iaculis dictum.'
+		  imgPath='http://smartassistans.se/wp-content/themes/smartassistans/img/jumbotron.jpg'
+		  {'Next' ref='http://google.com'}
+		  position=top
+	
 	show user.name position=right size=large
 	show user.username position=center
 	show user.pass position=center
 	show user.mail position=center
 	show user.tvType position=left
 	show user.slika position=left
+	show user.married position=left
+	paragraph 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+				Etiam dictum viverra turpis, a tristique ligula feugiat iaculis. Nam cursus 
+				risus vel iaculis dictum.' 
+				position=center
 ;
 
 view user_view:
@@ -85,7 +97,7 @@ view articles_list:
 	show article.author at 4 size 4
 	thumbnail data_show={ user.pass,  user.num, user.slika}
 	!row 2
-	form for user action=create
+	form for user actions=create update
 ;
 
 page articles_for_user:

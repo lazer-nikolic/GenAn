@@ -20,6 +20,12 @@ def property_processor(property_object):
                 if type is 'link' and not property_object.ref_param is None:
                     raise TextXSemanticError("Type {0} can't have both type for link. Property name: {1}".format(property_object.type,property_object.name))
         
+    parameters_allowed_fields=['combobox', 'checkbox', 'radio'] 
+    for type in parameters_allowed_fields:
+        if property_object.type.name not in parameters_allowed_fields:
+            if not property_object.params is None:
+                raise TextXSemanticError("Property {0} can't have parameters attribute.".format(property_object.type.name))
+    
     classesString = "";
     if not property_object.classes is None:
         for x in property_object.classes.htmlClasses:
