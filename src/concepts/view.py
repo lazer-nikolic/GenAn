@@ -4,13 +4,12 @@ Created on 08.02.2016.
 @author: Lazar
 '''
 from concepts.row import Row
-
+from textx.exceptions import TextXSemanticError
 
 class View(object):
-
-    basic_type_names = ['text', 'number', 'checkbox', 'link', 
+    basic_type_names = ['text', 'number', 'checkbox', 'link',
                         'email', 'password', 'menuitem', 'menu',
-                        'button', 'radio', 'form', 'label', 'image', 
+                        'button', 'radio', 'form', 'label', 'image',
                         'date', 'combobox', 'list', 'table',
                         'thumbnail', "row"]
 
@@ -20,6 +19,8 @@ class View(object):
         self.parent = parent
         self.rows = []
 
+        seen = set()
+
         row = Row(self, 1)
         last_row_number = 1
         for view_selector in views:
@@ -28,6 +29,12 @@ class View(object):
                     row_number = last_row_number
                     last_row_number += 1
                 else:
+                    if view_selector.number and view_selector.number not in seen:
+                        seen.add(view_selector.number)
+                    else:
+                        line, col = self._tx_metamodel.parser.pos_to_linecol(self._tx_position)
+                        raise TextXSemanticError("ERROR: (at %d, %d) More than one row at position %d." %
+                                                 (line, col, view_selector.number))
                     last_row_number = view_selector.number
                     row_number = view_selector.number
                 self.rows.append(row)
