@@ -122,8 +122,8 @@ class Generator(object):
         if view.name in self.builtins:
             return self.generate_basic(view, o, prop)
         else:
-            # Subviews for this view
-            views = []
+            # Rows for this view
+            rows = []
 
             file = self.form_route(view.name)
 
@@ -131,9 +131,9 @@ class Generator(object):
             self.generate_ctrl(view)
 
             for row in view.rows:
-                print(self.generate_row(row), file=file)
+                rows.append((row.number, self.generate_row(row)))
 
-            rendered = get_template("view.html", views=views)
+            rendered = get_template("view.html", rows=rows)
             print(rendered, file=file)
 
             return "<ng-include src={0}></ng-include>".format(view.name)

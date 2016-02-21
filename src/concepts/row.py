@@ -10,6 +10,10 @@ class Row(object):
     classdocs
     '''
 
-    def __init__(self, selectors, parent):
-        self.selectors = sorted(selectors, key=lambda selector: selector.position)
+    def __init__(self, parent, number=-1):
         self.parent = parent
+        self.number = number
+        self.selectors = []
+
+    def sort_selectors(self):
+        self.selectors = sorted(self.selectors, key=lambda selector: selector.position)

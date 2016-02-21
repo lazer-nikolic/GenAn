@@ -20,16 +20,23 @@ class View(object):
         self.parent = parent
         self.rows = []
 
-        row_selectors = []
+        row = Row(self, 1)
+        last_row_number = 1
         for view_selector in views:
             if view_selector.__class__.__name__ == 'RowSeparator':
-                self.rows.append(Row(row_selectors, self))
-                row_selectors.clear()
+                if view_selector.number < 0:
+                    row_number = last_row_number
+                    last_row_number += 1
+                else:
+                    last_row_number = view_selector.number
+                    row_number = view_selector.number
+                    print("%d" % view_selector.number)
+                self.rows.append(row)
+                row = Row(self, row_number)
             else:
-                row_selectors.append(view_selector)
-        if row_selectors:
-            self.rows.append(Row(row_selectors, self))
-            row_selectors.clear()
+                row.selectors.append(view_selector)
+        if row not in self.rows:
+            self.rows.append(row)
 
     def __str__(self):
         return self.name
