@@ -23,6 +23,8 @@ from concepts.form import Form
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
 from concepts.footer import Footer
+from concepts.use import Use
+from concepts.addition_parameters import AdditionParameters
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -66,7 +68,9 @@ class Interpreter:
                                              Menu,
                                              Form,
                                              RefLink,
-                                             Footer
+                                             Footer,
+                                             Use,
+                                             AdditionParameters
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

@@ -2,7 +2,7 @@ Module:
 	concept += Concept
 ;
 Concept:
-	Object|View|Page
+	Object|View|Page|Footer|Menubar|Sidebar
 ;
 
 Size:
@@ -26,12 +26,18 @@ ViewOnPage:
 	selector=Selector 'position' '=' position=/[^\s]+/ (Style)*
 ;
 
+
 Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
-		(layout=Layout | menubar=Menubar | sidebar=Sidebar | footer=Footer)*
+		(using *= Use)
+		(layout=Layout)*
 		views *= ViewOnPage
 	';'
+;
+
+Use:
+	('use' 'menubar' m=[Menubar])|('use' 'sidebar' s=[Sidebar])|('use' 'footer' f=[Footer])	
 ;
 
 Selector:
@@ -83,7 +89,11 @@ ReferencedParameter:
 ;
 
 Property:
-	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)? ('ref' '=' ref=STRING)?
+	name=ID type=[View] 'label' '=' label=STRING (additionalParameters*=AdditionParameters)
+;
+
+AdditionParameters:
+	(params=PropertyList | ref_param=ReferencedParameter)| (classes = HtmlClass)|('ref' '=' ref=STRING)
 ;
 
 Object:
@@ -101,14 +111,14 @@ RefLink:
 ;
 
 Sidebar:
-    'sidebar' ':'
+    'sidebar' name=ID ':'
     	('color' '=' color=Color)?
         links*=RefLink
     ';'
 ;
 
 Footer:
-	'footer' paragraph=STRING (side=Side)? ('color' '=' color=Color)?
+	'footer' name=ID paragraph=STRING (side=Side)? ('color' '=' color=Color)? ';'
 ;
 
 Side:
@@ -122,7 +132,7 @@ Menu:
 ;
 
 Menubar:
-    'menubar' (brandName=STRING)? ':'
+    'menubar' name=ID  (brandName=STRING)? ':'
     	('color' '=' color=Color)?
         menus*=Menu
     ';'

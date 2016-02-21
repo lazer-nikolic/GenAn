@@ -6,10 +6,10 @@ object user:
 	pass password label='Password'
 	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
-	slika image label='google.com' class = {'width':'130', 'height':'130'} ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png' 
+	slika image label='google.com' ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png'  class = {'width':'160', 'height':'130'} 
 	myLabel label label = 'Hello World'
 	birthDate date label = 'Birth date'
-	articles link label='Articles' @articles_for_user ref='ssss'
+	articles link label='Articles'  @articles_for_user
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
 	married checkbox label='Married'
@@ -21,17 +21,17 @@ object article:
 	author text label='Author'
 ;
 
-page user_page:
-	title = 'Details for user'
-	sidebar:
+footer mainFooter 'Moj novi footer' right color=black;
+
+sidebar mainSidebar:
 		color=red
 	    'Articles' @articles_for_user
 	    'More articles' @articles_for_user
 	    'Even more articles!' @articles_for_user
 	    'Google' ref='http://google.com'
 	;
-	
-	menubar 'GenAn':
+
+menubar mainMenu 'GenAn':
 		color=blue
 	    menu File:
             'New' ref='http://google.com'
@@ -59,8 +59,12 @@ page user_page:
 	    
 	;
 
-	footer 'Moj novi footer' right color=black
-			
+page user_page:
+	title = 'Details for user'
+	use menubar mainMenu
+	use footer mainFooter
+	use sidebar mainSidebar
+	
 	show user.name position=right size=large
 	show user.username position=center
 	show user.pass position=center
