@@ -1,9 +1,9 @@
 import os
-from generation.generator import Generator
+from generation.generator import Generator, BColors
 from interpretation.interpreter import Interpreter
 
 if __name__ == "__main__":
-    print("Running GenAn...")
+    print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
     output_file = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'gen_test')
 
@@ -15,13 +15,4 @@ if __name__ == "__main__":
 
     generator = Generator(model, interpreter.builtins, output_file)
     generator.generate()
-    print("done...")
-
-# if __name__ == "__main__":
-#     parser = OptionParser()
-#     parser.add_option("-o", "--output", dest="output_file",
-#                       help="generate to OUTPUT", metavar="OUTPUT")
-#
-#     (options, args) = parser.parse_args()
-#     option_dict = vars(options)
-#     main(option_dict['output_file'])
+    print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")

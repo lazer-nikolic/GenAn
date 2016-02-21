@@ -1,3 +1,10 @@
-{% for view in views %}
-{{view}}
+{% set last_row_number = 1 %}
+{% for row in rows %}
+{% if last_row_number < row[0] %}
+    {% for i in range(row[0] - last_row_number) %}
+        <div class="empty-row"></div>
+    {% endfor %}
+    {% set last_row_number = row[0] %}
+{% endif %}
+{{row[1]}}
 {% endfor %}

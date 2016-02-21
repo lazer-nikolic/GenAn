@@ -10,6 +10,7 @@ import zipfile
 import shutil
 
 import os
+from concepts.row import Row
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
@@ -54,17 +55,20 @@ class Generator(object):
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
-        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+
+        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                              " Name of your application (default: genanApp): ")
+        if self.app_name == '':
+            self.app_name = "genanApp"
+
+        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                        " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
-            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
+            answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                            " Do you want to generate node.js backend for your application? [y/n] ")
 
+
         if answer.lower() in ["y", "yes"]:
-            self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC + 
-                              " Name of your application (default: genanApp): ")
-            if self.app_name == '':
-                self.app_name = "genanApp"
             # Call express to set up node.js server
             try:
                 print(self.path)
@@ -89,7 +93,6 @@ class Generator(object):
                 print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Unable to generate the backend. Cleaning up...")
                 shutil.rmtree(base_path)
 
-
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -112,7 +115,6 @@ class Generator(object):
             print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Generation failed. Cleaning up...")
             shutil.rmtree(self.path)
 
-
     def generate_basic(self, comp, o, prop):
         return get_template("{0}.html".format(prop.type), o=o, prop=prop, type=prop.type.name)
 
@@ -121,26 +123,18 @@ class Generator(object):
         if view.name in self.builtins:
             return self.generate_basic(view, o, prop)
         else:
-            # Subviews for this view
-            views = []
-            path = os.path.join(self.path, "app", "views", view.name)
-            file_path = "{0}.html".format(view.name)
-            full_path = os.path.join(path, file_path)
-            self.routes[view.name] = {
-                'path': "/{0}".format(view.name),
-                'template': "/{0}".format(full_path),
-                'controller': "{0}Ctrl".format(view.name).title()
-            }
-            if not os.path.exists(path):
-                os.makedirs(path)
-            file = open(full_path, 'w+')
+            # Rows for this view
+            rows = []
+
+            file = self.form_route(view.name)
 
             print("Generating view {0}".format(view.name))
             self.generate_ctrl(view)
-            for selector in view.views:
-                print(self.generate_selector(selector), file=file)
 
-            rendered = get_template("view.html", views=views)
+            for row in view.rows:
+                rows.append((row.number, self.generate_row(row)))
+
+            rendered = get_template("view.html", rows=rows)
             print(rendered, file=file)
 
             return "<ng-include src={0}></ng-include>".format(view.name)
@@ -148,18 +142,8 @@ class Generator(object):
     def generate_page(self, page):
         # Contains contained views
         positions = {}
-        path = os.path.join(self.path, "app", "views", page.name)
-        file_path = "{0}.html".format(page.name)
-        full_path = os.path.join(path, file_path)
-        self.routes[page.name] = {
-            'path': "/{0}".format(page.name),
-            'template': "/{0}".format(full_path),
-            'controller': "{0}Ctrl".format(page.name).title()
-        }
 
-        if not os.path.exists(path):
-            os.makedirs(path)
-        file = open(full_path, 'w+')
+        file = self.form_route(page.name)
 
         print("Generating page {0}".format(page.name))
         self.generate_ctrl(page)
@@ -214,22 +198,21 @@ class Generator(object):
     def generate_object_selector(self, o, prop):
         print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
-    
+
     def generate_form(self, obj, action):
         formInputs = []
         for property in obj.properties:
-            if property.type is 'image': #Za sliku se unosi string, a ne prikazuje se!
+            if property.type is 'image':  # Za sliku se unosi string, a ne prikazuje se!
                 render = get_template("text.html", o=obj, prop=property, type=property.type.name)
                 formInputs.append(render)
             else:
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
-        return get_template("form.html", formInputs=formInputs, obj=obj,action=action)
+        return get_template("form.html", formInputs=formInputs, obj=obj, action=action)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
         # SelectorObject contains an object
-        
         if hasattr(selector, "view"):
             return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
@@ -237,7 +220,7 @@ class Generator(object):
         elif hasattr(selector, "type"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
         elif hasattr(selector, "action"):
-            return self.generate_form(obj=selector.obj,action = selector.action)
+            return self.generate_form(obj=selector.obj, action=selector.action)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 
@@ -267,6 +250,38 @@ class Generator(object):
         print(rendered_rest, file=file_rest)
         self.objects.append(object)
 
+    def generate_row(self, row):
+        print("Generating row... ")
+        rendered_selector = {}
+        for sub_view in row.selectors:
+            rendered_selector[sub_view.selector] = self.generate_selector(sub_view.selector)
+        row_selectors = [sub_view.selector for sub_view in row.selectors]
+        return get_template("row.html", sub_views=row.selectors, rendered_selector=rendered_selector)
+
+    def form_route(self, name):
+        """
+        form_route(self, name)
+        Creates folder, file and forms route for a view or a page with passed name.
+        Returns the after mentioned file.
+        :param name:
+        :return: Created file
+        """
+
+        path = os.path.join(self.path, "app", "views", name)
+        file_path = "{0}.html".format(name)
+        full_path = os.path.join(path, file_path)
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file = open(full_path, 'w+')
+
+        self.routes[name] = {
+            'path': "/{0}".format(name),
+            'template': "/views/{0}".format(full_path),
+            'controller': "{0}Ctrl".format(name).title()
+        }
+
+        return file
 
 class BColors:
     HEADER = '\033[95m'

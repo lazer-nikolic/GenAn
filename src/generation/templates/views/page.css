@@ -136,4 +136,5 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
-}
+
+.empty-row { margin-top:5%; }
