@@ -36,7 +36,7 @@ class Interpreter:
     def __init__(self):
         builtins = {x: View(None, x, []) for x in View.basic_type_names}
         layouts = {
-            'border': Layout('border', ['top', 'bottom', 'center',
+            'border': Layout('border', ['top', 'center',
                                         'left', 'right'], None),
             'grid': Layout('grid', [], None)
         }

@@ -56,11 +56,6 @@ class Generator(object):
             self.type_mapper = json.load(data_file)
 
 
-        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                              " Name of your application (default: genanApp): ")
-        if self.app_name == '':
-            self.app_name = "genanApp"
-
         answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                        " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
@@ -70,6 +65,11 @@ class Generator(object):
 
         if answer.lower() in ["y", "yes"]:
             # Call express to set up node.js server
+            self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                              " Name of your application (default: genanApp): ")
+            if self.app_name == '':
+                self.app_name = "genanApp"
+                
             try:
                 print(self.path)
                 base_path = os.path.join(self.path, self.app_name)

@@ -12,7 +12,7 @@ from concepts.layout import Layout
 def page_processor(page):
     # Default layout je border
     if not page.layout:
-        page.layout = Layout('border', ['top', 'bottom', 'center', 'left', 'right'], None)
+        page.layout = Layout('border', ['top', 'center', 'left', 'right'], None)
 
     for view_on_page in page.views:
         if not view_on_page.position in page.layout.positions:
