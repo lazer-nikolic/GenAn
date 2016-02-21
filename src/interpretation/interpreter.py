@@ -43,7 +43,7 @@ class Interpreter:
                                         'left', 'right'], None),
             'grid': Layout('grid', [], None)
         }
-       
+
         builtins.update(layouts)
 
         self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
@@ -83,7 +83,8 @@ class Interpreter:
                                              AdditionParameters,
                                              Paragraph,
                                              Jumbo,
-                                             JumboParameters
+                                             JumboParameters,
+                                             AdditionParameters
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

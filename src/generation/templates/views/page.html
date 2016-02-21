@@ -53,24 +53,35 @@
               {{view}}
               {% endfor %}
             </div>
-        {% endif %}    
-        
-        
-            <div class="col-md-3">
+        {% endif %}
+        {% set col_number = (positions['left']|count > 0)|int +
+                            (positions['center']|count > 0)|int +
+                            (positions['right']|count > 0)|int
+        %}
+        {% if col_number > 0 %}
+            {% set size = (12/col_number)|int %}
+        {% endif %}
+        {% if positions['left']|count > 0 %}
+            <div class="col-md-{{size}}">
               {% for view in positions['left'] %}
               {{view}}
               {% endfor %}
             </div>
-            <div class="col-md-4">
+        {% endif %}
+        {% if positions['center']|count > 0 %}
+            <div class="col-md-{{size}}">
               {% for view in positions['center'] %}
               {{view}}
               {% endfor %}
             </div>
-            <div class="col-md-3">
+        {% endif %}
+        {% if positions['right']|count > 0 %}
+            <div class="col-md-{{size}}">
               {% for view in positions['right'] %}
               {{view}}
               {% endfor %}
             </div>
+        {% endif %}
           </div>
         </div>
     </div>
