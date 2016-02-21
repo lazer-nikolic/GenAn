@@ -24,7 +24,8 @@ def get_template(template_name, **kwargs):
                                                os.path.join("..", "generation", "templates", "views"),
                                                os.path.join("..", "generation", "templates", "backend"),
                                                os.path.join("..", "generation", "templates", "views", "basic"),
-                                               os.path.join("..", "generation", "templates", "views", "data_show")
+                                               os.path.join("..", "generation", "templates", "views", "data_show"),
+                                               os.path.join("..", "generation", "templates", "controllers")
                                                ]))
 
     template = env.get_template("{0}".format(template_name))
@@ -78,6 +79,8 @@ class Generator(object):
                 subprocess.check_call(["npm", "install", "ejs", "--save"],
                                       shell=True, cwd=base_path)
                 subprocess.check_call(["npm", "install", "debug", "--save"],
+                                      shell=True, cwd=base_path)
+                subprocess.check_call(["npm", "install", "cors", "--save"],
                                       shell=True, cwd=base_path)
                 # Enable objects generation
                 self.visitors['Object'] = self.generate_object
@@ -173,7 +176,14 @@ class Generator(object):
         print(rendered, file=file)
 
     def generate_ctrl(self, concept):
-        # TODO: Generate stuff
+        path = os.path.join(self.path, "app", "controller", concept.name)
+        file_path = "{0}.controller.js".format(concept.name)
+        full_path = os.path.join(path, file_path)
+        render = get_template("form.js", concept = concept)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file = open(full_path, 'w+')
+        print(render, file=file)
         print("Generating controller for {0}".format(concept.name))
 
     def generate_object_selector(self, o, prop):
