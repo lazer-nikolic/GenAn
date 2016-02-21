@@ -44,6 +44,8 @@
             {{concept.name | title}}Factory.remove(ctrl.currentObject.id);
             EventBus.emitEvent('GoToTableUser');
         }
-
+    {for x in formInputs}
+        {{x}}
+        {}
     }
 })();

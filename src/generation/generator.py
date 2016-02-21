@@ -198,16 +198,17 @@ class Generator(object):
         print("Generating object {0}".format(o.name))
         return self.generate_view(prop.type, o, prop)
 
-    def generate_form(self, obj, action):
+    def generate_form(self, obj, actions):
         formInputs = []
         for property in obj.properties:
+
             if property.type is 'image':  # Za sliku se unosi string, a ne prikazuje se!
                 render = get_template("text.html", o=obj, prop=property, type=property.type.name)
                 formInputs.append(render)
             else:
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
-        return get_template("form.html", formInputs=formInputs, obj=obj, action=action)
+        return get_template("form.html", formInputs=formInputs, obj=obj, actions=actions)
 
     def generate_selector(self, selector):
         # SelectorView contains a view
@@ -218,8 +219,9 @@ class Generator(object):
             return self.generate_object_selector(selector.object, selector.property)
         elif hasattr(selector, "data"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
-        elif hasattr(selector, "action"):
-            return self.generate_form(obj=selector.obj, action=selector.action)
+
+        elif hasattr(selector, "actions"):
+            return self.generate_form(obj=selector.obj, actions=selector.actions)
         elif hasattr(selector, "paragraph"):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
@@ -286,6 +288,18 @@ class Generator(object):
 
         return file
 
+    def generate_form_controller(self, form, actions):
+        formInouts=[]
+        for property in form:
+
+            if property.type is 'checkbox':
+                render = get_template("checkbox.js", form = form, actions=actions)
+                formInputs.append(render)
+            else:
+                render = self.generate_basic(obj, obj, property)
+                formInputs.append(render)
+
+        return get_template("form.js", form = formInputs, actions=actions)
 
 class BColors:
     HEADER = '\033[95m'
