@@ -19,13 +19,22 @@ Style:
 
 View:
 	'view' name=ID ':' 
-		views *= Selector
+		views *= SubView
 	';'
 ;
+
+SubView:
+    RowSeparator | ViewInView
+;
+
 ViewOnPage:
 	selector=Selector 'position' '=' position=/[^\s]+/ (Style)*
 ;
 
+
+ViewInView:
+	selector=Selector ('at' position=NUMBER)? ('size' size=NUMBER)?
+;
 
 Page:
 	'page' name=ID ':' 
@@ -135,6 +144,16 @@ Menubar:
     'menubar' name=ID  (brandName=STRING)? ':'
     	('color' '=' color=Color)?
         menus*=Menu
+    ';'
+;
+
+RowSeparator:
+    '!row' (number=INT)?
+;
+
+Row:
+    'row' ':'
+        selectors*=ViewInView
     ';'
 ;
 
