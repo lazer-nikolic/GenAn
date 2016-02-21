@@ -6,16 +6,20 @@ Created on 08.02.2016.
 from textx.exceptions import TextXSemanticError
 
 def property_processor(property_object):
+    
+    adapter_property(property_object)
     ref_prop =['link', 'button','image']
     for type in ref_prop:
         if type is property_object.type.name:
-            if property_object.ref is '':
+            if property_object.ref is '' or property_object.ref is None:
                 if type is 'link' and not property_object.ref_param is None:
                     property_object.ref = "#/"+property_object.ref_param.page.name 
                 else:
                     raise TextXSemanticError("Type {0} must have ref='example.com' / @refToPage - for link".format(property_object.type))
-    
-    
+            else:
+                if type is 'link' and not property_object.ref_param is None:
+                    raise TextXSemanticError("Type {0} can't have both type for link. Property name: {1}".format(property_object.type,property_object.name))
+        
     classesString = "";
     if not property_object.classes is None:
         for x in property_object.classes.htmlClasses:
@@ -28,17 +32,45 @@ def property_processor(property_object):
         property_object.classes = ""
 
 
+def adapter_property(property):
+    '''
+    Adapter method for additional parametes on property class
+    '''
+    
+    for x in property.additionalParameters:
+        if not x.ref_param is None:
+            if not property.ref_param is None:
+                raise TextXSemanticError("You can't use more than one @ link.")
+            property.ref_param = x.ref_param
+        elif not x.params is None:
+            if not property.params is None:
+                raise TextXSemanticError("You can't use more than one parameters keyword.")
+            property.params = x.params
+        elif not x.classes is None:
+            if not property.classes is None:
+                raise TextXSemanticError("You can't use more than one class keyword.")
+            property.classes = x.classes
+        elif not x.ref is None:
+            if not property.ref is None:
+                raise TextXSemanticError("You can't use more than one ref keyword.")
+            property.ref = x.ref
+  
+
+
 class Property(object):
     '''
     classdocs
     '''
 
-    def __init__(self, name, type, ref_param, params, label, parent, classes, ref):
+    def __init__(self, name, type, label, parent, additionalParameters):
         self.name = name
         self.type = type
-        self.ref_param = ref_param
+        self.ref_param = None
         self.label = label
         self.parent = parent
-        self.params = params
-        self.classes = classes
-        self.ref = ref
+        self.additionalParameters=additionalParameters
+        self.params = None
+        self.classes = None
+        self.ref = None
+        
+        

@@ -55,21 +55,19 @@ class Generator(object):
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
-
-        self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                              " Name of your application (default: genanApp): ")
-        if self.app_name == '':
-            self.app_name = "genanApp"
-
         answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                        " Do you want to generate node.js backend for your application? [y/n] ")
         while not answer.lower() in ["y", "n", "yes", " no"]:
             answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
                            " Do you want to generate node.js backend for your application? [y/n] ")
 
-
         if answer.lower() in ["y", "yes"]:
             # Call express to set up node.js server
+            self.app_name = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                                  " Name of your application (default: genanApp): ")
+            if self.app_name == '':
+                self.app_name = "genanApp"
+
             try:
                 print(self.path)
                 base_path = os.path.join(self.path, self.app_name)
@@ -154,41 +152,42 @@ class Generator(object):
             if position not in positions:
                 positions[position] = []
             positions[position].append(self.generate_selector(selector))
-        
-        menuExist ='false'
-        sidebarExist='false'    
-        menuRender=""
+
+        menuExist = 'false'
+        sidebarExist = 'false'
+        menuRender = ""
         if not page.menubar is None:
-            menuRight=[]
-            menuLeft=[]
-            menuExist='true'
+            menuRight = []
+            menuLeft = []
+            menuExist = 'true'
             for x in page.menubar.menus:
                 if len(x.side) == 0:
                     menuLeft.append(x)
                 else:
-                    if x.side[0] =='left':
+                    if x.side[0] == 'left':
                         menuLeft.append(x)
                     else:
                         menuRight.append(x)
-            menuRender = get_template("header.html", menuRight=menuRight, menuLeft=menuLeft, brand_name=page.menubar.brandName)
-            
+            menuRender = get_template("header.html", header=page.menubar, menuRight=menuRight, menuLeft=menuLeft)
+
         sidebarRend = ""
         if not page.sidebar is None:
             sidebarRend = get_template("sidebar.html", sidebar=page.sidebar, menu=menuExist)
-            sidebarExist='true'
+            sidebarExist = 'true'
 
         footerRend = ""
         if not page.footer is None:
             footerRend = get_template("footer.html", footer=page.footer, sidebarExist=sidebarExist)
-            
-        rendered = get_template("page.html", page=page, positions=positions, sidebar=sidebarRend, footer=footerRend, header=menuRender)
+
+        rendered = get_template("page.html", page=page, positions=positions, sidebar=sidebarRend, footer=footerRend,
+                                header=menuRender)
         print(rendered, file=file)
 
     def generate_ctrl(self, concept):
         path = os.path.join(self.path, "app", "controller", concept.name)
         file_path = "{0}.controller.js".format(concept.name)
         full_path = os.path.join(path, file_path)
-        render = get_template("form.js", concept = concept)
+        render = get_template("form.js", concept=concept)
         if not os.path.exists(path):
             os.makedirs(path)
         file = open(full_path, 'w+')
@@ -218,10 +217,15 @@ class Generator(object):
             return self.generate_view(selector.view)
         elif hasattr(selector, "object"):
             return self.generate_object_selector(selector.object, selector.property)
-        elif hasattr(selector, "type"):
+        elif hasattr(selector, "data"):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
+
         elif hasattr(selector, "actions"):
             return self.generate_form(obj=selector.obj, actions=selector.actions)
+        elif hasattr(selector, "paragraph"):
+            return get_template("paragraph.html", paragrpah=selector.paragraph)
+        elif hasattr(selector, "jumbo"):
+            return get_template("jumbo.html", jumbo = selector)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 

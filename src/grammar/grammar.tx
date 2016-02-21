@@ -2,7 +2,7 @@ Module:
 	concept += Concept
 ;
 Concept:
-	Object|View|Page
+	Object|View|Page|Footer|Menubar|Sidebar
 ;
 
 Size:
@@ -10,7 +10,7 @@ Size:
 ;
 
 Color:
-	'red'|'blue'|'green'|'black'|'white'|'yellow'
+	'red'|'blue'|'green'|'black'|'white'|'yellow'|'gray'
 ;
 Style:
 	('color' '=' Color) |
@@ -31,6 +31,7 @@ ViewOnPage:
 	selector=Selector 'position' '=' position=/[^\s]+/ (Style)*
 ;
 
+
 ViewInView:
 	selector=Selector ('at' position=NUMBER)? ('size' size=NUMBER)?
 ;
@@ -38,13 +39,18 @@ ViewInView:
 Page:
 	'page' name=ID ':' 
 		'title' '=' title=STRING
-		(layout=Layout | menubar=Menubar | sidebar=Sidebar | footer=Footer)*
+		(using *= Use)
+		(layout=Layout)*
 		views *= ViewOnPage
 	';'
 ;
 
+Use:
+	('use' 'menubar' m=[Menubar])|('use' 'sidebar' s=[Sidebar])|('use' 'footer' f=[Footer])	
+;
+
 Selector:
-	  SelectorObject|SelectorView|DataShow|Form
+	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph
 ;
 
 SelectorObject:
@@ -65,6 +71,18 @@ SelectorView:
 
 DataShow:
 	type=[View] 'data_show' '=' '{' data+=SelectorObject[","]  '}'
+;
+
+Paragraph:
+	'paragraph' paragraph = STRING 
+;
+
+Jumbo:
+	'jumbo' ':' (jumbo += JumboParameters)
+;
+
+JumboParameters:
+	('heading' '=' heading=STRING) | ('text' '=' text=STRING) | ('{'ref = RefLink '}')| ('imgPath' '=' imgPath=STRING)
 ;
 
 HtmlClass:
@@ -92,7 +110,11 @@ ReferencedParameter:
 ;
 
 Property:
-	name=ID type=[View] 'label' '=' label=STRING (params=PropertyList | ref_param=ReferencedParameter )? (classes = HtmlClass)? ('ref' '=' ref=STRING)?
+	name=ID type=[View] 'label' '=' label=STRING (additionalParameters*=AdditionParameters)
+;
+
+AdditionParameters:
+	(params=PropertyList | ref_param=ReferencedParameter)| (classes = HtmlClass)|('ref' '=' ref=STRING)
 ;
 
 Object:
@@ -110,13 +132,14 @@ RefLink:
 ;
 
 Sidebar:
-    'sidebar' ':'
+    'sidebar' name=ID ':'
+    	('color' '=' color=Color)?
         links*=RefLink
     ';'
 ;
 
 Footer:
-	'footer' paragraph=STRING (side=Side)?
+	'footer' name=ID paragraph=STRING (side=Side)? ('color' '=' color=Color)? ';'
 ;
 
 Side:
@@ -130,7 +153,8 @@ Menu:
 ;
 
 Menubar:
-    'menubar' (brandName=STRING)? ':'
+    'menubar' name=ID  (brandName=STRING)? ':'
+    	('color' '=' color=Color)?
         menus*=Menu
     ';'
 ;

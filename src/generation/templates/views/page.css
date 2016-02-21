@@ -56,7 +56,7 @@ body {
   .sidebar {
     position: fixed;
     bottom: 0;
-    top: 51px;
+    top: 50px;
     left: 0;
     z-index: 1000;
     display: block;

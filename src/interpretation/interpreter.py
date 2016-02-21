@@ -26,6 +26,11 @@ from concepts.view_in_view import ViewInView
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
 from concepts.footer import Footer
+from concepts.use import Use
+from concepts.jumbo import Jumbo, jumbo_procesor
+from concepts.jumbo_parameters import JumboParameters
+from concepts.paragraph import Paragraph
+from concepts.addition_parameters import AdditionParameters
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -34,11 +39,11 @@ class Interpreter:
     def __init__(self):
         builtins = {x: View(None, x, []) for x in View.basic_type_names}
         layouts = {
-            'border': Layout('border', ['top', 'bottom', 'center',
+            'border': Layout('border', ['top', 'center',
                                         'left', 'right'], None),
             'grid': Layout('grid', [], None)
         }
-       
+
         builtins.update(layouts)
 
         self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
@@ -48,7 +53,8 @@ class Interpreter:
             'Page': page_processor,
             'Property': property_processor,
             'DataShow': data_show_processor,
-            'RefLink': ref_link_procesor
+            'RefLink': ref_link_procesor,
+            'Jumbo': jumbo_procesor
         }
 
     def load_model(self, file_path):
@@ -69,10 +75,16 @@ class Interpreter:
                                              Menu,
                                              Form,
                                              RefLink,
+                                             Footer,
+                                             Use,
                                              Row,
                                              ViewInView,
                                              RowSeparator,
-                                             Footer
+                                             AdditionParameters,
+                                             Paragraph,
+                                             Jumbo,
+                                             JumboParameters,
+                                             AdditionParameters
                                          ],
                                          builtins=self.builtins,
                                          debug=False)
