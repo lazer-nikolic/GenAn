@@ -24,6 +24,7 @@ object article:
 page user_page:
 	title = 'Details for user'
 	sidebar:
+		color=red
 	    'Articles' @articles_for_user
 	    'More articles' @articles_for_user
 	    'Even more articles!' @articles_for_user
@@ -31,6 +32,7 @@ page user_page:
 	;
 	
 	menubar 'GenAn':
+		color=blue
 	    menu File:
             'New' ref='http://google.com'
             'Open' @articles_for_user
@@ -57,7 +59,7 @@ page user_page:
 	    
 	;
 
-	footer 'Moj novi footer' right
+	footer 'Moj novi footer' right color=black
 			
 	show user.name position=right size=large
 	show user.username position=center

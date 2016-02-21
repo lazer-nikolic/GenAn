@@ -9,7 +9,8 @@ class Footer(object):
     classdocs
     '''
     
-    def __init__(self, paragraph, side, parent):
+    def __init__(self, paragraph, side, parent,color):
         self.paragraph = paragraph
         self.side = side
         self.parent = parent
+        self.color = color

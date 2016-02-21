@@ -102,12 +102,13 @@ RefLink:
 
 Sidebar:
     'sidebar' ':'
+    	('color' '=' color=Color)?
         links*=RefLink
     ';'
 ;
 
 Footer:
-	'footer' paragraph=STRING (side=Side)?
+	'footer' paragraph=STRING (side=Side)? ('color' '=' color=Color)?
 ;
 
 Side:
@@ -122,6 +123,7 @@ Menu:
 
 Menubar:
     'menubar' (brandName=STRING)? ':'
+    	('color' '=' color=Color)?
         menus*=Menu
     ';'
 ;

@@ -1,8 +1,8 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top"  {% if header.color is not none %} style="background-color:{{header.color}}"{%endif%}>
       <div class="container-fluid">
       {% if brand_name != '' -%}
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">{{brand_name}}</a>
+          <a class="navbar-brand" href="#">{{header.brandName}}</a>
         </div>
        {% endif %}
         

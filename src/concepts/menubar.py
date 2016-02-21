@@ -10,7 +10,8 @@ class Menubar(object):
     classdocs
     '''
 
-    def __init__(self, menus, parent, brandName):
+    def __init__(self, menus, parent, brandName,color):
         self.menus = menus
         self.parent = parent
         self.brandName = brandName
+        self.color=color

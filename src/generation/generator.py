@@ -183,7 +183,7 @@ class Generator(object):
                         menuLeft.append(x)
                     else:
                         menuRight.append(x)
-            menuRender = get_template("header.html", menuRight=menuRight, menuLeft=menuLeft, brand_name=page.menubar.brandName)
+            menuRender = get_template("header.html", header=page.menubar, menuRight=menuRight, menuLeft=menuLeft)
             
         sidebarRend = ""
         if not page.sidebar is None:
