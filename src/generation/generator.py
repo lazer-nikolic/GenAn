@@ -124,35 +124,14 @@ class Generator(object):
         else:
             # Subviews for this view
             views = []
-            path = os.path.join(self.path, "app", "views", view.name)
-            file_path = "{0}.html".format(view.name)
-            full_path = os.path.join(path, file_path)
-            self.routes[view.name] = {
-                'path': "/{0}".format(view.name),
-                'template': "/{0}".format(full_path),
-                'controller': "{0}Ctrl".format(view.name).title()
-            }
-            if not os.path.exists(path):
-                os.makedirs(path)
-            file = open(full_path, 'w+')
+
+            file = self.form_route(view.name)
 
             print("Generating view {0}".format(view.name))
             self.generate_ctrl(view)
 
-            row_selectors = []
-
-            for view_selector in view.views:
-                if view_selector.__class__.__name__ == 'str':
-                    row = Row(row_selectors, view)
-                    print(self.generate_row(row), file=file)
-                    row_selectors.clear()
-                else:
-                    row_selectors.append(view_selector)
-
-            if row_selectors:
-                row = Row(row_selectors, view)
+            for row in view.rows:
                 print(self.generate_row(row), file=file)
-                row_selectors.clear()
 
             rendered = get_template("view.html", views=views)
             print(rendered, file=file)
@@ -162,18 +141,8 @@ class Generator(object):
     def generate_page(self, page):
         # Contains contained views
         positions = {}
-        path = os.path.join(self.path, "app", "views", page.name)
-        file_path = "{0}.html".format(page.name)
-        full_path = os.path.join(path, file_path)
-        self.routes[page.name] = {
-            'path': "/{0}".format(page.name),
-            'template': "/{0}".format(full_path),
-            'controller': "{0}Ctrl".format(page.name).title()
-        }
 
-        if not os.path.exists(path):
-            os.makedirs(path)
-        file = open(full_path, 'w+')
+        file = self.form_route(page.name)
 
         print("Generating page {0}".format(page.name))
         self.generate_ctrl(page)
@@ -281,6 +250,30 @@ class Generator(object):
         row_selectors = [sub_view.selector for sub_view in row.selectors]
         return get_template("row.html", sub_views=row.selectors, rendered_selector=rendered_selector)
 
+    def form_route(self, name):
+        """
+        form_route(self, name)
+        Creates folder, file and forms route for a view or a page with passed name.
+        Returns the after mentioned file.
+        :param name:
+        :return: Created file
+        """
+
+        path = os.path.join(self.path, "app", "views", name)
+        file_path = "{0}.html".format(name)
+        full_path = os.path.join(path, file_path)
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file = open(full_path, 'w+')
+
+        self.routes[name] = {
+            'path': "/{0}".format(name),
+            'template': "/views/{0}".format(full_path),
+            'controller': "{0}Ctrl".format(name).title()
+        }
+
+        return file
 
 class BColors:
     HEADER = '\033[95m'

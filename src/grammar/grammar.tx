@@ -136,7 +136,7 @@ Menubar:
 ;
 
 RowSeparator:
-    '!row'
+    '!row' number?=NUMBER
 ;
 
 Row:

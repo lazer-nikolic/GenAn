@@ -10,5 +10,6 @@ class RowSeparator(object):
     classdocs
     '''
 
-    def __init__(self, parent):
+    def __init__(self, parent, number):
         self.parent = parent
+        self.number = number
