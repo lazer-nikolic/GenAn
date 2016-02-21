@@ -40,7 +40,7 @@ class Interpreter:
                                         'left', 'right'], None),
             'grid': Layout('grid', [], None)
         }
-       
+
         builtins.update(layouts)
 
         self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
@@ -76,7 +76,7 @@ class Interpreter:
                                              Row,
                                              ViewInView,
                                              RowSeparator,
-                                            AdditionParameters
+                                             AdditionParameters
                                          ],
                                          builtins=self.builtins,
                                          debug=False)
