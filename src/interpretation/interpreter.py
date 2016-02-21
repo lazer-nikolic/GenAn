@@ -25,6 +25,7 @@ from concepts.form import Form
 from concepts.view_in_view import ViewInView
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
+from concepts.footer import Footer
 from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
@@ -70,7 +71,8 @@ class Interpreter:
                                              RefLink,
                                              Row,
                                              ViewInView,
-                                             RowSeparator
+                                             RowSeparator,
+                                             Footer
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

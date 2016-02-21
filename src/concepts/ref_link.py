@@ -5,7 +5,7 @@ Created on 08.02.2016.
 '''
 def ref_link_procesor(ref_link):
     if not ref_link.ref is None:
-        ref_link.ref = ref_link.ref.page.name
+        ref_link.ref = "#/"+ref_link.ref.page.name
     else:
         ref_link.ref = ref_link.aps_ref
 

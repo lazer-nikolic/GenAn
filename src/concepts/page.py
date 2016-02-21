@@ -26,7 +26,7 @@ class Page(object):
     classdocs
     '''
 
-    def __init__(self, name, title, views, parent, layout, sidebar, menubar):
+    def __init__(self, name, title, views, parent, layout, sidebar, menubar, footer):
         self.name = name
         self.title = title
         self.views = views
@@ -34,3 +34,4 @@ class Page(object):
         self.sidebar = sidebar
         self.parent = parent
         self.menubar = menubar
+        self.footer = footer
