@@ -107,6 +107,8 @@ class Generator(object):
             if self.objects:
                 render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
                 app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
+                shutil.copy(os.path.join(os.pardir, "generation", "templates", "backend", "common.js"),
+                            os.path.join(self.path, self.app_name))
                 print(render_app, file=app_file)
         except Exception as e:
             print(BColors.FAIL + e)

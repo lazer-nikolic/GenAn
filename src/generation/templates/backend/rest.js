@@ -3,11 +3,27 @@ var router = express.Router();
 
 var mongoose = require('mongoose');
 var {{o.name|title}} = require('../models/{{o.name|title}}.js');
+var queryOps = require('../common')
 
 /* GET /users listing. */
 router.get('/', function(req, res, next) {
-{{o.name|title}}.find({}).populate('author')
-  .exec(function (err, post) {
+queries = {};
+for (query in req.query){
+    query_string = req.query[query];
+    query_parts = query_string.split("$");
+    if (query_parts.length > 1){
+        param = query_parts[1];
+        operation = query_parts[0];
+        queryOp = queryOps[operation];
+        newQuery = queryOp(operation, param);
+        queries[query] = newQuery[operation];
+    }
+    else {
+        queries[query] = req.query[query];
+    }
+}
+{{o.name|title}}.find(queries)
+    .exec(function (err, post) {
       if (err) return next(err);
       res.json(post);
     }
