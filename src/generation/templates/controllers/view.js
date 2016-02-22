@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('{{view.name}}', [])
+    angular.module('app')
         .controller('{{view.name | title}}Controller', {{view.name | title}}Controller);
 
     {{view.name | title}}Controller.$inject = ['EventBus',{% for factory in factories %}'{{factory | title}}Factory',{% endfor %} '$filter', '$stateParams'];

@@ -3,11 +3,11 @@
     'use strict';
 
     angular.module('{{form.name}}', [])
-        .controller('{{form.name | title}}Controller', {{form.name | title}}Controller);
+        .controller('{{form.name | title}}FormController', {{form.name | title}}FormController);
 
-    {{form.name | title}}Controller.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
+    {{form.name | title}}FormController.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
 
-    function {{form.name | title}}Controller(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
+    function {{form.name | title}}FormController(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
 
         var ctrl = this;
         ctrl.update = false;

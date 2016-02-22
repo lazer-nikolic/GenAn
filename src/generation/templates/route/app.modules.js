@@ -12,8 +12,5 @@
             'app.layout',
             'app.about-us',
             'app.api'
-            {%for module in modules %}
-                ,'{{module}}'
-            {%endfor%}
         ]);
 })();

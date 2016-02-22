@@ -38,4 +38,8 @@
 
             $urlRouterProvider.otherwise('/index');
         }
+
+    run.$inject = ['Routing'];
+    function run(Routing) {
+    }
     })();
