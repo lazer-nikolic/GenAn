@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('{{form.name}}')
+    angular.module('{{form.name}}', [])
         .controller('{{form.name | title}}Controller', {{form.name | title}}Controller);
 
     {{form.name | title}}Controller.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
