@@ -1,5 +1,5 @@
 {% import 'common.jinja' as common %}
-<form name="{{obj.name}}" role="form" novalidate>
+<form name="{{obj.name}}" role="form" novalidate ng-controller="{{obj.name}}FormController">
 {% for input in formInputs %}
 	{{input}}
 {% endfor %}

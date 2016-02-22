@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('{{data[0].object.name}}')
+    angular.module('app')
         .controller('{{data[0].object.name | title}}Controller', {{data[0].object.name | title}}Controller);
 
     {{data[0].object.name | title}}Controller.$inject = ['EventBus', '{{data[0].object.name | title}}Factory', '$filter'];
