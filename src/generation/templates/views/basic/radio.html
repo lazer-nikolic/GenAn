@@ -2,12 +2,8 @@
 <fieldset class="standard">
 	<legend>{{prop.label}}</legend>
 {% for option in prop.params.propertyList %}
-<div class="radio">
-  <label>
     <input {{prop.classes}} ng-model="{{ common.ng_model(o, prop) }}" type="radio" name="{{prop.name}}" >
-    {{option}}
-  </label>
-</div>
+      {{option}}</br>
 {% endfor%}
 
 </fieldset>
