@@ -3,10 +3,6 @@ Created on 03.02.2016.
 
 @author: Lazar
 '''
-import getopt
-import sys
-from optparse import OptionParser
-
 import os
 from concepts.layout import Layout
 from concepts.menu import Menu
@@ -22,7 +18,7 @@ from concepts.sidebar import Sidebar
 from concepts.view import View
 from concepts.data_show import DataShow, data_show_processor
 from concepts.form import Form
-from concepts.view_in_view import ViewInView
+from concepts.view_in_view import ViewInView, view_in_view_processor
 from concepts.view_on_page import ViewOnPage
 from concepts.ref_link import RefLink, ref_link_procesor
 from concepts.footer import Footer
@@ -31,7 +27,6 @@ from concepts.jumbo import Jumbo, jumbo_procesor
 from concepts.jumbo_parameters import JumboParameters
 from concepts.paragraph import Paragraph
 from concepts.addition_parameters import AdditionParameters
-from generation.generator import Generator
 from textx.metamodel import metamodel_from_file
 
 
@@ -54,6 +49,7 @@ class Interpreter:
             'Property': property_processor,
             'DataShow': data_show_processor,
             'RefLink': ref_link_procesor,
+            'ViewInView': view_in_view_processor,
             'Jumbo': jumbo_procesor
         }
 

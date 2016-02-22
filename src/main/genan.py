@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     this_dir = os.path.dirname(__file__)
     file_path = os.path.join(this_dir, os.pardir, os.pardir, 'test', 'test.gn')
-
+    print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Loading model from file {0}".format(file_path))
     interpreter = Interpreter()
     model = interpreter.load_model(file_path)
 
