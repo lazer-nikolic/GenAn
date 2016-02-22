@@ -127,7 +127,6 @@ class Generator(object):
             file = self.form_route(view.name)
 
             print("Generating view {0}".format(view.name))
-            self.generate_ctrl(view)
 
             for row in view.rows:
                 rows.append((row.number, self.generate_row(row)))
@@ -144,7 +143,7 @@ class Generator(object):
         file = self.form_route(page.name)
 
         print("Generating page {0}".format(page.name))
-        self.generate_ctrl(page)
+        self.generate_page_controller(page)
         for view_on_page in page.views:
             selector = view_on_page.selector
             # Default value is 'center'
@@ -183,11 +182,10 @@ class Generator(object):
                                 header=menuRender)
         print(rendered, file=file)
 
-    def generate_ctrl(self, concept):
-        path = os.path.join(self.path, "app", "controller", concept.name)
+    def generate_ctrl(self, concept, render):
+        path = os.path.join(self.path, "app", "controllers", concept.name)
         file_path = "{0}.controller.js".format(concept.name)
         full_path = os.path.join(path, file_path)
-        render = get_template("form.js", concept=concept)
         if not os.path.exists(path):
             os.makedirs(path)
         file = open(full_path, 'w+')
@@ -200,6 +198,7 @@ class Generator(object):
 
     def generate_form(self, obj, actions):
         formInputs = []
+        self.generate_form_controller(obj, actions)
         for property in obj.properties:
 
             if property.type is 'image':  # Za sliku se unosi string, a ne prikazuje se!
@@ -289,17 +288,29 @@ class Generator(object):
         return file
 
     def generate_form_controller(self, form, actions):
-        formInouts=[]
-        for property in form:
-
+        formInputs = []
+        factories = []
+        for property in form.properties:
             if property.type is 'checkbox':
-                render = get_template("checkbox.js", form = form, actions=actions)
+                render = get_template("checkbox.js", name = property.name)
                 formInputs.append(render)
-            else:
-                render = self.generate_basic(obj, obj, property)
+            elif property.type is 'date':
+                render = get_template("date.js", name = property.name)
                 formInputs.append(render)
 
-        return get_template("form.js", form = formInputs, actions=actions)
+        render = get_template("form.js", form = form, formInputs = formInputs, actions=actions)
+        self.generate_ctrl(form, render)
+
+
+    def generate_page_controller(self, page):
+        factories = []
+        for view_on_page in page.views:
+            selector = view_on_page.selector
+            if hasattr(selector, 'object'):
+                if selector.object.name not in factories:
+                    factories.append(selector.object.name)
+        render = get_template("page.js", page = page, factories = factories)
+        self.generate_ctrl(page,render)
 
 class BColors:
     HEADER = '\033[95m'

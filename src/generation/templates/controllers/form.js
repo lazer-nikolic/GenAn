@@ -2,12 +2,12 @@
 (function () {
     'use strict';
 
-    angular.module('{{concept.name}}')
-        .controller('{{concept.name | title}}Controller', {{concept.name | title}}Controller);
+    angular.module('{{form.name}}')
+        .controller('{{form.name | title}}Controller', {{form.name | title}}Controller);
 
-    {{concept.name | title}}Controller.$inject = ['EventBus','{{concept.name | title}}Factory', '$filter', '$stateParams'];
+    {{form.name | title}}Controller.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
 
-    function {{concept.name | title}}Controller(EventBus, {{concept.name | title}}Factory, $filter, $stateParams) {
+    function {{form.name | title}}Controller(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
 
         var ctrl = this;
         ctrl.update = false;
@@ -15,7 +15,7 @@
         ctrl.currentObject = {};
 
         if ($stateParams.id != 'new') {
-            {{concept.name | title}}Factory.getById($stateParams.id).then(function(success) {
+            {{form.name | title}}Factory.getById($stateParams.id).then(function(success) {
                 ctrl.currentObject = success;
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
                 ctrl.update = true;
@@ -24,10 +24,10 @@
 
         ctrl.save = function () {
             if (ctrl.update) {
-                {{concept.name | title}}Factory.update(ctrl.currentObject);
+                {{form.name | title}}Factory.update(ctrl.currentObject);
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
             } else {
-                {{concept.name | title}}Factory.save(ctrl.currentObject);
+                {{form.name | title}}Factory.save(ctrl.currentObject);
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
             }
         }
@@ -41,11 +41,11 @@
         }
 
         ctrl.remove = function () {
-            {{concept.name | title}}Factory.remove(ctrl.currentObject.id);
+            {{form.name | title}}Factory.remove(ctrl.currentObject.id);
             EventBus.emitEvent('GoToTableUser');
         }
-    {for x in formInputs}
+    {%for x in formInputs %}
         {{x}}
-        {}
-    }
-})();
+   {% endfor %}
+}}
+)();
