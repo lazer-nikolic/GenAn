@@ -27,7 +27,8 @@ def get_template(template_name, **kwargs):
                                                os.path.join("..", "generation", "templates", "views", "basic"),
                                                os.path.join("..", "generation", "templates", "views", "data_show"),
                                                os.path.join("..", "generation", "templates", "views", "frame"),
-                                               os.path.join("..", "generation", "templates", "controllers")
+                                               os.path.join("..", "generation", "templates", "controllers"),
+                                               os.path.join("..", "generation", "templates", "route")
                                                ]))
 
     template = env.get_template("{0}".format(template_name))
@@ -94,16 +95,16 @@ class Generator(object):
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        if not os.path.exists(os.path.join(self.path, "app", "styles")):
-            os.makedirs(os.path.join(self.path, "app", "styles"))
+        if not os.path.exists(os.path.join(self.path, "app","src", "styles")):
+            os.makedirs(os.path.join(self.path, "app","src", "styles"))
         shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
-                    os.path.join(self.path, "app", "styles", "page.css"))
+                    os.path.join(self.path, "app", "src", "styles", "page.css"))
         try:
             for concept in self.model.concept:
                 class_name = concept.__class__.__name__
                 if class_name in self.visitors:
                     self.visitors[class_name](concept)
-
+            self.generate_route_file()
             if self.objects:
                 render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
                 app_file = open(os.path.join(self.path, self.app_name, "app.js"), "w+")
@@ -125,7 +126,7 @@ class Generator(object):
             rows = []
 
             file = self.form_route(view.name)
-
+            self.generate_view_controller(view)
             print("Generating view {0}".format(view.name))
 
             for row in view.rows:
@@ -183,7 +184,7 @@ class Generator(object):
         print(rendered, file=file)
 
     def generate_ctrl(self, concept, render):
-        path = os.path.join(self.path, "app", "controllers", concept.name)
+        path = os.path.join(self.path, "app", "src", "app", "controllers", concept.name)
         file_path = "{0}.controller.js".format(concept.name)
         full_path = os.path.join(path, file_path)
         if not os.path.exists(path):
@@ -271,9 +272,10 @@ class Generator(object):
         :return: Created file
         """
 
-        path = os.path.join(self.path, "app", "views", name)
+        path = os.path.join(self.path, "app", "src", "app", "views", name)
         file_path = "{0}.html".format(name)
         full_path = os.path.join(path, file_path)
+        relative_path = "app/views/"+name+".html"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -281,10 +283,9 @@ class Generator(object):
 
         self.routes[name] = {
             'path': "/{0}".format(name),
-            'template': "/views/{0}".format(full_path),
-            'controller': "{0}Ctrl".format(name).title()
+            'template':relative_path,
+            'controller': "{0}Controller".format(name.title())
         }
-
         return file
 
     def generate_form_controller(self, form, actions):
@@ -311,6 +312,48 @@ class Generator(object):
                     factories.append(selector.object.name)
         render = get_template("page.js", page = page, factories = factories)
         self.generate_ctrl(page,render)
+
+    def generate_view_controller(self, view):
+        factories = []
+        for view_on_page in view.views:
+            if hasattr(view_on_page, 'selector'):
+                selector = view_on_page.selector
+                if hasattr(selector, 'object'):
+                    if selector.object.name not in factories:
+                        factories.append(selector.object.name)
+        render = get_template("view.js", view = view, factories = factories)
+        self.generate_ctrl(view,render)
+
+    def generate_factories(self):
+        for concept in self.model.concept:
+            if concept.__class__.__name__ == "Object":
+                render = get_template("factory.js", object = object)
+                path = os.path.join(self.path, "app", "src", "app", "factories", object.name)
+                file_path = "{0}.factory.js".format(object.name)
+                full_path = os.path.join(path, file_path)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                file = open(full_path, 'w+')
+                print(render, file=file)
+                print("Generating factory for {0}".format(concept.name))
+
+
+    def generate_route_file(self):
+        render_routes = get_template("app.routes.js", routes = self.routes)
+        render_modules = get_template("app.modules.js", modules = self.routes)
+        path = os.path.join(self.path, "app", "src", "app")
+        file_path_routes = "app.routes.js"
+        file_path_modules = "app.modules.js"
+        full_path_routes = os.path.join(path, file_path_routes)
+        full_path_modules = os.path.join(path, file_path_modules)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file_routes = open(full_path_routes, 'w+')
+        print(render_routes, file=file_routes)
+        print("Generating app.route.js")
+        file_modules = open(full_path_modules, 'w+')
+        print(render_modules, file=file_modules)
+        print("Generating app.modules.js")
 
 class BColors:
     HEADER = '\033[95m'
