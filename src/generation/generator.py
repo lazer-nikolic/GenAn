@@ -225,6 +225,8 @@ class Generator(object):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
             return get_template("jumbo.html", jumbo = selector)
+        elif hasattr(selector, "stLink"):
+            return get_template("staticLink.html", link = selector.stLink, classes = selector.classes)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 

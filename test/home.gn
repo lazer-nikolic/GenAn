@@ -1,0 +1,63 @@
+menubar mainMenu 'GenAn':
+	    menu Sites:
+            'BLIC' ref='http://google.com'
+            'B92' ref ='#'
+	    ;
+	
+	    'News' ref='http://google.com' left
+	    'About' ref='http://google.com' 
+	 
+	    'Sign up' ref='http://google.com' right
+	;
+
+page home:
+	title='Home'
+	use menubar mainMenu
+	jumbo:  heading='Welcome'
+			text='Lorem ipsum dolor sit amet, 
+				  consectetur adipiscing elit. Donec interdum ipsum vitae 
+				  odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			imgPath='http://www.planwallpaper.com/static/images/518079-background-hd.jpg'
+			position=top
+			
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more' ref='#' position=left
+	paragraph '&nbsp; ' position=left
+	paragraph '&nbsp; ' position=left
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more' ref='#' position=left 
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center 
+	link 'Read more' ref='#' position=center	
+	paragraph '&nbsp; ' position=center
+	paragraph '&nbsp; ' position=center
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center
+	link 'Read more' ref='#' class={'style':'float:right;'} position=center   	    
+	
+;
