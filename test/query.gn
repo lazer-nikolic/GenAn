@@ -4,4 +4,5 @@ object user:
 	first_name text label='First name'
 	last_name text label='Last name'
 	query getUsersByName property=name condition=lt$3 sortBy=name rangeTo = 2
+	query getUsersBySort property=username condition=startsWith$'mo'
 ;

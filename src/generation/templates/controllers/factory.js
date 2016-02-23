@@ -33,6 +33,12 @@
             return ApiService.remove(relativeUrl, id);
         }
 
+        <% for query in queries %>
+        function {{query.name}}() {
+            return ApiService.getQuery("{{query.string}}");
+        }
+        <% endfor %>
+
         return {
             getAll: getAll,
             getById: getById,

@@ -55,9 +55,8 @@ class Interpreter:
             'RefLink': ref_link_procesor,
             'ViewInView': view_in_view_processor,
             'Jumbo': jumbo_procesor,
-            'Query': query_processor
+            'Query': query_processor,
             'StaticLink': static_link_procesor
-
         }
 
     def load_model(self, file_path):

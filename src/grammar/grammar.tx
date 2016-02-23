@@ -129,7 +129,7 @@ Object:
 ;
 
 Query:
-    'query' name=ID ( 'property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property])? ('order''='order=Order)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
+    'query' name=ID ( 'property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property] ('order''='order=Order)?)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
 ;
 
 Condition:
