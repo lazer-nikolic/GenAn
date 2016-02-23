@@ -27,6 +27,9 @@ from concepts.jumbo import Jumbo, jumbo_procesor
 from concepts.jumbo_parameters import JumboParameters
 from concepts.paragraph import Paragraph
 from concepts.addition_parameters import AdditionParameters
+from concepts.query import Query, query_processor
+from concepts.string_condition import StringCondition
+from concepts.integer_condition import IntegerCondition
 from textx.metamodel import metamodel_from_file
 
 
@@ -50,7 +53,8 @@ class Interpreter:
             'DataShow': data_show_processor,
             'RefLink': ref_link_procesor,
             'ViewInView': view_in_view_processor,
-            'Jumbo': jumbo_procesor
+            'Jumbo': jumbo_procesor,
+            'Query': query_processor
         }
 
     def load_model(self, file_path):
@@ -61,6 +65,9 @@ class Interpreter:
                                              Object,
                                              Page,
                                              Property,
+                                             Query,
+                                             StringCondition,
+                                             IntegerCondition,
                                              SelectorObject,
                                              SelectorView,
                                              ViewOnPage,

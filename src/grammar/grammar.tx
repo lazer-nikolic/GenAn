@@ -120,7 +120,36 @@ AdditionParameters:
 Object:
 	'object' name=ID ':'
 		properties *= Property
+		queries *= Query
 	';'
+;
+
+Query:
+    'query' name=ID ( 'property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property])? ('order''='order=Order)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
+;
+
+Condition:
+    StringCondition | IntegerCondition
+;
+
+StringCondition:
+    conditionName=StringConditionName '$' parameter=STRING
+;
+
+IntegerCondition:
+    conditionName=IntegerConditionName '$' parameter=INT
+;
+
+StringConditionName:
+    'startsWith'|'endsWith'|'matches'
+;
+
+IntegerConditionName:
+    'lt'|'gt'|'le'|'ge'|'e'
+;
+
+Order:
+    'asc'|'desc'
 ;
 
 Layout:
