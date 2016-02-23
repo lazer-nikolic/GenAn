@@ -322,12 +322,18 @@ class Generator(object):
         self.generate_ctrl(form.name + ".form", render)
 
     def generate_page_controller(self, page):
-        factories = []
+        factories = {}
+        query = 'getAll'
         for view_on_page in page.views:
             selector = view_on_page.selector
             if hasattr(selector, 'object'):
                 if selector.object.name not in factories:
-                    factories.append(selector.object.name)
+                    factories[selector.object.name] = query
+
+        if hasattr(page, 'object'):
+            factories[page.object.name] = page.query.name
+
+
         render = get_template("page.js", page=page, factories=factories)
         self.generate_ctrl(page.name, render)
 

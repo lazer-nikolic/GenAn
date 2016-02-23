@@ -6,3 +6,9 @@ object user:
 	query getUsersByName property=name condition=lowerThan $ 3 sortBy=name rangeTo = 2
 	query getUsersBySort property=username condition=startsWith $ 'mo'
 ;
+
+page user_page for user.getUsersByName:
+	title = 'Details for user'
+	show user.name position=right size=large
+	show user.username position=center
+;
