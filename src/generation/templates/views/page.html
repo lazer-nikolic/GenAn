@@ -1,69 +1,70 @@
-
-  <div>
-
-  {{header}}
-
-    <div class="container-fluid">
+<div>
+{% if sidebar !='' -%}
+<div style="{%if footer !=''%}  padding-bottom: 60px; {%endif%} {%if header!=''%}  padding-top: 50px; {%endif%}">
+{% else %}
+<div style="margin-left:auto; margin-right:auto; width:960px; {%if footer !=''%}  padding-bottom: 60px; {%endif%} {%if header!=''%}  padding-top: 50px; {%endif%}">
+   {% endif %}
+   {{header}}
+   <div class="container-fluid">
       <div class="row">
-      {{sidebar}}
-        {% if sidebar !='' -%}
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        {%else%}
-        	<div class="col-sm-12 main">
-        {%endif%}
-        
-        {% if positions['top']|count > 0 %}
-            <div class="page-header">
-              {% for view in positions['top'] %}
-              {{view}}
-              {% endfor %}
+         {{sidebar}}
+         {% if sidebar !='' -%}
+         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {%else%}
+            <div class="col-sm-12 main">
+               {%endif%}
+               {% if positions['top']|count > 0 %}
+               <div class="page-header">
+                  {% for view in positions['top'] %}
+                  {{view}}
+                  {% endfor %}
+               </div>
+               {% endif %}
+               {% set col_number = (positions['left']|count > 0)|int +
+               (positions['center']|count > 0)|int +
+               (positions['right']|count > 0)|int
+               %}
+               {% if col_number > 0 %}
+               {% set size = (12/col_number)|int %}
+               {% endif %}
+               {% if positions['left']|count > 0 %}
+               <div class="col-md-{{size}}">
+                  {% for view in positions['left'] %}
+                  {{view}}
+                  {% endfor %}
+               </div>
+               {% endif %}
+               {% if positions['center']|count > 0 %}
+               <div class="col-md-{{size}}">
+                  {% for view in positions['center'] %}
+                  {{view}}
+                  {% endfor %}
+               </div>
+               {% endif %}<<<<<<< HEAD
+               {% if positions['right']|count > 0 %}
+               <div class="col-md-{{size}}">
+                  {% for view in positions['right'] %}
+                  {{view}}
+                  {% endfor %}
+               </div>
+               {% endif %}
             </div>
-        {% endif %}
-        {% set col_number = (positions['left']|count > 0)|int +
-                            (positions['center']|count > 0)|int +
-                            (positions['right']|count > 0)|int
-        %}
-        {% if col_number > 0 %}
-            {% set size = (12/col_number)|int %}
-        {% endif %}
-        {% if positions['left']|count > 0 %}
-            <div class="col-md-{{size}}">
-              {% for view in positions['left'] %}
-              {{view}}
-              {% endfor %}
-            </div>
-        {% endif %}
-        {% if positions['center']|count > 0 %}
-            <div class="col-md-{{size}}">
-              {% for view in positions['center'] %}
-              {{view}}
-              {% endfor %}
-            </div>
-        {% endif %}
-        {% if positions['right']|count > 0 %}
-            <div class="col-md-{{size}}">
-              {% for view in positions['right'] %}
-              {{view}}
-              {% endfor %}
-            </div>
-        {% endif %}
-        
-        
-        
-          </div>
-        </div>
-    </div>
-    {{footer}}
-   
-   
-<script>
-var sidebarWidth = document.getElementById("sidebar").offsetWidth;
-document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
-
-window.onresize = function(event) {
-	var sidebarWidth = document.getElementById("sidebar").offsetWidth;
-	document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
-};
-</script>
+         </div>
+      </div>
+      {{footer}}
+      
+       {% if sidebar !='' and footer!=''-%}
+      <script>
+         var sidebarWidth = document.getElementById("sidebar").offsetWidth;
+         document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
+         
+         window.onresize = function(event) {
+         	var sidebarWidth = document.getElementById("sidebar").offsetWidth;
+         	document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
+         };
+      </script>
+      {% endif %}
+   </div>
+</div>
 </div>
 </div>
