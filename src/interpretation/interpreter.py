@@ -26,6 +26,7 @@ from concepts.use import Use
 from concepts.jumbo import Jumbo, jumbo_procesor
 from concepts.jumbo_parameters import JumboParameters
 from concepts.paragraph import Paragraph
+from concepts.static_link import StaticLink, static_link_procesor
 from concepts.addition_parameters import AdditionParameters
 from textx.metamodel import metamodel_from_file
 
@@ -50,7 +51,8 @@ class Interpreter:
             'DataShow': data_show_processor,
             'RefLink': ref_link_procesor,
             'ViewInView': view_in_view_processor,
-            'Jumbo': jumbo_procesor
+            'Jumbo': jumbo_procesor,
+            'StaticLink': static_link_procesor
         }
 
     def load_model(self, file_path):
@@ -80,7 +82,8 @@ class Interpreter:
                                              Paragraph,
                                              Jumbo,
                                              JumboParameters,
-                                             AdditionParameters
+                                             AdditionParameters,
+                                             StaticLink
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

@@ -55,7 +55,6 @@ menubar mainMenu 'GenAn':
 	    ;
 	    
 	    'Login' ref='http://google.com' right
-	    
 	;
 
 page user_page:
