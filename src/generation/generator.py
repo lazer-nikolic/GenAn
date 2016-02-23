@@ -315,6 +315,7 @@ class Generator(object):
     def add_subroutes(self, page):
         print(page.name)
         for view in page.subviews:
+            print(view.name)
             if view.name in self.routes:
                 self.routes[page.name]['sub_routes'].append(self.routes[view.name])
         print(self.routes[page.name])

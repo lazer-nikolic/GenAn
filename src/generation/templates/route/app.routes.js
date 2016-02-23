@@ -34,7 +34,7 @@
 
                     {% for sub_route in routes[route].sub_routes %}
                     ,
-                    '{{sub_route.name}}': {
+                    '{{sub_route.name}}@{{route}}': {
                         templateUrl: '{{sub_route.template}}',
                         controller: '{{sub_route.controller|title}}Controller',
                         controllerAs: 'ctrl'

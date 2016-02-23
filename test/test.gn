@@ -57,6 +57,16 @@ menubar mainMenu 'GenAn':
 	    'Login' ref='http://google.com' right
 	;
 
+view articles_list:
+	show article.title
+	show article.description at 2 size 2
+	!row 4
+	show article.author at 4 size 4
+	thumbnail data_show={ user.pass,  user.num, user.slika}
+	!row 2
+	form for user actions=create update
+;
+
 page user_page:
 	title = 'Details for user'
 	use menubar mainMenu
@@ -82,6 +92,7 @@ page user_page:
 				Etiam dictum viverra turpis, a tristique ligula feugiat iaculis. Nam cursus
 				risus vel iaculis dictum.'
 				position=center
+    show articles_list position=center
 ;
 
 view user_view:
@@ -89,17 +100,8 @@ view user_view:
     show articles_list
 ;
 
-view articles_list:
-	show article.title
-	show article.description at 2 size 2
-	!row 4
-	show article.author at 4 size 4
-	thumbnail data_show={ user.pass,  user.num, user.slika}
-	!row 2
-	form for user actions=create update
-;
-
 page articles_for_user:
 	title='Articles for user'
+	use sidebar mainSidebar
 	show articles_list position=center
 ;
