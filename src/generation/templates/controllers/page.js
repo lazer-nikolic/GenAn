@@ -12,7 +12,7 @@
         var ctrl = this;
          {% for factory in factories %}
              ctrl.{{factory}} = {};
-             {{factory | title}}Factory.getAll().then(function (success) {
+             {{factory | title}}Factory.{{factories[factory]}}().then(function (success) {
                 ctrl.{{factory}} = success;
              });
          {% endfor %}
