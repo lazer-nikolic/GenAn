@@ -4,7 +4,7 @@
 
     angular
         .module('app', [
-            'ngAnimate', 'ngTouch', 'ngSanitize',
+            'ngAnimate', 'ngTouch', 'ngSanitize', 'ngLocale',
             'ui.router', 'ui.bootstrap',
             'app.config',
             'app.translation',

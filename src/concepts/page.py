@@ -51,7 +51,10 @@ class Page(object):
         self.layout = layout
         self.parent = parent
         self.using = using
+        self.path = []
         self.footer = None
         self.menubar = None
         self.sidebar = None
+        self.subviews = []
+
 

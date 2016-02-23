@@ -19,7 +19,7 @@ from concepts.view import View
 from concepts.data_show import DataShow, data_show_processor
 from concepts.form import Form
 from concepts.view_in_view import ViewInView, view_in_view_processor
-from concepts.view_on_page import ViewOnPage
+from concepts.view_on_page import ViewOnPage, view_on_page_processor
 from concepts.ref_link import RefLink, ref_link_procesor
 from concepts.footer import Footer
 from concepts.use import Use
@@ -56,7 +56,8 @@ class Interpreter:
             'ViewInView': view_in_view_processor,
             'Jumbo': jumbo_procesor,
             'Query': query_processor,
-            'StaticLink': static_link_procesor
+            'StaticLink': static_link_procesor,
+            'ViewOnPage': view_on_page_processor
         }
 
     def load_model(self, file_path):

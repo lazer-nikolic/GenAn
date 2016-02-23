@@ -6,6 +6,7 @@ Created on 08.02.2016.
 from concepts.row import Row
 from textx.exceptions import TextXSemanticError
 
+
 class View(object):
     basic_type_names = ['text', 'number', 'checkbox', 'link',
                         'email', 'password', 'menuitem', 'menu',
@@ -18,6 +19,7 @@ class View(object):
         self.views = views
         self.parent = parent
         self.rows = []
+        self.path = {}
 
         seen = set()
 
@@ -46,3 +48,4 @@ class View(object):
 
     def __str__(self):
         return self.name
+

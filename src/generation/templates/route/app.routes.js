@@ -10,7 +10,6 @@
     routes.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider'];
 
     function routes($stateProvider, $urlRouterProvider, $httpProvider) {
-
         $stateProvider
             .state('index', {
                 url: '/index',
@@ -32,6 +31,15 @@
                         controller: '{{routes[route].controller|title}}Controller',
                         controllerAs: 'ctrl'
                     }
+
+                    {% for sub_route in routes[route].sub_routes %}
+                    ,
+                    '{{sub_route.name}}': {
+                        templateUrl: '{{sub_route.template}}',
+                        controller: '{{sub_route.controller|title}}Controller',
+                        controllerAs: 'ctrl'
+                    }
+                    {% endfor %}
                 }
             })
             {% endfor %};

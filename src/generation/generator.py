@@ -153,13 +153,14 @@ class Generator(object):
             rendered = get_template("view.html", rows=rows)
             print(rendered, file=file)
 
-            return "<ng-include src={0}></ng-include>".format(view.name)
+            return "<div ui-view='{0}'></div>".format(view.name)
 
     def generate_page(self, page):
         # Contains contained views
         positions = {}
 
         file = self.form_route(page.name)
+        self.add_subroutes(page)
 
         print("Generating page {0}".format(page.name))
         self.generate_page_controller(page)
@@ -302,11 +303,22 @@ class Generator(object):
         file = open(full_path, 'w+')
 
         self.routes[name] = {
+            'name': name,
             'path': "/{0}".format(name),
             'template': relative_path,
-            'controller': "{0}".format(name)
+            'controller': "{0}".format(name),
+            'sub_routes': []
         }
+
         return file
+
+    def add_subroutes(self, page):
+        print(page.name)
+        for view in page.subviews:
+            if view.name in self.routes:
+                self.routes[page.name]['sub_routes'].append(self.routes[view.name])
+        print(self.routes[page.name])
+
 
     def generate_form_controller(self, form, actions):
         formInputs = []
@@ -345,9 +357,9 @@ class Generator(object):
     def generate_factories(self):
         for concept in self.model.concept:
             if concept.__class__.__name__ == "Object":
-                for query in concept.queries:
-                    self.stringifyQuery(query)
-                render = get_template("factory.js", object=concept, queries=concept.queries)
+                # for query in concept.queries:
+                #     self.stringifyQuery(query)
+                render = get_template("factory.js", object=concept, query=concept.queries)
                 path = os.path.join(self.path, "app", "src", "app", "factories", concept.name)
                 file_path = "{0}.factory.js".format(concept.name)
                 full_path = os.path.join(path, file_path)

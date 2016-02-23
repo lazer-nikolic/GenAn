@@ -34,6 +34,13 @@ def view_in_view_processor(view_in_view):
                       "(at %d, %d) Size %d of component exceeds row size on position %d." %
                       (line, col, view_in_view.size, view_in_view.position))
 
+        selector = view_in_view.selector
+        if hasattr(selector, 'view'):
+            builtins = view_in_view._tx_metamodel.builtins
+            view_name = selector.view.obj_name
+            view = selector.view
+            if view_name not in builtins:
+                view_in_view.parent.subviews.append(view)
 
 class ViewInView(object):
     '''
