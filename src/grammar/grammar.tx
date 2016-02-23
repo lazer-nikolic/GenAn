@@ -50,7 +50,11 @@ Use:
 ;
 
 Selector:
-	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph
+	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph|StaticLink
+;
+
+StaticLink:
+	'link' stLink=RefLink (classes = HtmlClass)?
 ;
 
 SelectorObject:

@@ -26,6 +26,7 @@ from concepts.use import Use
 from concepts.jumbo import Jumbo, jumbo_procesor
 from concepts.jumbo_parameters import JumboParameters
 from concepts.paragraph import Paragraph
+from concepts.static_link import StaticLink, static_link_procesor
 from concepts.addition_parameters import AdditionParameters
 from concepts.query import Query, query_processor
 from concepts.string_condition import StringCondition
@@ -38,7 +39,7 @@ class Interpreter:
         builtins = {x: View(None, x, []) for x in View.basic_type_names}
         layouts = {
             'border': Layout('border', ['top', 'center',
-                                        'left', 'right'], None),
+                                        'left', 'right', 'bottom'], None),
             'grid': Layout('grid', [], None)
         }
 
@@ -55,6 +56,8 @@ class Interpreter:
             'ViewInView': view_in_view_processor,
             'Jumbo': jumbo_procesor,
             'Query': query_processor
+            'StaticLink': static_link_procesor
+
         }
 
     def load_model(self, file_path):
@@ -87,7 +90,8 @@ class Interpreter:
                                              Paragraph,
                                              Jumbo,
                                              JumboParameters,
-                                             AdditionParameters
+                                             AdditionParameters,
+                                             StaticLink
                                          ],
                                          builtins=self.builtins,
                                          debug=False)

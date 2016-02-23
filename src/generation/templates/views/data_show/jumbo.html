@@ -1,7 +1,15 @@
 <div class="jumbotron" style="background: url('{{jumbo.imgPath}}') no-repeat center;">
       <div class="container">
+      {% if jumbo.heading is not none %}
         <h1>{{jumbo.heading}}</h1>
+         {%endif%}
+      
+      {% if jumbo.text is not none %}
         <p>{{jumbo.text}}</p>
+         {%endif%}
+        
+        {% if jumbo.ref is not none %}
         <p><a class="btn btn-primary btn-lg" href="{{jumbo.ref.ref}}" role="button">{{jumbo.ref.label}} &raquo;</a></p>
+        {%endif%}
       </div>
 </div>

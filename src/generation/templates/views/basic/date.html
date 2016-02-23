@@ -1,5 +1,5 @@
 {% import 'common.jinja' as common %}
 <div class="form-group">
  <label for="{{o.name}}.{{prop.name}}" translate="{{prop.label.upper()}}"> {{prop.label}} </label>
- <input {{prop.classes}} type="date" name="{{o.name}}.{{prop.name}}" value="Bike" ng-model="{{ common.ng_model(o, prop) }}"  ng-model-options="{{common.ng_model_options()}}"/>
+ <input {{prop.classes}} type="date" name="{{o.name}}.{{prop.name}}" value="Bike" ng-model="ctrl.{{ common.ng_model(o, prop) }}"  ng-model-options="{{common.ng_model_options()}}"/>
 </div>

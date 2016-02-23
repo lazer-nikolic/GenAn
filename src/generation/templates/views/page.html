@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+  <div>
+  {{header}}
+=======
 
 <!DOCTYPE html>
 <!-- saved from url=(0045)https://getbootstrap.com/examples/dashboard/# -->
@@ -34,10 +38,15 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
-  <body>
-  {{header}}
+  {% if sidebar !='' -%}
+  <body style="{%if footer !=''%}  padding-bottom: 60px; {%endif%} {%if header!=''%}  padding-top: 50px; {%endif%}">
+  {% else %}
+  <body style="margin-left:auto; margin-right:auto; width:960px; {%if footer !=''%}  padding-bottom: 60px; {%endif%} {%if header!=''%}  padding-top: 50px; {%endif%}">
+  {% endif %}
+>>>>>>> 69b18645b1f9c78d48bae5dfbe19117c23923b4d
   
+  {{header}}
+
     <div class="container-fluid">
       <div class="row">
       {{sidebar}}
@@ -82,6 +91,9 @@
               {% endfor %}
             </div>
         {% endif %}
+        
+        
+        
           </div>
         </div>
     </div>
@@ -97,5 +109,5 @@ window.onresize = function(event) {
 	document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
 };
 </script>
-</body>
-</html>
+</div>
+</div>

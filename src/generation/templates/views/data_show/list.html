@@ -8,7 +8,7 @@
         {% for head in data -%}
 	{% if head.property.type.name == 'image' -%} 
          <div class="media-left"> 
-            <a href="#"> <img class="media-object img-circle" src="{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}" width="64" height="64"> </a> 
+            <a href="#"> <img class="media-object img-circle" src="{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}" width="64" height="64"> </a>
          </div>
          {% endif -%}
  {% endfor -%}
