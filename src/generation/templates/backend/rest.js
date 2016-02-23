@@ -6,11 +6,48 @@ var {{o.name|title}} = require('../models/{{o.name|title}}.js');
 var queryOps = require('../common')
 
 /* GET /users listing. */
-router.get('/', function(req, res, next) {
+router.get('/'
+, function(req, res, next) {
+sort_field = '';
+sort = [];
+order = 'descending';
 queries = {};
+from = -1;
+to = -1;
 for (query in req.query){
     query_string = req.query[query];
     query_parts = query_string.split("$");
+
+    console.log(query);
+    console.log(query_string);
+
+    // Reserved params
+    if (query === 'sortBy'){
+        sort_field = query_string;
+        console.log(sort);
+        continue;
+    }
+
+   if (query === 'order'){
+        order = query_string;
+        if (sort_field != ''){
+            sort.push([sort_field, order]);
+        }
+        console.log(sort);
+        continue;
+    }
+
+    if (query === 'from'){
+        from = parseInt(query_string);
+        continue;
+    }
+
+    if (query === 'to'){
+        to = parseInt(query_string);
+        continue;
+    }
+
+
     if (query_parts.length > 1){
         param = query_parts[1];
         operation = query_parts[0];
@@ -22,8 +59,14 @@ for (query in req.query){
         queries[query] = req.query[query];
     }
 }
-{{o.name|title}}.find(queries)
-    .exec(function (err, post) {
+query = {{o.name|title}}.find(queries).sort(sort);
+if (from > -1){
+    query.limit(to);
+}
+if (to > -1){
+    query.skip(from);
+}
+query.exec(function (err, post) {
       if (err) return next(err);
       res.json(post);
     }
