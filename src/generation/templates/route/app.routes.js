@@ -29,7 +29,7 @@
                 views: {
                     'center': {
                         templateUrl: '{{routes[route].template}}',
-                        controller: '{{routes[route].controller}}',
+                        controller: '{{routes[route].controller|title}}Controller',
                         controllerAs: 'ctrl'
                     }
                 }

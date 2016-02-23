@@ -68,7 +68,6 @@ class Generator(object):
             except FileNotFoundError:
                 print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Unable to generate framework. Continues...")
 
-
         with open('config.json') as data_file:
             self.type_mapper = json.load(data_file)
 
@@ -111,8 +110,8 @@ class Generator(object):
     def generate(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        if not os.path.exists(os.path.join(self.path, "app","src", "styles")):
-            os.makedirs(os.path.join(self.path, "app","src", "styles"))
+        if not os.path.exists(os.path.join(self.path, "app", "src", "styles")):
+            os.makedirs(os.path.join(self.path, "app", "src", "styles"))
         shutil.copy(os.path.join(os.pardir, "generation", "templates", "views", "page.css"),
                     os.path.join(self.path, "app", "src", "styles", "page.css"))
         try:
@@ -244,7 +243,7 @@ class Generator(object):
         elif hasattr(selector, "paragraph"):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
-            return get_template("jumbo.html", jumbo = selector)
+            return get_template("jumbo.html", jumbo=selector)
         else:
             print(BColors.FAIL + " selector '{0}' ERROR".format(selector))
 
@@ -294,7 +293,7 @@ class Generator(object):
         path = os.path.join(self.path, "app", "src", "app", "views", name)
         file_path = "{0}.html".format(name)
         full_path = os.path.join(path, file_path)
-        relative_path = "app/views/"+name+"/"+name+".html"
+        relative_path = "app/views/" + name + "/" + name + ".html"
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -302,8 +301,8 @@ class Generator(object):
 
         self.routes[name] = {
             'path': "/{0}".format(name),
-            'template':relative_path,
-            'controller': "{0}Controller".format(name.title())
+            'template': relative_path,
+            'controller': "{0}".format(name)
         }
         return file
 
@@ -311,15 +310,14 @@ class Generator(object):
         formInputs = []
         for property in form.properties:
             if property.type is 'checkbox':
-                render = get_template("checkbox.js", name = property.name)
+                render = get_template("checkbox.js", name=property.name)
                 formInputs.append(render)
             elif property.type is 'date':
-                render = get_template("date.js", name = property.name)
+                render = get_template("date.js", name=property.name)
                 formInputs.append(render)
 
-        render = get_template("form.js", form = form, formInputs = formInputs, actions=actions)
-        self.generate_ctrl(form.name+".form", render)
-
+        render = get_template("form.js", form=form, formInputs=formInputs, actions=actions)
+        self.generate_ctrl(form.name + ".form", render)
 
     def generate_page_controller(self, page):
         factories = []
@@ -328,8 +326,8 @@ class Generator(object):
             if hasattr(selector, 'object'):
                 if selector.object.name not in factories:
                     factories.append(selector.object.name)
-        render = get_template("page.js", page = page, factories = factories)
-        self.generate_ctrl(page.name,render)
+        render = get_template("page.js", page=page, factories=factories)
+        self.generate_ctrl(page.name, render)
 
     def generate_view_controller(self, view):
         factories = []
@@ -339,13 +337,13 @@ class Generator(object):
                 if hasattr(selector, 'object'):
                     if selector.object.name not in factories:
                         factories.append(selector.object.name)
-        render = get_template("view.js", view = view, factories = factories)
-        self.generate_ctrl(view.name,render)
+        render = get_template("view.js", view=view, factories=factories)
+        self.generate_ctrl(view.name, render)
 
     def generate_factories(self):
         for concept in self.model.concept:
             if concept.__class__.__name__ == "Object":
-                render = get_template("factory.js", object = concept)
+                render = get_template("factory.js", object=concept)
                 path = os.path.join(self.path, "app", "src", "app", "factories", concept.name)
                 file_path = "{0}.factory.js".format(concept.name)
                 full_path = os.path.join(path, file_path)
@@ -355,10 +353,9 @@ class Generator(object):
                 print(render, file=file)
                 print("Generating factory for {0}".format(concept.name))
 
-
     def generate_route_file(self):
-        render_routes = get_template("app.routes.js", routes = self.routes)
-        render_modules = get_template("app.modules.js", modules = self.routes)
+        render_routes = get_template("app.routes.js", routes=self.routes)
+        render_modules = get_template("app.modules.js", modules=self.routes)
         path = os.path.join(self.path, "app", "src", "app")
         file_path_routes = "app.routes.js"
         file_path_modules = "app.modules.js"
@@ -372,6 +369,7 @@ class Generator(object):
         file_modules = open(full_path_modules, 'w+')
         print(render_modules, file=file_modules)
         print("Generating app.modules.js")
+
 
 class BColors:
     HEADER = '\033[95m'
