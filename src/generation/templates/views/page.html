@@ -51,6 +51,8 @@
          </div>
       </div>
       {{footer}}
+      
+       {% if sidebar !='' and footer!=''-%}
       <script>
          var sidebarWidth = document.getElementById("sidebar").offsetWidth;
          document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
@@ -60,6 +62,7 @@
          	document.getElementById("footerText").style["padding-left"] = sidebarWidth+"px"
          };
       </script>
+      {% endif %}
    </div>
 </div>
 
