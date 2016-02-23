@@ -347,6 +347,7 @@ class Generator(object):
             if concept.__class__.__name__ == "Object":
                 for query in concept.queries:
                     self.stringifyQuery(query)
+                    
                 render = get_template("factory.js", object=concept, queries=concept.queries)
                 path = os.path.join(self.path, "app", "src", "app", "factories", concept.name)
                 file_path = "{0}.factory.js".format(concept.name)
@@ -388,7 +389,7 @@ class Generator(object):
             string += 'from=' + str(query.rangeFrom) + '&'
         if hasattr(query, 'rangeTo') and query.rangeTo != 0:
             string += 'to=' + str(query.rangeTo) + '&'
-        if string.len() > 0:
+        if len(string) > 0:
             string = string[:-1]
         query.string = string
 

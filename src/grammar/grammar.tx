@@ -149,7 +149,7 @@ StringConditionName:
 ;
 
 IntegerConditionName:
-    'lt'|'gt'|'le'|'ge'|'e'
+    'lowerThan'|'greterThan'|'lessEqual'|'greaterEqual'|'equal'
 ;
 
 Order:
