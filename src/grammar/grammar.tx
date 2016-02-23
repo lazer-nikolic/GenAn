@@ -37,7 +37,7 @@ ViewInView:
 ;
 
 Page:
-	'page' name=ID ':' 
+	'page' name=ID ('for' object=[Object]'.'query=[Query])?':'
 		'title' '=' title=STRING
 		(using *= Use)
 		(layout=Layout)*
@@ -129,7 +129,7 @@ Object:
 ;
 
 Query:
-    'query' name=ID ( 'property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property] ('order''='order=Order)?)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
+    'query' name=ID ('property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property] ('order''='order=Order)?)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
 ;
 
 Condition:
