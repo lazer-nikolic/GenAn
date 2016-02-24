@@ -3,15 +3,32 @@
 
 DSL for definition of client-side application based on AngularJS.
 #### Instalation:
-GenAn requires the following for backend generation:
 
-node.js and npm: 
-https://nodejs.org/en/download/
+git clone https://github.com/theshammy/GenAn.git
+
+Run genan.py in main package.
+
+#### Dependencies:
+* Arpeggio
+* textX
+* Jinja2
 
 ##### Backend
+* node.js and npm: https://nodejs.org/en/download/
 * express:
 `npm install -g express`
 * express generator:
 `npm install -g express-generator`
+
+### Usage:
+
+There are three concepts in GenAn:
+* Object: Contains properties which are basic component or views. These properties describe how an entity should be visualized.
+* View: Part of a page, containing other views or object references.
+* Page: HTML page, containing views or object references.
+
+Examples are located in test directory.
+
+Once executed, GenAn will generate html pages described in a .gn file using the after mentioned concepts. GenAn also provides AngularJS application and node.js backend generation.
 
 To run GenAn, execute genan.py inside src/main and follow the instructons. Documentation will be available soon.
