@@ -2,11 +2,11 @@
 [![MIT](https://camo.githubusercontent.com/52ec9e2dfec7264e254fb7af5ac87f301ced9180/68747470733a2f2f696d672e736869656c64732e696f2f707970692f6c2f417270656767696f2e737667)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 
 DSL for definition of client-side application based on AngularJS.
-#### Instalation:
+#### Installation:
 
 git clone https://github.com/theshammy/GenAn.git
 
-Run genan.py in main package.
+Run genan.py in main package from command line: `genan -source_file -destination_folder`
 
 #### Dependencies:
 * Arpeggio
@@ -31,4 +31,4 @@ Examples are located in test directory.
 
 Once executed, GenAn will generate html pages described in a .gn file using the after mentioned concepts. GenAn also provides AngularJS application and node.js backend generation.
 
-To run GenAn, execute genan.py inside src/main and follow the instructons. Documentation will be available soon.
+Documentation will be available soon.
