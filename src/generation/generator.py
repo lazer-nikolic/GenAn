@@ -371,7 +371,7 @@ class Generator(object):
                 render = get_template("date.js", name=property.name)
                 formInputs.append(render)
 
-        render = get_template("form.js", form=form, formInputs=formInputs, actions=actions)
+        render = get_template("form.js", name=form.name, formInputs=formInputs, actions=actions)
         self.generate_ctrl(form.name + ".form", render)
 
     def generate_page_controller(self, page):
