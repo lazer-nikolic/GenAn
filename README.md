@@ -4,7 +4,11 @@
 DSL for definition of client-side application based on AngularJS.
 #### Instalation:
 GenAn requires the following for backend generation:
-* node.js and npm: https://nodejs.org/en/download/
+
+node.js and npm: 
+https://nodejs.org/en/download/
+
+##### Backend
 * express:
 `npm install -g express`
 * express generator:
