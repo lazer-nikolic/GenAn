@@ -248,9 +248,9 @@ class Generator(object):
 
         elif hasattr(selector, "actions"):
             self.generate_form(obj=selector.obj, actions=selector.actions)
-            self.form__route_controller(selector.obj.name+'_form', selector.obj.name+'Form')
+            self.form__route_controller(selector.obj.name+'.form', selector.obj.name+'form')
             self.add_view_subroutes(selector.parent.parent.name, selector.obj.name+'.form')
-            return '<div ui-view=\'' + selector.obj.name + '\'/>'
+            return '<div ui-view=\'' + selector.obj.name + '.form\'/>'
         elif hasattr(selector, "paragraph"):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
@@ -369,7 +369,7 @@ class Generator(object):
                 render = get_template("date.js", name=property.name)
                 formInputs.append(render)
 
-        render = get_template("form.js", form=form, formInputs=formInputs, actions=actions)
+        render = get_template("form.js", name=form.name, formInputs=formInputs, actions=actions)
         self.generate_ctrl(form.name + ".form", render)
 
     def generate_page_controller(self, page):

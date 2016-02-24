@@ -2,12 +2,12 @@
 (function () {
     'use strict';
 
-    angular.module('{{form.name}}', [])
-        .controller('{{form.name | title}}FormController', {{form.name | title}}FormController);
+    angular.module('app')
+        .controller('{{name | title}}formController', {{name | title}}formController);
 
-    {{form.name | title}}FormController.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
+    {{name | title}}formController.$inject = ['EventBus','{{name | title}}Factory', '$filter', '$stateParams'];
 
-    function {{form.name | title}}FormController(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
+    function {{name | title}}formController(EventBus, {{name | title}}Factory, $filter, $stateParams) {
 
         var ctrl = this;
         ctrl.update = false;
@@ -15,7 +15,7 @@
         ctrl.currentObject = {};
 
         if ($stateParams.id != 'new') {
-            {{form.name | title}}Factory.getById($stateParams.id).then(function(success) {
+            {{name | title}}Factory.getById($stateParams.id).then(function(success) {
                 ctrl.currentObject = success;
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
                 ctrl.update = true;
@@ -24,15 +24,15 @@
 
         ctrl.save = function () {
             if (ctrl.update) {
-                {{form.name | title}}Factory.update(ctrl.currentObject);
+                {{name | title}}Factory.update(ctrl.currentObject);
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
             } else {
-                {{form.name | title}}Factory.save(ctrl.currentObject);
+                {{name | title}}Factory.save(ctrl.currentObject);
                 angular.copy(ctrl.currentObject, ctrl.oldObject);
             }
         }
 
-        ctrl.restartUpdate = function () {
+        ctrl.resetUpdate = function () {
             angular.copy(ctrl.oldObject, ctrl.currentObject);
         }
 
@@ -41,7 +41,7 @@
         }
 
         ctrl.remove = function () {
-            {{form.name | title}}Factory.remove(ctrl.currentObject.id);
+            {{name | title}}Factory.remove(ctrl.currentObject.id);
             EventBus.emitEvent('GoToTableUser');
         }
     {%for x in formInputs %}
