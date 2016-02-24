@@ -2,12 +2,12 @@
 (function () {
     'use strict';
 
-    angular.module('{{form.name}}', [])
-        .controller('{{form.name | title}}FormController', {{form.name | title}}FormController);
+    angular.module('app')
+        .controller('{{form.name | title}}_formController', {{form.name | title}}_formController);
 
-    {{form.name | title}}FormController.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
+    {{form.name | title}}_formController.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
 
-    function {{form.name | title}}FormController(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
+    function {{form.name | title}}_formController(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
 
         var ctrl = this;
         ctrl.update = false;

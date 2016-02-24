@@ -227,7 +227,7 @@ class Generator(object):
             else:
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
-        form_name = obj.name + ".form"
+        form_name = obj.name + "_form"
         file = self.form_route(form_name)
         rendered = get_template("form.html", formInputs=formInputs, obj=obj, actions=actions)
 
@@ -248,9 +248,9 @@ class Generator(object):
 
         elif hasattr(selector, "actions"):
             self.generate_form(obj=selector.obj, actions=selector.actions)
-            self.form__route_controller(selector.obj.name+'_form', selector.obj.name+'Form')
-            self.add_view_subroutes(selector.parent.parent.name, selector.obj.name+'.form')
-            return '<div ui-view=\'' + selector.obj.name + '\'/>'
+            self.form__route_controller(selector.obj.name+'_form', selector.obj.name +'_form')
+            self.add_view_subroutes(selector.parent.parent.name, selector.obj.name+'_form')
+            return '<div ui-view=\'' + selector.obj.name+'_form' + '\'/>'
         elif hasattr(selector, "paragraph"):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
@@ -335,6 +335,8 @@ class Generator(object):
 
         if controller is None:
             controller = name
+
+        print("CONTROLLER: {0}".format(controller))
 
         self.routes[name] = {
             'name': name,
