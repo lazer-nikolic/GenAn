@@ -1,19 +1,18 @@
 import argparse
 
 import os
+from click._unicodefun import click
 from generation.generator import Generator, BColors
 from interpretation.interpreter import Interpreter
 
-if __name__ == "__main__":
+@click.command()
+@click.option('-h', '--help', is_flag=True, help='Help.')
+@click.argument('src', nargs=1, type=click.Path(exists=True))
+@click.argument('dest', nargs=1, type=click.Path(exists=True))
+def main(src, dest, help):
 
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('input', metavar='input', help='input file')
-    parser.add_argument('output', default='', metavar='output', help='output file', nargs='?')
-    args = parser.parse_args()
-    print(args)
-
-    input_path = args.input
-    output_path = args.output
+    input_path = src
+    output_path = dest
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
@@ -30,3 +29,6 @@ if __name__ == "__main__":
     generator = Generator(model, interpreter.builtins, output_file)
     generator.generate()
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
+
+if __name__ == '__main__':
+        main()

@@ -13,7 +13,7 @@
 __author__ = "Lazar Nikolić <lazarpwna AT gmail DOT com>, Bojana Zoranović, Dragoljub Ilić"
 __version__ = "0.1.0.dev1"
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 NAME = 'GenAn'
 VERSION = __version__
@@ -36,10 +36,14 @@ setup(
     license = LICENSE,
     url = URL,
     # download_url = DOWNLOAD_URL,
-    packages = ["src"],
-    scripts = ['src/main/genan.py'],
+    py_modules= find_packages(),
     keywords = "dsl angular mean",
-    install_requires=['textx', 'arpeggio'],
+    install_requires=[
+        'textx',
+        'arpeggio',
+        'jinja2',
+        'Click'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -50,6 +54,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python'
         ],
-
-
+    entry_points='''
+        [console_scripts]
+            genan=genan:main
+    ''',
 )
