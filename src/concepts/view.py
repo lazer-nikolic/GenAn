@@ -20,6 +20,7 @@ class View(object):
         self.parent = parent
         self.rows = []
         self.path = {}
+        self.subviews = []
 
         seen = set()
 

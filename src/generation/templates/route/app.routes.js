@@ -31,8 +31,8 @@
                         controller: '{{routes[route].controller|title}}Controller',
                         controllerAs: 'ctrl'
                     }
-
-                    {% for sub_route in routes[route].sub_routes %}
+                    {% set all_routes = routes[route]|sub_routes%}
+                    {% for sub_route in  all_routes %}
                     ,
                     '{{sub_route.name}}@{{route}}': {
                         templateUrl: '{{sub_route.template}}',
