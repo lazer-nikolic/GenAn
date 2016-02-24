@@ -40,7 +40,7 @@ class Generator(object):
     classdocs
     '''
 
-    def __init__(self, model, builtins, path):
+    def __init__(self, model, builtins, path, debug=False):
         self.path = path
         self.model = model
         self.builtins = builtins
@@ -52,12 +52,14 @@ class Generator(object):
         # List of objects required for backend routes
         self.objects = []
         self.routes = {}
-
-        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                       " Do you want to generate framework for your AngularJS application? [y/n] ")
-        while not answer.lower() in ["y", "n", "yes", " no"]:
+        if debug:
+            answer = 'n'
+        else:
             answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                           " Do you want to generate framework for your AngularJS for your application? [y/n] ")
+                           " Do you want to generate framework for your AngularJS application? [y/n] ")
+            while not answer.lower() in ["y", "n", "yes", " no"]:
+                answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                               " Do you want to generate framework for your AngularJS for your application? [y/n] ")
 
         if answer.lower() in ["y", "yes"]:
             seed_file = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'app.zip')
