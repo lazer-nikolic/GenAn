@@ -11,6 +11,7 @@ import shutil
 
 import os
 from concepts.row import Row
+from generation.jinja_filters import sub_routes_filter
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
@@ -30,7 +31,7 @@ def get_template(template_name, **kwargs):
                                                os.path.join("..", "generation", "templates", "controllers"),
                                                os.path.join("..", "generation", "templates", "route")
                                                ]))
-
+    env.filters['sub_routes'] = sub_routes_filter
     template = env.get_template("{0}".format(template_name))
     return template.render(kwargs)
 
@@ -40,7 +41,7 @@ class Generator(object):
     classdocs
     '''
 
-    def __init__(self, model, builtins, path):
+    def __init__(self, model, builtins, path, debug=False):
         self.path = path
         self.model = model
         self.builtins = builtins
@@ -52,12 +53,14 @@ class Generator(object):
         # List of objects required for backend routes
         self.objects = []
         self.routes = {}
-
-        answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                       " Do you want to generate framework for your AngularJS application? [y/n] ")
-        while not answer.lower() in ["y", "n", "yes", " no"]:
+        if debug:
+            answer = 'n'
+        else:
             answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
-                           " Do you want to generate framework for your AngularJS for your application? [y/n] ")
+                           " Do you want to generate framework for your AngularJS application? [y/n] ")
+            while not answer.lower() in ["y", "n", "yes", " no"]:
+                answer = input(BColors.OKBLUE + "GENAN:" + BColors.ENDC +
+                               " Do you want to generate framework for your AngularJS for your application? [y/n] ")
 
         if answer.lower() in ["y", "yes"]:
             seed_file = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'app.zip')
@@ -142,7 +145,6 @@ class Generator(object):
         else:
             # Rows for this view
             rows = []
-
             file = self.form_route(view.name)
             self.generate_view_controller(view)
             print("Generating view {0}".format(view.name))
@@ -153,6 +155,8 @@ class Generator(object):
             rendered = get_template("view.html", rows=rows)
             print(rendered, file=file)
 
+            self.add_subroutes(view)
+
             return "<div ui-view='{0}'></div>".format(view.name)
 
     def generate_page(self, page):
@@ -160,7 +164,6 @@ class Generator(object):
         positions = {}
 
         file = self.form_route(page.name)
-        self.add_subroutes(page)
 
         print("Generating page {0}".format(page.name))
         self.generate_page_controller(page)
@@ -201,6 +204,8 @@ class Generator(object):
         rendered = get_template("page.html", page=page, positions=positions, sidebar=sidebarRend, footer=footerRend,
                                 header=menuRender)
         print(rendered, file=file)
+
+        self.add_subroutes(page)
 
     def generate_ctrl(self, name, render):
         path = os.path.join(self.path, "app", "src", "app", "controllers", name)
@@ -352,8 +357,10 @@ class Generator(object):
         print(page.name)
         for view in page.subviews:
             print(view.name)
-            if view.name in self.routes:
-                self.routes[page.name]['sub_routes'].append(self.routes[view.name])
+            if view.name not in self.routes:
+                # HACK: Files will be reopened. This doesn't affect the generation problem, though.
+                self.form_route(view.name)
+            self.routes[page.name]['sub_routes'].append(self.routes[view.name])
         print(self.routes[page.name])
 
     def add_view_subroutes(self, view, subview):

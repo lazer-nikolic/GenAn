@@ -10,6 +10,15 @@ def view_in_view_processor(view_in_view):
     line, col = view_in_view._tx_metamodel.parser.pos_to_linecol(
                 view_in_view._tx_position)
 
+    selector = view_in_view.selector
+    if selector.__class__.__name__ == 'SelectorView':
+        builtins = view_in_view._tx_metamodel.builtins
+        view_name = selector.view.name
+        view = selector.view
+        if view_name not in builtins:
+            print("{0} > {1}".format(view_in_view.parent, view))
+            view_in_view.parent.subviews.append(view)
+
     if view_in_view.position:
         if view_in_view.position > 12:
             print(BColors.WARNING + "WARNING: " + BColors.ENDC +
@@ -33,14 +42,6 @@ def view_in_view_processor(view_in_view):
                 print(BColors.WARNING + "WARNING: " + BColors.ENDC +
                       "(at %d, %d) Size %d of component exceeds row size on position %d." %
                       (line, col, view_in_view.size, view_in_view.position))
-
-        selector = view_in_view.selector
-        if hasattr(selector, 'view'):
-            builtins = view_in_view._tx_metamodel.builtins
-            view_name = selector.view.obj_name
-            view = selector.view
-            if view_name not in builtins:
-                view_in_view.parent.subviews.append(view)
 
 class ViewInView(object):
     '''

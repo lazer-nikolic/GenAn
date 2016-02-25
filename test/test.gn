@@ -57,7 +57,12 @@ menubar mainMenu 'GenAn':
 	    'Login' ref='http://google.com' right
 	;
 
+view sub_list:
+   show article.title
+;
+
 view articles_list:
+    show sub_list
 	show article.title
 	show article.description at 2 size 2
 	!row 4
