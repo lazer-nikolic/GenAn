@@ -5,14 +5,14 @@ from click._unicodefun import click
 from generation.generator import Generator, BColors
 from interpretation.interpreter import Interpreter
 
-@click.command()
-@click.option('-h', '--help', is_flag=True, help='Help.')
-@click.argument('src', nargs=1, type=click.Path(exists=True))
-@click.argument('dest', nargs=1, type=click.Path(exists=True))
-def main(src, dest, help):
-
-    input_path = src
-    output_path = dest
+#@click.command()
+#@click.option('-h', '--help', is_flag=True, help='Help.')
+#@click.argument('src', nargs=1, type=click.Path(exists=True))
+#@click.argument('dest', nargs=1, type=click.Path(exists=True))
+#def main(src, dest, help):
+def main():
+    input_path = "../../test/example.gn"
+    output_path = "../../gen_test/"
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 

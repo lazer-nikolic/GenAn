@@ -1,0 +1,193 @@
+menubar mainMenu 'GenAn':
+	    menu Views:
+            'Table' @table_page
+            'Thumbnail' @thumbnail_page
+            'List' @list_page
+	    ;
+	
+	    'User form' @user_form left
+	    'About' @about_page
+	 
+		 menu Links right:
+	    	'Facebook' ref='http://facebook.com'
+	    	'You tube' ref='http://youtube.com'
+	    	'Twitter' ref='http://twitter.com' 
+	    ;
+	    'Sign up' ref='http://google.com' right
+	    
+	;
+	
+sidebar mainSidebar:
+		//color=gray
+		'Home' @home
+	    'GitHub' ref='https://github.com/theshammy/GenAn'
+	    'Google Search' ref='http://google.com'
+	;
+
+footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
+
+object user:
+	username text label='User name' class={'required'}
+	pass password label='Password'
+	age number label='Age' class={'required', 'step':'1'} 
+	mail email label='Email' 
+	birthDate date label = 'Birth date' 
+	gender combobox label='Gender' parameters = { 'Male', 'Female' }
+;
+
+object common:
+	banner1 image label='banner' ref= 'http://orig06.deviantart.net/e08c/f/2014/163/a/2/computer_programming_banner_by_nuranox-d7m1ta5.png'  class = {'width':'300', 'height':'100','margin':'auto'}
+	banner2 image label='banner' ref= 'http://prg.is.titech.ac.jp/wp-content/uploads/2013/09/prg-banner-201309.jpg'  class = {'width':'300', 'height':'100','margin':'auto'}
+	
+	tableName label label='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at nisl sed ipsum posuere pharetra 
+			accumsan at urna.' 
+;
+
+page home:
+	title='Home'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	jumbo:  heading='Welcome'
+			text='Lorem ipsum dolor sit amet, 
+				  consectetur adipiscing elit. Donec interdum ipsum vitae 
+				  odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			imgPath='http://www.planwallpaper.com/static/images/518079-background-hd.jpg'
+			position=top
+			
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more' ref='#' position=left
+	paragraph '&nbsp; ' position=left
+	paragraph '&nbsp; ' position=left
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more' ref='#' position=left 
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center 
+	link 'Read more' ref='#' position=center	
+	paragraph '&nbsp; ' position=center
+	paragraph '&nbsp; ' position=center
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center
+	link 'Read more' ref='#' position=center //class={'style':'float:right;'} 	    
+;
+
+
+page user_form:
+	title='User form'
+	use menubar mainMenu
+ 	form for user actions=create position=center
+;
+	
+page about_page:
+	title='About'
+	use sidebar mainSidebar
+	show image_about_view position=top 
+	paragraph 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at nisl sed ipsum posuere pharetra 
+			accumsan at urna. Fusce rutrum facilisis magna, vel dignissim libero lacinia id. Duis ac 
+			nibh nisi. Suspendisse nec porttitor elit. Proin fringilla vitae risus ut commodo. Fusce 
+			enim justo, molestie elementum mauris nec, sodales maximus risus. Nullam elementum finibus 
+			luctus. Etiam in metus accumsan, vestibulum velit sit amet, rutrum massa. Etiam vitae aliquam 
+			lacus. Proin in dignissim diam, sed sagittis ante. Sed pharetra scelerisque erat nec aliquet. 
+			Nulla scelerisque nec magna at rutrum. Mauris in lacinia nibh. Nulla pulvinar turpis eu neque 
+			faucibus, non auctor lectus maximus. Pellentesque imperdiet, orci vitae tempus facilisis, tortor nisi 
+			posuere mauris, ac tempus augue massa quis lacus.'
+			    position=center
+	paragraph '&nbsp; ' position=center
+	paragraph 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at nisl sed ipsum posuere pharetra 
+			accumsan at urna. Fusce rutrum facilisis magna, vel dignissim libero lacinia id. Duis ac 
+			nibh nisi. Suspendisse nec porttitor elit. Proin fringilla vitae risus ut commodo. Fusce 
+			enim justo, molestie elementum mauris nec, sodales maximus risus. Nullam elementum finibus 
+			luctus. Etiam in metus accumsan, vestibulum velit sit amet, rutrum massa. Etiam vitae aliquam 
+			lacus. Proin in dignissim diam, sed sagittis ante. Sed pharetra scelerisque erat nec aliquet. 
+			Nulla scelerisque nec magna at rutrum. Mauris in lacinia nibh. Nulla pulvinar turpis eu neque 
+			faucibus, non auctor lectus maximus. Pellentesque imperdiet, orci vitae tempus facilisis, tortor nisi 
+			posuere mauris, ac tempus augue massa quis lacus.'
+			    position=center
+	paragraph '&nbsp; ' position=center
+	paragraph 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at nisl sed ipsum posuere pharetra 
+			accumsan at urna. Fusce rutrum facilisis magna, vel dignissim libero lacinia id. Duis ac 
+			nibh nisi. Suspendisse nec porttitor elit. Proin fringilla vitae risus ut commodo. Fusce 
+			enim justo, molestie elementum mauris nec, sodales maximus risus. Nullam elementum finibus 
+			luctus. Etiam in metus accumsan, vestibulum velit sit amet, rutrum massa. Etiam vitae aliquam 
+			lacus. Proin in dignissim diam, sed sagittis ante. Sed pharetra scelerisque erat nec aliquet. 
+			Nulla scelerisque nec magna at rutrum. Mauris in lacinia nibh. Nulla pulvinar turpis eu neque 
+			faucibus, non auctor lectus maximus. Pellentesque imperdiet, orci vitae tempus facilisis, tortor nisi 
+			posuere mauris, ac tempus augue massa quis lacus.'
+			    position=center
+;
+
+view image_about_view:
+	!row 1
+	show common.banner1 at 2 size 3 
+	show common.banner2 at 4 size 3 
+;
+
+page table_page:
+	 title='Table example'
+	 use menubar mainMenu
+	 use sidebar mainSidebar
+	 use footer mainFooter
+	 show table_view position=center
+;
+
+view table_view:
+	!row 4
+ 	 show common.tableName at 2 size 8 
+ 	!row 5
+ 	table data_show={ user.username,  user.age, user.gender} at 3 size 6 
+;
+
+page thumbnail_page:
+	title ='Thumbnail example'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show thumbnail_view position=center
+;
+
+view thumbnail_view:
+	!row 4
+ 	 show common.tableName at 2 size 8 
+ 	!row 5
+ 	thumbnail data_show={ user.username,  user.age, user.gender } at 2 size 9
+;
+
+page list_page:
+	title ='List example'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show list_view position=center
+;
+
+view list_view:
+	!row 4
+ 	 show common.tableName at 2 size 8 
+ 	!row 5
+ 	list data_show={user.username,  user.mail } at 3 size 6 
+;
