@@ -22,8 +22,6 @@ AUTHOR = __author__
 AUTHOR_EMAIL = '<lazarpwna AT gmail DOT com>'
 LICENSE = 'MIT'
 URL = 'https://github.com/theshammy/GenAn'
-# DOWNLOAD_URL = 'https://github.com/igordejanovic/Arpeggio/archive/v{}.tar.gz'\
-#     .format(VERSION)
 
 setup(
     name = NAME,

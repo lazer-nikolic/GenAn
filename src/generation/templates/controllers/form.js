@@ -3,19 +3,12 @@
     'use strict';
 
     angular.module('app')
-<<<<<<< HEAD
-        .controller('{{form.name | title}}_formController', {{form.name | title}}_formController);
 
-    {{form.name | title}}_formController.$inject = ['EventBus','{{form.name | title}}Factory', '$filter', '$stateParams'];
-
-    function {{form.name | title}}_formController(EventBus, {{form.name | title}}Factory, $filter, $stateParams) {
-=======
         .controller('{{name | title}}formController', {{name | title}}formController);
 
     {{name | title}}formController.$inject = ['EventBus','{{name | title}}Factory', '$filter', '$stateParams'];
 
     function {{name | title}}formController(EventBus, {{name | title}}Factory, $filter, $stateParams) {
->>>>>>> aa82ef6078860aca7847f0bc6c84daaa1a084309
 
         var ctrl = this;
         ctrl.update = false;

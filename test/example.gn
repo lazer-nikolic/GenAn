@@ -100,7 +100,7 @@ page home:
 page user_form:
 	title='User form'
 	use menubar mainMenu
- 	form for user actions=create position=center
+ 	form for user actions=save position=center
 ;
 	
 page about_page:
