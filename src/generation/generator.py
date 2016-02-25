@@ -227,7 +227,14 @@ class Generator(object):
             else:
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
-        return get_template("form.html", formInputs=formInputs, obj=obj, actions=actions)
+        form_name = obj.name + "_form"
+        file = self.form_route(form_name)
+        rendered = get_template("form.html", formInputs=formInputs, obj=obj, actions=actions)
+
+        print(rendered, file=file)
+        return '<div ui-view=\'' + form_name + '\'/>'
+
+
 
     def generate_selector(self, selector):
         # SelectorView contains a view
@@ -240,7 +247,10 @@ class Generator(object):
             return get_template("{0}.html".format(selector.type.name), data=selector.data)
 
         elif hasattr(selector, "actions"):
-            return self.generate_form(obj=selector.obj, actions=selector.actions)
+            self.generate_form(obj=selector.obj, actions=selector.actions)
+            self.form__route_controller(selector.obj.name+'_form', selector.obj.name +'_form')
+            self.add_view_subroutes(selector.parent.parent.name, selector.obj.name+'_form')
+            return '<div ui-view=\'' + selector.obj.name+'_form' + '\'/>'
         elif hasattr(selector, "paragraph"):
             return get_template("paragraph.html", paragrpah=selector.paragraph)
         elif hasattr(selector, "jumbo"):
@@ -312,6 +322,32 @@ class Generator(object):
 
         return file
 
+    def form__route_controller(self, name, controller):
+
+        path = os.path.join(self.path, "app", "src", "app", "views", name)
+        file_path = "{0}.html".format(name)
+        full_path = os.path.join(path, file_path)
+        relative_path = "app/views/" + name + "/" + name + ".html"
+
+        # if not os.path.exists(path):
+        #     os.makedirs(path)
+        # file = open(full_path, 'w+')
+
+        if controller is None:
+            controller = name
+
+        print("CONTROLLER: {0}".format(controller))
+
+        self.routes[name] = {
+            'name': name,
+            'path': "/{0}".format(name),
+            'template': relative_path,
+            'controller': "{0}".format(controller),
+            'sub_routes': []
+        }
+
+        #return file
+
     def add_subroutes(self, page):
         print(page.name)
         for view in page.subviews:
@@ -320,6 +356,10 @@ class Generator(object):
                 self.routes[page.name]['sub_routes'].append(self.routes[view.name])
         print(self.routes[page.name])
 
+    def add_view_subroutes(self, view, subview):
+        if view in self.routes:
+            self.routes[view]['sub_routes'].append(self.routes[subview])
+        print(self.routes[view])
 
     def generate_form_controller(self, form, actions):
         formInputs = []
@@ -331,7 +371,7 @@ class Generator(object):
                 render = get_template("date.js", name=property.name)
                 formInputs.append(render)
 
-        render = get_template("form.js", form=form, formInputs=formInputs, actions=actions)
+        render = get_template("form.js", name=form.name, formInputs=formInputs, actions=actions)
         self.generate_ctrl(form.name + ".form", render)
 
     def generate_page_controller(self, page):
