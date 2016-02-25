@@ -5,7 +5,7 @@ menubar mainMenu 'GenAn':
             'List' @list_page
 	    ;
 	
-	    'User form' @user_form left
+	    'User form' @user_form_page left
 	    'About' @about_page
 	 
 		 menu Links right:
@@ -97,10 +97,15 @@ page home:
 ;
 
 
-page user_form:
+page user_form_page:
 	title='User form'
 	use menubar mainMenu
- 	form for user actions=save position=center
+ 	show user_form_view position=center
+;
+	
+view user_form_view:
+	!row 1
+	form for user actions=save at 3 size 6
 ;
 	
 page about_page:
