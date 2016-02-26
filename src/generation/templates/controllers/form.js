@@ -9,7 +9,6 @@
 
     function {{name | title}}formController(EventBus, {{name | title}}Factory, $filter, $stateParams) {
 
-
         var ctrl = this;
         ctrl.update = false;
         ctrl.oldObject = {};

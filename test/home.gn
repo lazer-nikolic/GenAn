@@ -59,5 +59,4 @@ page home:
 			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
 			    position=center
 	link 'Read more' ref='#' class={'style':'float:right;'} position=center   	    
-	
 ;

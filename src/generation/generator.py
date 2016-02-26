@@ -6,6 +6,7 @@ Created on 08.02.2016.
 import json
 import subprocess
 import zipfile
+import codecs
 
 import shutil
 
@@ -88,7 +89,6 @@ class Generator(object):
                 self.app_name = "genanApp"
 
             try:
-                print(self.path)
                 base_path = os.path.join(self.path, self.app_name)
                 if not os.path.exists(base_path):
                     os.makedirs(base_path)

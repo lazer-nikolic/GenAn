@@ -2,7 +2,7 @@
       <div class="container-fluid">
       {% if brand_name != '' -%}
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">{{header.brandName}}</a>
+          <a class="navbar-brand" href="#/home">{{header.brandName}}</a>
         </div>
        {% endif %}
         
@@ -19,7 +19,7 @@
               </a>
               <ul class="dropdown-menu">
               {% for item in menu.items %}
-                <li><a href="/{{item.ref}}">{{item.label}}</a></li>
+                <li><a href="{{item.ref}}">{{item.label}}</a></li>
               {% endfor %}
               </ul>
             </li>
@@ -44,7 +44,7 @@
               </a>
               <ul class="dropdown-menu">
               {% for item in menu.items %}
-                <li><a href="/{{item.ref}}">{{item.label}}</a></li>
+                <li><a href="{{item.ref}}">{{item.label}}</a></li>
               {% endfor %}
               </ul>
             </li>

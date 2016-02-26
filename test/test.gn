@@ -1,3 +1,73 @@
+menubar mainMenu 'GenAn':
+	    menu Views:
+            'Table' ref='http://google.com'
+            'Thumbnail' ref ='#'
+            'List' ref ='#'
+	    ;
+	
+	    'User form' ref='http://google.com' left
+	    'About' ref='http://google.com' 
+	 
+	    'Sign up' ref='http://google.com' right
+	    menu Profile right:
+	    	'Edit profile' ref='#'
+	    	'Log out' ref='#' 
+	    ;
+	;
+
+page home:
+	title='Home'
+	use menubar mainMenu
+	jumbo:  heading='Welcome'
+			text='Lorem ipsum dolor sit amet, 
+				  consectetur adipiscing elit. Donec interdum ipsum vitae 
+				  odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			imgPath='http://www.planwallpaper.com/static/images/518079-background-hd.jpg'
+			position=top
+			
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more &radio;' ref='#' position=left
+	paragraph '&nbsp; ' position=left
+	paragraph '&nbsp; ' position=left
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			   position=left
+	link 'Read more' ref='#' position=left 
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center 
+	link 'Read more' ref='#' position=center	
+	paragraph '&nbsp; ' position=center
+	paragraph '&nbsp; ' position=center
+	
+	paragraph 'Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet, 
+			   consectetur adipiscing elit. Donec interdum ipsum vitae 
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center
+	link 'Read more' ref='#' class={'style':'float:right;'} position=center   	    
+;
+
+
+
 object user:
 	name text label='Name' class={'required'}
 	username text label='User name'
@@ -6,7 +76,7 @@ object user:
 	pass password label='Password'
 	num number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
-	slika image label='google.com' ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png'  class = {'width':'160', 'height':'130'} 
+	slika image label='google.com'  ref= 'https://www.ostraining.com/cdn/images/coding/bootstrap.png'  class = {'width':'160', 'height':'130'} 
 	myLabel label label = 'Hello World'
 	birthDate date label = 'Birth date' 
 	articles link label='Articles'  @articles_for_user
