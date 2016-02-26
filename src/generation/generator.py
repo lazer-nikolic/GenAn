@@ -123,6 +123,7 @@ class Generator(object):
                 if class_name in self.visitors:
                     self.visitors[class_name](concept)
             self.generate_factories()
+            self.check_for_route_id()
             self.generate_route_file()
             if self.objects:
                 render_app = get_template("app.js", objects=self.objects, app_name=self.app_name)
@@ -233,7 +234,7 @@ class Generator(object):
                 render = self.generate_basic(obj, obj, property)
                 formInputs.append(render)
         form_name = obj.name + "_form"
-        file = self.form_route(form_name)
+        file = self.form_route(form_name, True)
         rendered = get_template("form.html", formInputs=formInputs, obj=obj, actions=actions)
 
         print(rendered, file=file)
@@ -253,7 +254,7 @@ class Generator(object):
 
         elif hasattr(selector, "actions"):
             self.generate_form(obj=selector.obj, actions=selector.actions)
-            self.form__route_controller(selector.obj.name+'_form', selector.obj.name +'_form')
+            self.form__route_controller(selector.obj.name+'_form', selector.obj.name +'form', True)
             self.add_view_subroutes(selector.parent.parent.name, selector.obj.name+'_form')
             return '<div ui-view=\'' + selector.obj.name+'_form' + '\'/>'
         elif hasattr(selector, "paragraph"):
@@ -299,7 +300,7 @@ class Generator(object):
         row_selectors = [sub_view.selector for sub_view in row.selectors]
         return get_template("row.html", sub_views=row.selectors, rendered_selector=rendered_selector)
 
-    def form_route(self, name):
+    def form_route(self, name, id=False):
         """
         form_route(self, name)
         Creates folder, file and forms route for a view or a page with passed name.
@@ -322,12 +323,13 @@ class Generator(object):
             'path': "/{0}".format(name),
             'template': relative_path,
             'controller': "{0}".format(name),
-            'sub_routes': []
+            'sub_routes': [],
+            'id':id
         }
 
         return file
 
-    def form__route_controller(self, name, controller):
+    def form__route_controller(self, name, controller, id=False):
 
         path = os.path.join(self.path, "app", "src", "app", "views", name)
         file_path = "{0}.html".format(name)
@@ -348,7 +350,8 @@ class Generator(object):
             'path': "/{0}".format(name),
             'template': relative_path,
             'controller': "{0}".format(controller),
-            'sub_routes': []
+            'sub_routes': [],
+            'id':id
         }
 
         #return file
@@ -367,6 +370,17 @@ class Generator(object):
         if view in self.routes:
             self.routes[view]['sub_routes'].append(self.routes[subview])
         print(self.routes[view])
+
+    def check_for_route_id(self):
+        for route in self.routes:
+            if self.routes[route]['id']:
+                self.routes[route]['path'] += '/:id'
+                continue
+            for subroutes in self.routes[route]['sub_routes']:
+                if subroutes['id'] and not self.routes[route]['id']:
+                    self.routes[route]['path'] += '/:id'
+                    self.routes[route]['id'] = True
+                    break
 
     def generate_form_controller(self, form, actions):
         formInputs = []
@@ -398,22 +412,27 @@ class Generator(object):
         self.generate_ctrl(page.name, render)
 
     def generate_view_controller(self, view):
-        factories = []
+        factories = {}
+        query = 'getAll'
         for view_on_page in view.views:
             if hasattr(view_on_page, 'selector'):
                 selector = view_on_page.selector
                 if hasattr(selector, 'object'):
                     if selector.object.name not in factories:
-                        factories.append(selector.object.name)
+                        factories[selector.object.name] = query
+
+        if hasattr(view, 'object') and view.query:
+            factories[view.object.name] = view.query.name
         render = get_template("view.js", view=view, factories=factories)
         self.generate_ctrl(view.name, render)
 
     def generate_factories(self):
         for concept in self.model.concept:
             if concept.__class__.__name__ == "Object":
-                # for query in concept.queries:
-                #     self.stringifyQuery(query)
-                render = get_template("factory.js", object=concept, query=concept.queries)
+                queries = {}
+                for query in concept.queries:
+                     queries[query.name] = self.stringifyQuery(query)
+                render = get_template("factory.js", object=concept, queries=queries)
                 path = os.path.join(self.path, "app", "src", "app", "factories", concept.name)
                 file_path = "{0}.factory.js".format(concept.name)
                 full_path = os.path.join(path, file_path)
@@ -442,10 +461,10 @@ class Generator(object):
 
     def stringifyQuery(self, query):
         string = ""
-        if hasattr(query, 'property'):
-            string += 'property=' + query.property.name + '&'
-        if hasattr(query, 'condition'):
-            string += 'condition=' + query.condition.conditionName+"$"+str(query.condition.parameter) + '&'
+        if hasattr(query, 'property') and query.property is not None:
+            string += query.property.name + '&'
+        if hasattr(query, 'condition') and query.condition is not None:
+            string += query.condition.conditionName+"$"+str(query.condition.parameter) + '&'
         if hasattr(query, 'sortBy') and query.sortBy is not None:
             string += 'sortBy=' + query.sortBy.name + '&'
         if hasattr(query, 'order') and query.order is not None:
@@ -456,7 +475,7 @@ class Generator(object):
             string += 'to=' + str(query.rangeTo) + '&'
         if len(string) > 0:
             string = string[:-1]
-        query.string = string
+        return string
 
 class BColors:
     HEADER = '\033[95m'
