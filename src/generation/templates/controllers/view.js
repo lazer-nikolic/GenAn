@@ -11,9 +11,13 @@
 
         var ctrl = this;
          {% for factory in factories %}
+             ctrl.{{factory}}_multiple  = {};
              ctrl.{{factory}} = {};
-             {{factory | title}}Factory.getAll().then(function (success) {
-                ctrl.{{factory}} = success;
+             {{factory | title}}Factory.{{factories[factory]}}().then(function (success) {
+                ctrl.{{factory}}_multiple  = success;
+                if (ctrl.{{factory}}_multiple  && ctrl.{{factory}}_multiple.length>0) {
+                 ctrl.{{factory}} = ctrl.{{factory}}_multiple[0];
+             }
              });
          {% endfor %}
 }

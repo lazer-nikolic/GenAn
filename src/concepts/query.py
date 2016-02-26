@@ -6,12 +6,12 @@ def query_processor(query):
         query.condition.conditionName = adapter_for_query(query)
     
     for query in query.parent.queries:
-        if query.property not in query.parent.properties:
+        if (not hasattr(query, 'property')) and (query.sortBy not in query.parent.properties):
             line, col = query.parent._tx_metamodel.parser.pos_to_linecol(
                 object._tx_position)
             raise TextXSemanticError("ERROR: (at %d, %d) Object %s has no property named %s." %
                                      (line, col, query.parent.object.name, query.parent.property.name))
-        elif query.sortBy not in query.parent.properties:
+        elif (not hasattr(query, 'sortBy')) and (query.sortBy not in query.parent.properties):
             line, col = query.parent._tx_metamodel.parser.pos_to_linecol(
                 object._tx_position)
             raise TextXSemanticError("ERROR: (at %d, %d) Object %s has no property named %s." %

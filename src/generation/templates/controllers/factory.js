@@ -22,7 +22,7 @@
         }
 
         function create(single_{{object.name}}) {
-            return ApiService.create(relativeUrl, single_{{object.name}}, single_{{object.name}}._id);
+            return ApiService.create(relativeUrl, single_{{object.name}});
         }
 
         function update(single_{{object.name}}) {
@@ -34,8 +34,8 @@
         }
 
         {% for query in queries %}
-        function {{query.name}}() {
-            return ApiService.getQuery("{{query.string}}");
+        function {{query}}() {
+            return ApiService.getQuery(relativeUrl, "{{queries[query]}}");
         }
         {% endfor %}
 
@@ -45,6 +45,9 @@
             create: create,
             update: update,
             remove: remove
+            {% for query in queries %}
+                ,{{query}}:{{query}}
+            {% endfor %}
         };
     }
 })();

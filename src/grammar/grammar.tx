@@ -18,7 +18,7 @@ Style:
 ;
 
 View:
-	'view' name=ID ':' 
+	'view' name=ID ('for' object=[Object]'.'query=[Query])? ':'
 		views *= SubView
 	';'
 ;

@@ -14,10 +14,12 @@ class View(object):
                         'date', 'combobox', 'list', 'table',
                         'thumbnail', 'row']
 
-    def __init__(self, parent, name, views):
+    def __init__(self, parent, name, views, object = None, query = None):
         self.name = name
         self.views = views
         self.parent = parent
+        self.object = object
+        self.query = query
         self.rows = []
         self.path = {}
         self.subviews = []
