@@ -13,12 +13,14 @@ object user:
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 	tvType radio label='TV' parameters = { 'PLASMA', 'LCD', 'LED' }
 	married checkbox label='Married' parameters={'Pera', 'Djura', 'Sima'}
+	query getUsersByName sortBy=first_name
 ;
 
 object article:
 	title text label='Name'
 	description text label='Description'
 	author text label='Author'
+	query getArticlesBySort sortBy=author
 ;
 
 footer mainFooter 'Moj novi footer' right ;
@@ -57,11 +59,11 @@ menubar mainMenu 'GenAn':
 	    'Login' ref='http://google.com' right
 	;
 
-view sub_list:
+view sub_list for article.getArticlesBySort:
    show article.title
 ;
 
-view articles_list:
+view articles_list for article.getArticlesBySort:
     show sub_list
 	show article.title
 	show article.description at 2 size 2
@@ -72,7 +74,7 @@ view articles_list:
 	form for user actions=save update
 ;
 
-page user_page:
+page user_page for user.getUsersByName:
 	title = 'Details for user'
 	use menubar mainMenu
 	use footer mainFooter
