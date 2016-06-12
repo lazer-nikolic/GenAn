@@ -14,3 +14,8 @@ class Form(object):
         self.obj = obj
         self.actions = actions
         self.parent = parent
+        self.name = obj.obj_name + "_form"
+        self.subviews = []
+
+    def accept(self, visitor):
+        return visitor.visit_action_selector(self.obj, self.actions)

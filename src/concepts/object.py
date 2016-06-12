@@ -3,11 +3,7 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
-from textx.exceptions import TextXSemanticError
-class Object(object):
-    '''
-    classdocs
-    '''
+
 
 # def object_processor(object):
 #     for query in object.queries:
@@ -24,9 +20,12 @@ class Object(object):
 #         else:
 #             return True
 
+class Object(object):
     def __init__(self, properties, queries, name, parent):
         self.properties = properties
         self.queries = queries
         self.name = name
         self.parent = parent
-        
+
+    def accept(self, visitor):
+        return visitor.visit_object(self)

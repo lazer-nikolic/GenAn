@@ -40,3 +40,6 @@ class Jumbo(object):
         self.text = None
         self.ref = None
         self.imgPath = None
+
+    def accept(self, visitor):
+        return visitor.visit_other_selector("jumbo", jumbo=self)

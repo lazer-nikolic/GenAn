@@ -79,4 +79,3 @@ class Property(object):
         self.classes = None
         self.ref = None
         
-        

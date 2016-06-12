@@ -25,4 +25,7 @@ class SelectorObject(object):
         self.property = property
         self.query = query
         self.parent = parent
+        self.name = object.obj_name
 
+    def accept(self, visitor):
+        return visitor.visit_selector_object(self.object, self.property)

@@ -8,7 +8,7 @@ from generation.generator import BColors
 
 def view_in_view_processor(view_in_view):
     line, col = view_in_view._tx_metamodel.parser.pos_to_linecol(
-                view_in_view._tx_position)
+        view_in_view._tx_position)
 
     selector = view_in_view.selector
     if selector.__class__.__name__ == 'SelectorView':
@@ -42,6 +42,7 @@ def view_in_view_processor(view_in_view):
                 print(BColors.WARNING + "WARNING: " + BColors.ENDC +
                       "(at %d, %d) Size %d of component exceeds row size on position %d." %
                       (line, col, view_in_view.size, view_in_view.position))
+
 
 class ViewInView(object):
     '''

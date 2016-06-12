@@ -23,3 +23,6 @@ class DataShow(object):
         self.type = type
         self.parent = parent
         self.data = data
+
+    def accept(self, visitor):
+        return visitor.visit_other_selector(self.type.name, data=self.data)

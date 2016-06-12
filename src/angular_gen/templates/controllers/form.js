@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('app')
-        .controller('{{name | title}}formController', {{name | title}}formController);
+        .controller('{{name | title}}_formController', {{name | title}}formController);
 
     {{name | title}}formController.$inject = ['EventBus','{{name | title}}Factory', '$filter', '$stateParams'];
 

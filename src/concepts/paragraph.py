@@ -12,3 +12,6 @@ class Paragraph(object):
     def __init__(self, parent, paragraph):
         self.parent = parent
         self.paragraph = paragraph
+
+    def accept(self, visitor):
+        return visitor.visit_other_selector("paragraph", paragrpah=self.paragraph)

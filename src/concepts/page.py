@@ -59,4 +59,5 @@ class Page(object):
         self.sidebar = None
         self.subviews = []
 
-
+    def accept(self, visitor):
+        return visitor.visit_page(self)

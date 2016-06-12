@@ -3,6 +3,8 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
+
+
 def static_link_procesor(object):
     classesString = "";
     if not object.classes is None:
@@ -14,8 +16,9 @@ def static_link_procesor(object):
         object.classes = classesString
     else:
         object.classes = ""
-    
-    object.classes=classesString
+
+    object.classes = classesString
+
 
 class StaticLink(object):
     '''
@@ -25,5 +28,7 @@ class StaticLink(object):
     def __init__(self, parent, stLink, classes):
         self.parent = parent
         self.stLink = stLink
-        self.classes =classes
-        
+        self.classes = classes
+
+    def accept(self, visitor):
+        return visitor.visit_other_selector("staticLink", link=self.stLink, classes=self.classes)

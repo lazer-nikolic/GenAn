@@ -14,7 +14,7 @@ class View(object):
                         'date', 'combobox', 'list', 'table',
                         'thumbnail', 'row']
 
-    def __init__(self, parent, name, views, object = None, query = None):
+    def __init__(self, parent, name, views, object=None, query=None):
         self.name = name
         self.views = views
         self.parent = parent
@@ -46,9 +46,13 @@ class View(object):
                 row = Row(self, row_number)
             else:
                 row.selectors.append(view_selector)
+                if view_selector.__class__.__name__ == 'ViewInView':
+                    self.subviews.append(view_selector.selector)
         if row not in self.rows:
             self.rows.append(row)
 
     def __str__(self):
         return self.name
 
+    def accept(self, visitor):
+        return visitor.visit_view(self)

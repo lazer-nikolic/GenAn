@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-var {{o.name|title}} = require('../models/{{o.name|title}}.js');
+{% set model_name = o.name %}
+var {{model_name}} = require('../models/{{model_name}}.js');
 var queryOps = require('../common')
 
 /* GET /users listing. */
@@ -59,7 +60,7 @@ for (query in req.query){
         queries[query] = req.query[query];
     }
 }
-query = {{o.name|title}}.find(queries).sort(sort);
+query = {{model_name}}.find(queries).sort(sort);
 if (from > -1){
     query.limit(to);
 }
@@ -75,7 +76,7 @@ query.exec(function (err, post) {
 
 /* POST /users */
 router.post('/', function(req, res, next) {
-  {{o.name|title}}.create(req.body, function (err, post) {
+  {{model_name}}.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
@@ -83,7 +84,7 @@ router.post('/', function(req, res, next) {
 
 /* GET /users/id */
 router.get('/:id', function(req, res, next) {
-{{o.name|title}}.findOne(req.params.id)
+{{model_name}}.findOne(req.params.id)
   .exec(function (err, post) {
       if (err) return next(err);
       res.json(post);
@@ -93,7 +94,7 @@ router.get('/:id', function(req, res, next) {
 
 /* PUT /users/:id */
 router.put('/:id', function(req, res, next) {
-  {{o.name|title}}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+  {{model_name}}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
@@ -101,7 +102,7 @@ router.put('/:id', function(req, res, next) {
 
 /* DELETE /users/:id */
 router.delete('/:id', function(req, res, next) {
-  {{o.name|title}}.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+  {{model_name}}.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });

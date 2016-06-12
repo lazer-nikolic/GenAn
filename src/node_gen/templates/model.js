@@ -1,4 +1,3 @@
-{% import 'common.jinja' as common %}
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var {{o.name|title}}Schema = new mongoose.Schema({

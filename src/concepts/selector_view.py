@@ -14,4 +14,5 @@ class SelectorView(object):
         self.view = view
         self.parent = parent
 
-
+    def accept(self, visitor):
+        return visitor.visit_selector_view(self.view)
