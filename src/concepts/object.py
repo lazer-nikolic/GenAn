@@ -4,7 +4,6 @@ Created on 08.02.2016.
 @author: Lazar
 '''
 
-
 # def object_processor(object):
 #     for query in object.queries:
 #         if query.property not in object.properties:
@@ -20,14 +19,21 @@ Created on 08.02.2016.
 #         else:
 #             return True
 
+from concepts.property import Property
+from concepts.view import View
+
+
 def object_processor(object):
     for fk in object.meta:
-        if fk.foreignKeyType=='list':
-            #kreiras multilist komponentu
-            pass
+        if fk.foreignKeyType == 'list':
+            newType = View(None, 'multilist', [], object)
         else:
-            #kreiras combobox
-            pass
+            newType = View(None, 'combobox', [], object)
+
+        newProperty = Property(fk.label, newType, fk.label, None, [])
+        newProperty.dontShowInTable = True
+        newProperty.populateFromDB = True
+        object.properties.append(newProperty)
 
 
 class Object(object):

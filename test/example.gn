@@ -27,13 +27,17 @@ sidebar mainSidebar:
 footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
 
 object user:
+    Meta:
+        list common 'prvo'
+        single common 'drugo'
+        list common 'trece'
+    ;
 	username text label='User name' class={'required'}
 	pass password label='Password'
 	age number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
 	birthDate date label = 'Birth date' 
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
-	programming multilist label='Programming' parameters = { 'Java', 'Python', 'C', 'HTML' }
 ;
 
 object common:

@@ -5,27 +5,31 @@ Created on 08.02.2016.
 '''
 from textx.exceptions import TextXSemanticError
 
+
 def property_processor(property_object):
-    
     adapter_property(property_object)
-    ref_prop =['link', 'button','image']
+    ref_prop = ['link', 'button', 'image']
     for type in ref_prop:
         if type is property_object.type.name:
             if property_object.ref is '' or property_object.ref is None:
                 if type is 'link' and not property_object.ref_param is None:
-                    property_object.ref = "#/"+property_object.ref_param.page.name 
+                    property_object.ref = "#/" + property_object.ref_param.page.name
                 else:
-                    raise TextXSemanticError("Type {0} must have ref='example.com' / @refToPage - for link".format(property_object.type))
+                    raise TextXSemanticError(
+                        "Type {0} must have ref='example.com' / @refToPage - for link".format(property_object.type))
             else:
                 if type is 'link' and not property_object.ref_param is None:
-                    raise TextXSemanticError("Type {0} can't have both type for link. Property name: {1}".format(property_object.type,property_object.name))
-        
-    parameters_allowed_fields=['combobox', 'checkbox', 'radio','multilist']
+                    raise TextXSemanticError(
+                        "Type {0} can't have both type for link. Property name: {1}".format(property_object.type,
+                                                                                            property_object.name))
+
+    parameters_allowed_fields = ['combobox', 'checkbox', 'radio', 'multilist']
     for type in parameters_allowed_fields:
         if property_object.type.name not in parameters_allowed_fields:
             if not property_object.params is None:
-                raise TextXSemanticError("Property {0} can't have parameters attribute.".format(property_object.type.name))
-    
+                raise TextXSemanticError(
+                    "Property {0} can't have parameters attribute.".format(property_object.type.name))
+
     classesString = "";
     if not property_object.classes is None:
         for x in property_object.classes.htmlClasses:
@@ -42,7 +46,9 @@ def adapter_property(property):
     '''
     Adapter method for additional parametes on property class
     '''
-    
+    if property.type.name == 'multilist':
+        raise TextXSemanticError("You can't use multilist as regular filed.")
+
     for x in property.additionalParameters:
         if not x.ref_param is None:
             if not property.ref_param is None:
@@ -60,7 +66,6 @@ def adapter_property(property):
             if not property.ref is None:
                 raise TextXSemanticError("You can't use more than one ref keyword.")
             property.ref = x.ref
-  
 
 
 class Property(object):
@@ -74,8 +79,9 @@ class Property(object):
         self.ref_param = None
         self.label = label
         self.parent = parent
-        self.additionalParameters=additionalParameters
+        self.additionalParameters = additionalParameters
         self.params = None
         self.classes = None
         self.ref = None
-        
+        self.dontShowInTable = None
+        self.populateFromDB = None

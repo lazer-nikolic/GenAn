@@ -38,11 +38,7 @@ class AngularGenerator(FrontendGenerator):
 
             print(_MSG_HEADER_INFO + " Installing dependencies...")
 
-            yes = set(['yes', 'y', 'Y', 'Yes', 'YES', ''])
-
-            choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
-            if choice_npm in yes:
-                subprocess.check_call(["npm", "install"], cwd=os.path.join(self.path, "app"))
+            subprocess.check_call(["npm", "install"], cwd=os.path.join(self.path, "app"))
         except FileNotFoundError:
             print(_MSG_HEADER_FAIL + " Unable to generate framework. Continues...")
 
