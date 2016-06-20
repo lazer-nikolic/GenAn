@@ -13,7 +13,7 @@ from node_gen.node_generator import NodeGenerator
 from main.common import BColors
 
 def main():
-    input_path = "../../test/rest.gn"
+    input_path = "../../test/example.gn"
     output_path = "../../gen_test/"
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")

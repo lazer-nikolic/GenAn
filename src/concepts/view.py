@@ -12,7 +12,7 @@ class View(object):
                         'email', 'password', 'menuitem', 'menu',
                         'button', 'radio', 'form', 'label', 'image',
                         'date', 'combobox', 'list', 'table',
-                        'thumbnail', 'row']
+                        'thumbnail', 'row', 'multilist']
 
     def __init__(self, parent, name, views, object=None, query=None):
         self.name = name

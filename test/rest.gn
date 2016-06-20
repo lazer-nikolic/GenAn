@@ -15,6 +15,7 @@ object Actor:
     first_name text label='First Name'
     last_name text label='Last Name'
     age number label='age'
+    gender multilist label='Gender' parameters = { 'Male', 'Female' }
 ;
 
 object ProductionHouse:

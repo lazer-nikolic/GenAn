@@ -33,6 +33,7 @@ object user:
 	mail email label='Email' 
 	birthDate date label = 'Birth date' 
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
+	programming multilist label='Programming' parameters = { 'Java', 'Python', 'C', 'HTML' }
 ;
 
 object common:
