@@ -1,11 +1,26 @@
 object Film:
+    Meta:
+        list Actor 'actors'
+        single ProductionHouse 'production'
+        ;
     title text label='Title'
     description text label='Title'
     imdb_rating number label='Rating'
 ;
 
 object Actor:
+    Meta:
+        list Film 'movies'
+        ;
     first_name text label='First Name'
     last_name text label='Last Name'
     age number label='age'
+;
+
+object ProductionHouse:
+    Meta:
+        list Film 'movies'
+        ;
+    name text label='Name'
+    budget number label='Budget'
 ;
