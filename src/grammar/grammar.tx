@@ -123,6 +123,7 @@ AdditionParameters:
 
 Object:
 	'object' name=ID ':'
+	    ('Meta' ':' meta += Meta ';')?
 		properties *= Property
 		queries *= Query
 	';'
@@ -130,6 +131,14 @@ Object:
 
 Query:
     'query' name=ID ('property''='property=[Property] 'condition''='condition=Condition)? ('sortBy''='sortBy=[Property] ('order''='order=Order)?)? ('rangeFrom''='rangeFrom=INT)? ('rangeTo''='rangeTo=INT)?
+;
+
+Meta:
+    foreignKeyType=ForeignKeyType object=[Object] label=STRING
+;
+
+ForeignKeyType:
+    'single'|'list'
 ;
 
 Condition:

@@ -20,12 +20,23 @@ Created on 08.02.2016.
 #         else:
 #             return True
 
+def object_processor(object):
+    for fk in object.meta:
+        if fk.foreignKeyType=='list':
+            #kreiras multilist komponentu
+            pass
+        else:
+            #kreiras combobox
+            pass
+
+
 class Object(object):
-    def __init__(self, properties, queries, name, parent):
+    def __init__(self, properties, queries, meta, name, parent):
         self.properties = properties
         self.queries = queries
         self.name = name
         self.parent = parent
+        self.meta = meta
 
     def accept(self, visitor):
         return visitor.visit_object(self)
