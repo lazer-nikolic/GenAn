@@ -3,8 +3,6 @@ Created on 08.02.2016.
 
 @author: Lazar
 '''
-from generation.generator import BColors
-
 
 def view_in_view_processor(view_in_view):
     line, col = view_in_view._tx_metamodel.parser.pos_to_linecol(

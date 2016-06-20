@@ -2,7 +2,6 @@ import traceback
 
 import os
 from angular_gen.angular_generator import AngularGenerator
-from generation.generator import generate
 from interpretation.interpreter import Interpreter
 from node_gen.node_generator import NodeGenerator
 
@@ -13,9 +12,8 @@ from node_gen.node_generator import NodeGenerator
 # def main(src, dest, help):
 from main.common import BColors
 
-
 def main():
-    input_path = "../../test/example.gn"
+    input_path = "../../test/rest.gn"
     output_path = "../../gen_test/"
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")

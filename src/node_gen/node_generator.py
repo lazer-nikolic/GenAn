@@ -37,15 +37,20 @@ class NodeGenerator(BackendGenerator):
 
             subprocess.check_call(["express"], cwd=base_path)
             print(_MSG_HEADER_INFO + " Installing dependencies...")
-            subprocess.check_call(["npm", "install"], cwd=base_path)
-            subprocess.check_call(["npm", "install", "mongoose", "--save"],
-                                  cwd=base_path)
-            subprocess.check_call(["npm", "install", "ejs", "--save"],
-                                  cwd=base_path)
-            subprocess.check_call(["npm", "install", "debug", "--save"],
-                                  cwd=base_path)
-            subprocess.check_call(["npm", "install", "cors", "--save"],
-                                  cwd=base_path)
+
+            yes = set(['yes', 'y', 'Y', 'Yes', 'YES', ''])
+
+            choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
+            if choice_npm in yes:
+                subprocess.check_call(["npm", "install"], cwd=base_path)
+                subprocess.check_call(["npm", "install", "mongoose", "--save"],
+                                      cwd=base_path)
+                subprocess.check_call(["npm", "install", "ejs", "--save"],
+                                      cwd=base_path)
+                subprocess.check_call(["npm", "install", "debug", "--save"],
+                                      cwd=base_path)
+                subprocess.check_call(["npm", "install", "cors", "--save"],
+                                      cwd=base_path)
 
             print(_MSG_HEADER_INFO + " Generating backend...")
             for concept in self.model.concept:
@@ -81,6 +86,7 @@ class NodeGenerator(BackendGenerator):
         :param object:
         :return:
         """
+
         base_path = os.path.join(self.path, self.app_name)
 
         print(_MSG_HEADER_INFO + " Generating model for {0}".format(object.name))
@@ -111,7 +117,7 @@ def get_template(template_name, **kwargs):
     path = os.path.abspath(__file__)
     module_path = os.path.dirname(path)
     env = Environment(trim_blocks=True, lstrip_blocks=True,
-                      loader=FileSystemLoader(os.path.join(module_path, "templates"),))
+                      loader=FileSystemLoader(os.path.join(module_path, "templates"), ))
     env.filters['sub_routes'] = sub_routes_filter
     template = env.get_template("{0}".format(template_name))
     return template.render(kwargs)

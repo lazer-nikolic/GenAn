@@ -25,6 +25,7 @@ from concepts.footer import Footer
 from concepts.use import Use
 from concepts.jumbo import Jumbo, jumbo_procesor
 from concepts.jumbo_parameters import JumboParameters
+from concepts.object import object_processor
 from concepts.paragraph import Paragraph
 from concepts.static_link import StaticLink, static_link_procesor
 from concepts.addition_parameters import AdditionParameters
@@ -57,7 +58,8 @@ class Interpreter:
             'Jumbo': jumbo_procesor,
             'Query': query_processor,
             'StaticLink': static_link_procesor,
-            'ViewOnPage': view_on_page_processor
+            'ViewOnPage': view_on_page_processor,
+            'Object':object_processor
         }
 
     def load_model(self, file_path):
