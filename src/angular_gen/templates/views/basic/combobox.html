@@ -12,6 +12,6 @@
         {% endfor%}
     </select>
     {% else %}
-        <select  ng-model="ctrl.{{ common.ng_model(o, prop) }}" ng-options="value for value in ctrl.{{prop.name}}"/>
+        <select ng-model="ctrl.{{ common.ng_model(o, prop) }}" ng-options="value as {{common.generateSelectForFK(prop.extraPropertyList)}} for value in ctrl.{{prop.name}} track by value.id"/>
     {% endif %}
 </div>

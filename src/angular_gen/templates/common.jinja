@@ -14,5 +14,16 @@
 	    </div>
 {% endmacro %}
 
+
+{% macro generateSelectForFK(propertiesList) -%}
+    {% if propertiesList|length > 1 -%}
+        ({%for prop in propertiesList -%}
+           value.{{prop.name}} {% if not loop.last -%} +' '+{% endif -%}
+        {%endfor-%})
+    {%else-%}
+        value.{{propertiesList[0].name}}
+    {%endif-%}
+{% endmacro -%}
+
 {% macro open_bracket() %}{% raw %}{{% endraw %}{% endmacro %}
 {% macro closed_bracket() %}{% raw %}}{% endraw %}{% endmacro %}

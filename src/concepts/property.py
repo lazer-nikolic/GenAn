@@ -85,3 +85,4 @@ class Property(object):
         self.ref = None
         self.dontShowInTable = None
         self.populateFromDB = None
+        self.extraPropertyList = None

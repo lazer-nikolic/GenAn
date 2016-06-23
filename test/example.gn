@@ -28,9 +28,8 @@ footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
 
 object user:
     Meta:
-        list common 'prvo'
-        single common 'drugo'
-        list common 'trece'
+        single group by name 'owner'
+        list group by name, description 'groups'
     ;
 	username text label='User name' class={'required'}
 	pass password label='Password'
@@ -38,6 +37,14 @@ object user:
 	mail email label='Email' 
 	birthDate date label = 'Birth date' 
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
+;
+
+object group:
+    Meta:
+        list user by username, mail 'users'
+    ;
+    name text label='Group name'
+    description text label='Description'
 ;
 
 object common:
@@ -167,7 +174,7 @@ page table_page:
 
 view table_view:
 	!row 4
- 	 show common.tableName at 2 size 8 
+ 	 show common.tableName at 2 size 8
  	!row 5
  	table data_show={ user.username,  user.age, user.gender} at 3 size 6 
 ;

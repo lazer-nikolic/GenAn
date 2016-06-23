@@ -21,10 +21,19 @@ Created on 08.02.2016.
 
 from concepts.property import Property
 from concepts.view import View
-
+from textx.exceptions import TextXSemanticError
 
 def object_processor(object):
+    #check if property exist for current object
     for fk in object.meta:
+        for prop in fk.property.properties:
+           if prop not in fk.object.properties:
+            line, col = fk.object._tx_metamodel.parser.pos_to_linecol(
+                fk.object._tx_position)
+            raise TextXSemanticError("ERROR: (at %d, %d) Object %s has no property named %s." %
+                                     (line, col, fk.object.name, prop.name))
+
+        #bind Meta to property
         if fk.foreignKeyType == 'list':
             newType = View(None, 'multilist', [], object)
         else:
@@ -33,6 +42,7 @@ def object_processor(object):
         newProperty = Property(fk.label, newType, fk.label, None, [])
         newProperty.dontShowInTable = True
         newProperty.populateFromDB = True
+        newProperty.extraPropertyList=fk.property.properties
         object.properties.append(newProperty)
 
 

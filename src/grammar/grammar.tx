@@ -12,6 +12,7 @@ Size:
 Color:
 	'red'|'blue'|'green'|'black'|'white'|'yellow'|'gray'
 ;
+
 Style:
 	('color' '=' Color) |
 	('size' '=' Size)
@@ -134,11 +135,15 @@ Query:
 ;
 
 Meta:
-    foreignKeyType=ForeignKeyType object=[Object] label=STRING
+    foreignKeyType=ForeignKeyType object=[Object] ' by ' property=PropertiesForMeta label=STRING
 ;
 
 ForeignKeyType:
     'single'|'list'
+;
+
+PropertiesForMeta:
+        properties+=[Property][","]
 ;
 
 Condition:

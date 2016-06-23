@@ -8,9 +8,9 @@ var {{o.name|title}}Schema = new mongoose.Schema({
 {% endfor %}
 {% for fk in o.meta%}
  {%if fk.foreignKeyType == 'list'%}
-  {{fk.label}} : [{ type: Schema.Types.ObjectId, ref: {{fk.object.name|title}} }],
+  {{fk.label}}: [{ type: Schema.Types.ObjectId, ref: '{{fk.object.name|title}}' }],
  {%else%}
-  {{fk.label}} : { type: Schema.Types.ObjectId, ref: {{fk.object.name|title}} },
+  {{fk.label}}: { type: Schema.Types.ObjectId, ref: '{{fk.object.name|title}}' },
  {%endif%}
 {%endfor%}
   updated_at: { type: Date, default: Date.now },
