@@ -19,7 +19,7 @@ def jumbo_procesor(object):
             object.text = x.text
         elif x.imgPath !='':
             if not object.imgPath is None:
-                raise TextXSemanticError("You can't use more than one imgPath attribure.")
+                raise TextXSemanticError("You can't use more than one imgPath attribute.")
             object.imgPath = x.imgPath
         elif not x.ref is None:
             if not object.ref is None:

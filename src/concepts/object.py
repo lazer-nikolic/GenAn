@@ -25,6 +25,7 @@ from textx.exceptions import TextXSemanticError
 
 def object_processor(object):
     #check if property exist for current object
+    checkUnique = []
     for fk in object.meta:
         for prop in fk.property.properties:
            if prop not in fk.object.properties:
@@ -32,6 +33,12 @@ def object_processor(object):
                 fk.object._tx_position)
             raise TextXSemanticError("ERROR: (at %d, %d) Object %s has no property named %s." %
                                      (line, col, fk.object.name, prop.name))
+
+        #check if label is unique
+        if fk.label in checkUnique:
+            raise TextXSemanticError("ERROR: %s already exist. All labels in Meta must be unique."%fk.label)
+        else:
+            checkUnique.append(fk.label)
 
         #bind Meta to property
         if fk.foreignKeyType == 'list':
