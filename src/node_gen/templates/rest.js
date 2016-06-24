@@ -92,6 +92,18 @@ router.get('/:id', function(req, res, next) {
   );
 });
 
+{%for fk in o.meta %}
+//This should be changed
+router.get('/:id/{{fk.label}}', function(req, res, next) {
+{{model_name}}.findOne(req.params.id)
+  .exec(function (err, post) {
+      if (err) return next(err);
+      res.json(post);
+    }
+  );
+});
+{%endfor%}
+
 /* PUT /users/:id */
 router.put('/:id', function(req, res, next) {
   {{model_name}}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
