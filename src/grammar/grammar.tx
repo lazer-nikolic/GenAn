@@ -200,7 +200,7 @@ Menu:
 ;
 
 Menubar:
-    'menubar' name=ID  (brandName=STRING)? ':'
+    'menubar' name=ID  (brandName=STRING)? (brandLink=ReferencedParameter)? ':'
     	('color' '=' color=Color)?
         menus*=Menu
     ';'

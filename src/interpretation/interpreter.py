@@ -6,7 +6,7 @@ Created on 03.02.2016.
 import os
 from concepts.layout import Layout
 from concepts.menu import Menu
-from concepts.menubar import Menubar
+from concepts.menubar import Menubar, menubar_processor
 from concepts.object import Object
 from concepts.page import page_processor, Page
 from concepts.property import Property, property_processor
@@ -59,7 +59,8 @@ class Interpreter:
             'Query': query_processor,
             'StaticLink': static_link_procesor,
             'ViewOnPage': view_on_page_processor,
-            'Object':object_processor
+            'Object':object_processor,
+            'Menubar':menubar_processor
         }
 
     def load_model(self, file_path):

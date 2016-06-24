@@ -1,4 +1,4 @@
-menubar mainMenu 'GenAn':
+menubar mainMenu 'GenAn' @home:
 	    menu Views:
             'Table' @table_page
             'Thumbnail' @thumbnail_page
