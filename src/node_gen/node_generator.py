@@ -38,7 +38,7 @@ class NodeGenerator(BackendGenerator):
             subprocess.check_call(["express"], cwd=base_path)
             print(_MSG_HEADER_INFO + " Installing dependencies...")
 
-            yes = set(['yes', 'y', 'Y', 'Yes', 'YES', ''])
+            yes = ['yes', 'y', 'Y', 'Yes', 'YES', '']
 
             choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
             if choice_npm in yes:
