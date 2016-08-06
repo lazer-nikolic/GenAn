@@ -3,6 +3,9 @@ import zipfile
 
 import os
 import shutil
+
+from pelix.ipopo.decorators import ComponentFactory, Provides, Property, Instantiate
+
 from angular_gen.jinja_filters import sub_routes_filter
 from jinja2 import Environment, FileSystemLoader
 from main.common import BColors, FrontendGenerator
@@ -12,9 +15,13 @@ _MSG_HEADER_FAIL = BColors.FAIL + "ANGULAR GENERATOR - ERROR:" + BColors.ENDC
 _MSG_HEADER_SUCCESS = BColors.OKGREEN + "ANGULAR GENERATOR - SUCCESS:" + BColors.ENDC
 
 
+@ComponentFactory("genan_angular_generator_factory")
+@Provides("genan_frontend_generator")
+@Property("_name", "name", "genan_angularjs")
+@Instantiate("genan_angular_generator")
 class AngularGenerator(FrontendGenerator):
-    def __init__(self, model, builtins, path):
-        super(AngularGenerator, self).__init__(model, builtins, path)
+    def __init__(self):
+        super(AngularGenerator, self).__init__()
         self.routes = {}
 
     def generate(self):
