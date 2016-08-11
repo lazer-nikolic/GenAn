@@ -40,11 +40,9 @@ class GenanCore(object):
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Loading generators...")
         self._load_plugins()
 
-        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Starting generators...")
-        self.generate(True)
-        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
 
     def generate(self, debug=False):
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Starting generators...")
         try:
             for backend_generator in self._backend_generators:
                 backend_generator.generate()
@@ -56,12 +54,7 @@ class GenanCore(object):
             if debug:
                 traceback.print_tb(e.__traceback__)
             print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Generation failed.")
-
-    def init_generator(self, generator):
-        if generator:
-            generator.model = self.model
-            generator.builtins = self.builtins
-            generator.path = self.output_file
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
 
     def _load_plugins(self):
         # Load frontend generators
