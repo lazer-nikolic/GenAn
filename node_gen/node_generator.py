@@ -3,12 +3,8 @@ import subprocess
 
 import os
 import shutil
-
-from pelix.ipopo.decorators import ComponentFactory, Instantiate, Property, Provides
-
 from angular_gen.jinja_filters import sub_routes_filter
 from jinja2 import FileSystemLoader, Environment
-
 from main.common import BColors, BackendGenerator
 
 _MSG_HEADER_INFO = BColors.OKBLUE + "NODE GENERATOR:" + BColors.ENDC
@@ -16,13 +12,9 @@ _MSG_HEADER_FAIL = BColors.FAIL + "NODE GENERATOR - ERROR:" + BColors.ENDC
 _MSG_HEADER_SUCCESS = BColors.OKGREEN + "NODE GENERATOR - SUCCESS:" + BColors.ENDC
 
 
-@ComponentFactory("genan_node_generator_factory")
-@Provides("genan_backend_generator")
-@Property("_name", "name", "genan_nodejs")
-@Instantiate("genan_node_generator")
 class NodeGenerator(BackendGenerator):
-    def __init__(self):
-        super(NodeGenerator, self).__init__()
+    def __init__(self, model, builtins, path):
+        super(NodeGenerator, self).__init__(model, builtins, path)
         self.base_url = "http://localhost:3000/"
         self.app_name = "genan_node"
         self.objects = []
@@ -46,19 +38,15 @@ class NodeGenerator(BackendGenerator):
             subprocess.check_call(["express"], cwd=base_path)
             print(_MSG_HEADER_INFO + " Installing dependencies...")
 
-            yes = ['yes', 'y', 'Y', 'Yes', 'YES', '']
-
-            choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
-            if choice_npm in yes:
-                subprocess.check_call(["npm", "install"], cwd=base_path)
-                subprocess.check_call(["npm", "install", "mongoose", "--save"],
-                                      cwd=base_path)
-                subprocess.check_call(["npm", "install", "ejs", "--save"],
-                                      cwd=base_path)
-                subprocess.check_call(["npm", "install", "debug", "--save"],
-                                      cwd=base_path)
-                subprocess.check_call(["npm", "install", "cors", "--save"],
-                                      cwd=base_path)
+            subprocess.check_call(["npm", "install"], cwd=base_path)
+            subprocess.check_call(["npm", "install", "mongoose", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "ejs", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "debug", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "cors", "--save"],
+                                  cwd=base_path)
 
             print(_MSG_HEADER_INFO + " Generating backend...")
             for concept in self.model.concept:
