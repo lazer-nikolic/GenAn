@@ -3,6 +3,7 @@ import traceback
 import os
 
 import pelix.framework
+import pkg_resources
 from pelix.ipopo.decorators import ComponentFactory, Provides, Requires, Instantiate, Validate
 import logging
 
@@ -16,15 +17,12 @@ from interpretation.interpreter import Interpreter
 from main.common import BColors
 
 
-@ComponentFactory("genan_core")
-@Provides("spell_checker_service")
-@Requires("_frontend_generator", "genan_frontend_generator")
-@Requires("_backend_generator", "genan_backend_generator")
-@Instantiate("genan_core")
 class GenanCore(object):
     def __init__(self):
-        self._backend_generator = None
-        self._frontend_generator = None
+        self._backend_generators = []
+        self._frontend_generators = []
+
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
         input_path = "../../test/example.gn"
         output_path = "../../gen_test/"
@@ -37,25 +35,22 @@ class GenanCore(object):
         interpreter = Interpreter()
         self.model = interpreter.load_model(file_path)
         self.builtins = interpreter.builtins
+        self.path = output_path
 
-    @Validate
-    def validate(self, context):
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Loading generators...")
+        self._load_plugins()
 
-        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
-
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Starting generators...")
         self.generate(True)
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
 
     def generate(self, debug=False):
         try:
-            if self._backend_generator:
-                self.init_generator(self._backend_generator)
-                self._backend_generator.generate()
-            if self._frontend_generator:
-                if self._backend_generator.base_url:
-                    self._frontend_generator.backend_base_url = self._backend_generator.base_url
-                self.init_generator(self._frontend_generator)
-                self._frontend_generator.generate()
+            for backend_generator in self._backend_generators:
+                backend_generator.generate()
+            for frontend_generator in self._frontend_generators:
+                frontend_generator.backend_base_url = "http://localhost:3000"
+                frontend_generator.generate()
         except Exception as e:
             print(BColors.FAIL + "ERROR:" + BColors.FAIL)
             if debug:
@@ -68,27 +63,24 @@ class GenanCore(object):
             generator.builtins = self.builtins
             generator.path = self.output_file
 
+    def _load_plugins(self):
+        # Load frontend generators
+        for entrypoint in pkg_resources.iter_entry_points("genan.frontend_generator"):
+            FrontendGenerator = entrypoint.load()
+            generator = FrontendGenerator(self.model, self.builtins, self.path)
+            self._frontend_generators.append(generator)
+
+        # Load backend generators
+        for entrypoint in pkg_resources.iter_entry_points("genan.backend_generator"):
+            BackendGenerator = entrypoint.load()
+            generator = BackendGenerator(self.model, self.builtins, self.path)
+            self._backend_generators.append(generator)
+
 
 def main():
-    """
-    Starts a Pelix framework and waits for it to stop
-    """
-    framework = pelix.framework.create_framework((
-        "pelix.ipopo.core",
-        "pelix.shell.core",))
-
-    framework.start()
-
-    context = framework.get_bundle_context()
-
-    context.install_bundle("node_generator", "../node_gen/").start()
-    context.install_bundle("angular_generator", "../angular_gen/").start()
-
-    context.install_bundle("genan").start()
-
-    framework.wait_for_stop()
+    generator = GenanCore()
+    generator.generate(True)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
     main()
