@@ -12,11 +12,11 @@
 import os
 
 __author__ = "Lazar Nikolić <lazarpwna AT gmail DOT com>, Bojana Zoranović, Dragoljub Ilić"
-__version__ = "0.1.0.dev1"
+__version__ = "0.1.0"
 
 from setuptools import setup, find_packages
 
-NAME = 'GenAn Angular'
+NAME = 'genan-angular'
 VERSION = __version__
 DESC = 'AngularJS generator based on GenAn DSL'
 AUTHOR = __author__
