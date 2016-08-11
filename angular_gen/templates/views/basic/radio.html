@@ -1,0 +1,9 @@
+{% import 'common.jinja' as common %}
+<fieldset class="standard">
+	<legend>{{prop.label}}</legend>
+{% for option in prop.params.propertyList %}
+    <input {{prop.classes}} ng-model="ctrl.{{ common.ng_model(o, prop) }}" type="radio" name="{{prop.name}}" >
+      {{option}}</br>
+{% endfor%}
+
+</fieldset>

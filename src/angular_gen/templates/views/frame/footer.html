@@ -1,9 +1,0 @@
- <footer class="footer footer-sticky" {% if footer.color is not none %} style="background-color:{{footer.color}}"{%endif%}>
-      <div class="container">
-      {%if footer.side is not none %}
-        <p id="footerText" class="text-muted paragraph-height" style="float:{{footer.side}}; text-align:{{footer.side}};">{{footer.paragraph}}</p>
-      {% else %}
-      	<p id ="footerText" class="text-muted paragraph-height">{{footer.paragraph}}</p>
-      {% endif %}
-      </div>
-</footer>

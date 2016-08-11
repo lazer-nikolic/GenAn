@@ -1,4 +1,4 @@
-class GeneratorAdapter(object):
+class GeneratorAdapter:
     def visit_selector_view(self, view):
         pass
 
@@ -25,12 +25,18 @@ class GeneratorAdapter(object):
 
 
 class FrontendGenerator(GeneratorAdapter):
-    def __init__(self):
+    def __init__(self, model, builtins, path):
+        self.model = model
+        self.builtins = builtins
+        self.path = path
         self.backend_base_url = "http://localhost:8080/"
 
 
 class BackendGenerator(GeneratorAdapter):
-    def __init__(self):
+    def __init__(self, model, builtins, path):
+        self.model = model
+        self.builtins = builtins
+        self.path = path
         self.base_url = "http://localhost:8080/"
 
 

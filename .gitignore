@@ -80,5 +80,9 @@ site
 ## File-based project format:
 *.iws
 
-#Generator test
+# Generator test
 gen_test/
+
+# Plugins
+src/plugins/*.whl
+src/plugins*.egg
