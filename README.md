@@ -13,12 +13,23 @@ Run genan.py in main package from command line: `genan -source_file -destination
 * textX
 * Jinja2
 
+##### Database
+* mongoDB
+* robomongo db client
+
 ##### Backend
-* node.js and npm: https://nodejs.org/en/download/
+* node.js and npm: https://nodejs.org/en/download/  or better:
+* use nvm, follow installation manual from https://github.com/creationix/nvm and then install:
+* node.js and npm v5.12:
+`nvm install v5.12`
 * express:
 `npm install -g express`
 * express generator:
 `npm install -g express-generator`
+* express cli:
+`npm install -g express-cli`
+* gulp:
+`npm install -g gulp`
 
 ### Usage:
 
