@@ -39,6 +39,7 @@ ViewInView:
 
 Page:
 	'page' name=ID ('for' object=[Object]'.'query=[Query])?':'
+		('indexPage' '=' indexPage=BOOL)?
 		'title' '=' title=STRING
 		(using *= Use)
 		(layout=Layout)*
