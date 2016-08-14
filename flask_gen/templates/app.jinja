@@ -1,0 +1,14 @@
+import os
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config.from_pyfile(os.path.join(os.pardir, 'config.py'))
+db = SQLAlchemy(app)
+
+{% for object in objects %}
+from app.{{object.name}}.views import mod as {{object.name}}_module
+
+app.register_blueprint({{object.name}}_module)
+{% endfor %}

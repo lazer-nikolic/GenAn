@@ -1,0 +1,61 @@
+from flask import Blueprint
+from flask import jsonify
+from flask import request
+from werkzeug.exceptions import abort
+{% set model_name = o.name %}
+from app import db
+from app.{{o.name}}.models import {{model_name|title}}
+
+mod = Blueprint('{{model_name}}', __name__, url_prefix='/{{model_name}}')
+
+
+@mod.route('/', methods=['GET'])
+def index():
+    return jsonify([dev.as_dict() for dev in {{model_name|title}}.query.all()])
+
+
+@mod.route('/<int:id>/')
+def get_{{model_name}}(id):
+    result = {{model_name|title}}.query.get(id)
+    if not result:
+        return abort(404)
+    return jsonify(result.as_dict())
+
+
+@mod.route('/', methods=['POST'])
+def create_{{model_name}}():
+    if not request.json:
+        abort(400)
+
+    {{model_name}} = {{model_name|title}}(**request.json)
+    db.session.add({{model_name}})
+    db.session.commit()
+    return jsonify({{model_name}}.as_dict()), 200
+
+
+@mod.route('/<int:id>/', methods=['DELETE'])
+def delete_{{model_name}}(id):
+    db.session.delete({{model_name|title}}.query.get(id))
+    db.session.commit()
+    return jsonify({'success': True}), 200
+
+
+@mod.route('/<int:id>/', methods=['PUT'])
+def update_{{model_name}}(id):
+    {{model_name}} = {{model_name|title}}.query.get(id)
+    if not {{model_name}}:
+        return abort(404)
+    for field in request.json:
+        setattr({{model_name}}, field, request.json[field])
+    db.session.commit()
+    return jsonify({{model_name}}.as_dict())
+
+
+{% for fk in o.meta %}
+@mod.route('/<int:id>/{{fk.label}}/')
+def get_{{fk.label}}_for_{{model_name}}(id):
+    result = {{model_name|title}}.query.get(id)
+    if not result:
+        return abort(404)
+    return jsonify([entry.as_dict() for entry in result.{{fk.label}}.all()])
+{% endfor %}
