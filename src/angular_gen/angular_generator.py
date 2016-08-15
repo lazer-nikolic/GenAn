@@ -288,6 +288,7 @@ def _get_factories(view):
 
 def _generate_form_ctrl(path, obj, actions):
     form_inputs = []
+    distinct_meta = _distinct_meta_objects(obj)
 
     for property in obj.properties:
         if property.type is 'checkbox':
@@ -297,7 +298,7 @@ def _generate_form_ctrl(path, obj, actions):
             render = _get_template("date.js", name=property.name)
             form_inputs.append(render)
 
-    controller_rend = _get_template("form.js", name=obj.name, formInputs=form_inputs, actions=actions)
+    controller_rend = _get_template("form.js", name=obj.name, meta=distinct_meta, formInputs=form_inputs, actions=actions)
     controller_file = _get_ctrl(path, obj.name + "_form")
 
     print(controller_rend, file=controller_file)
@@ -340,3 +341,11 @@ def _generate_form(path, obj, actions):
 
     print(rendered, file=file)
     return '<div ui-view=\'' + form_name + '\'/>'
+
+def _distinct_meta_objects(obj):
+    distinct_meta = []
+    if obj.meta:
+        for m in obj.meta:
+            if m.object not in distinct_meta:
+                distinct_meta.append(m.object)
+    return distinct_meta
