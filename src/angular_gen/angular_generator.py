@@ -16,6 +16,7 @@ class AngularGenerator(FrontendGenerator):
     def __init__(self, model, builtins, path):
         super(AngularGenerator, self).__init__(model, builtins, path)
         self.routes = {}
+        self.customIndexRoute = None
 
     def generate(self):
         print(_MSG_HEADER_INFO + " Started.")
@@ -142,6 +143,11 @@ class AngularGenerator(FrontendGenerator):
 
         self.routes[page.name] = route
 
+        # check if page is marked as index
+        if self.customIndexRoute is None and page.indexPage:
+            self.customIndexRoute = route
+
+
     def visit_action_selector(self, object, actions):
         view_name = object.name + '_form'
         self.routes[view_name] = _get_route(view_name, True)
@@ -173,7 +179,7 @@ class AngularGenerator(FrontendGenerator):
         print(_MSG_HEADER_INFO + " Generating factory for {0}".format(object.name))
 
     def generate_route_file(self):
-        render_routes = _get_template("app.routes.js", routes=self.routes)
+        render_routes = _get_template("app.routes.js", routes=self.routes, customIndexRoute=self.customIndexRoute)
         render_modules = _get_template("app.modules.js", modules=self.routes)
         path = os.path.join(self.path, "app", "src", "app")
         file_path_routes = "app.routes.js"
