@@ -81,4 +81,4 @@ site
 *.iws
 
 #Generator test
-gen_test/
+gen_test*/

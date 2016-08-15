@@ -49,6 +49,8 @@ def object_processor(object):
         newProperty = Property(fk.label, newType, fk.label, None, [])
         newProperty.dontShowInTable = True
         newProperty.populateFromDB = True
+        newProperty.isMeta = True
+        newProperty.meta_object = fk.object
         newProperty.extraPropertyList=fk.property.properties
         object.properties.append(newProperty)
 
