@@ -7,7 +7,9 @@ menubar mainMenu 'GenAn' @home:
 
 	    menu Groups:
             'Group form' @group_form_page
-
+            'Table of groups' @group_table_page
+            'Thumbnails of groups' @group_thumbnail_page
+            'List of groups' @group_list_page
 	    ;
 
 	    'User form' @user_form_page left
@@ -245,7 +247,7 @@ view group_table_view:
 ;
 
 page group_thumbnail_page:
-	title ='Thumbnail of groups'
+	title = 'Thumbnails of groups'
 	use menubar mainMenu
 	use sidebar mainSidebar
 	use footer mainFooter
@@ -260,7 +262,7 @@ view group_thumbnail_view:
 ;
 
 page group_list_page:
-	title ='List of groups'
+	title = 'List of groups'
 	use menubar mainMenu
 	use sidebar mainSidebar
 	use footer mainFooter
