@@ -12,9 +12,13 @@ from node_gen.node_generator import NodeGenerator
 # def main(src, dest, help):
 from main.common import BColors
 
+import genan_env
+
 def main():
-    input_path = "../../test/example.gn"
-    output_path = "../../gen_test/"
+    print(genan_env.ROOT_PATH)
+
+    input_path = os.path.join(os.path.dirname(genan_env.ROOT_PATH), genan_env.TEST_DIR, 'example.gn')
+    output_path = os.path.join(os.path.dirname(genan_env.ROOT_PATH), genan_env.OUTPUT_DIR)
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
