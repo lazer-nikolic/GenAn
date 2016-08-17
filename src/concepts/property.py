@@ -83,6 +83,8 @@ class Property(object):
         self.params = None
         self.classes = None
         self.ref = None
+        self.isMeta = False
+        self.meta_object = None
         self.dontShowInTable = None
         self.populateFromDB = None
         self.extraPropertyList = None

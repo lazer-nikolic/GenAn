@@ -4,7 +4,14 @@ menubar mainMenu 'GenAn' @home:
             'Thumbnail' @thumbnail_page
             'List' @list_page
 	    ;
-	
+
+	    menu Groups:
+            'Group form' @group_form_page
+            'Table of groups' @group_table_page
+            'Thumbnails of groups' @group_thumbnail_page
+            'List of groups' @group_list_page
+	    ;
+
 	    'User form' @user_form_page left
 	    'About' @about_page
 	 
@@ -27,24 +34,12 @@ sidebar mainSidebar:
 footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
 
 object user:
-    Meta:
-        single group by name 'owner'
-        list group by name, description 'groups'
-    ;
 	username text label='User name' class={'required'}
 	pass password label='Password'
 	age number label='Age' class={'required', 'step':'1'} 
 	mail email label='Email' 
 	birthDate date label = 'Birth date' 
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
-;
-
-object group:
-    Meta:
-        list user by username, mail 'users'
-    ;
-    name text label='Group name'
-    description text label='Description'
 ;
 
 object common:
@@ -212,4 +207,71 @@ view list_view:
 
 view test_view:
     show list_view at 1 size 1
+;
+
+// Groups
+
+object group:
+    Meta:
+        single user by username, mail 'owner'
+        list user by username, mail 'users'
+    ;
+    name text label='Group name'
+    description text label='Description'
+;
+
+page group_form_page:
+    title='Group form'
+    use menubar mainMenu
+	show group_form_view position=center
+;
+
+view group_form_view:
+    !row 1
+    form for group actions=save at 3 size 6
+;
+
+page group_table_page:
+	 title='Table of groups'
+	 use menubar mainMenu
+	 use sidebar mainSidebar
+	 use footer mainFooter
+	 show group_table_view position=center
+;
+
+view group_table_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	table data_show={ group.name, group.description } at 3 size 6
+;
+
+page group_thumbnail_page:
+	title = 'Thumbnails of groups'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_thumbnail_view position=left
+;
+
+view group_thumbnail_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	thumbnail data_show={ group.name, group.description } at 2 size 9
+;
+
+page group_list_page:
+	title = 'List of groups'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_list_view position=right
+;
+
+view group_list_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	list data_show={ group.name, group.description } at 3 size 6
 ;
