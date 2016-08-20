@@ -273,12 +273,18 @@ def _get_ctrl(path, name):
 def _get_factories(view):
     factories = {}
     query = 'getAll'
+
     for view_on_page in view.views:
         if hasattr(view_on_page, 'selector'):
             selector = view_on_page.selector
-            if hasattr(selector, 'object'):
-                if selector.object.name not in factories:
-                    factories[selector.object.name] = query
+            # better solution is to catch only ShowData grammar rule
+            # that rule needs to be expanded with view type for single entity
+            # this way we keep consistency and enable to use single SelectorObject rule for constant values
+            # which are defined on model level
+            if hasattr(selector, 'data'):
+                for selector_obj in selector.data:
+                    if selector_obj.object.name not in factories:
+                        factories[selector_obj.object.name] = query
 
     if hasattr(view, 'object') and view.query:
         factories[view.object.name] = view.query.name

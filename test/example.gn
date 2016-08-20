@@ -42,6 +42,15 @@ object user:
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
 ;
 
+object group:
+    Meta:
+        single user by username, mail 'owner'
+        list user by username, mail 'users'
+    ;
+    name text label='Group name'
+    description text label='Description'
+;
+
 object common:
 	banner1 image label='banner' ref= 'http://orig06.deviantart.net/e08c/f/2014/163/a/2/computer_programming_banner_by_nuranox-d7m1ta5.png'  class = {'width':'300', 'height':'100','margin':'auto'}
 	banner2 image label='banner' ref= 'http://prg.is.titech.ac.jp/wp-content/uploads/2013/09/prg-banner-201309.jpg'  class = {'width':'300', 'height':'100','margin':'auto'}
@@ -210,15 +219,6 @@ view test_view:
 ;
 
 // Groups
-
-object group:
-    Meta:
-        single user by username, mail 'owner'
-        list user by username, mail 'users'
-    ;
-    name text label='Group name'
-    description text label='Description'
-;
 
 page group_form_page:
     title='Group form'
