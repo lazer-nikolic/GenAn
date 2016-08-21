@@ -39,12 +39,17 @@ ViewInView:
 
 Page:
 	'page' name=ID ('for' object=[Object]'.'query=[Query])?':'
+		('params' '=' urlParams+=UrlParam[","])?
 		('indexPage' '=' indexPage=BOOL)?
 		'title' '=' title=STRING
 		(using *= Use)
 		(layout=Layout)*
 		views *= ViewOnPage
 	';'
+;
+
+UrlParam:
+    object=[Object] ':' param=ID
 ;
 
 Use:

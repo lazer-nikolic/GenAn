@@ -29,7 +29,7 @@
                         'center': {
                             templateUrl: '{{routes[route].template}}',
                             controller: '{{routes[route].controller|title}}Controller',
-                            controllerAs: 'ctrl'
+                            controllerAs: 'ctrl_page'
                         }
                         {% set all_routes = routes[route]|sub_routes%}
                         {% for sub_route in  all_routes %}

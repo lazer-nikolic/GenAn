@@ -65,14 +65,10 @@ class AngularGenerator(FrontendGenerator):
         return "<div ui-view='{0}'></div>".format(view.name)
 
     def visit_selector_object(self, object, property):
-        print("visit selector object with class name {0}".format(object.__class__.__name__))
-        print(object.name)
-        print(property.name)
-        print(property.type in self.builtins)
         if property.type in self.builtins:
             return _generate_basic(object, property)
         else:
-            return "<div ui-view='{0}'></div>".format(object.name)
+            return "<div><h4>{{{{ ctrl_page.{0}.{1} }}}}</h4></div>".format(object.name, property.name)
 
     def visit_view(self, view):
         # Rows for this view
@@ -159,25 +155,9 @@ class AngularGenerator(FrontendGenerator):
         return _generate_form(self.path, object, actions)
 
     def visit_other_selector(self, name, **kwargs):
-        print("visit other selector for name: {0}".format(name))
-        print(kwargs)
         return _get_template("{0}.html".format(name), **kwargs)
 
     def visit_row(self, row):
-        # print("Generating row... ")
-        # print(row)
-        # print(dir(row))
-        # for s in row.selectors:
-        #     print(s)
-        #     print(dir(s))
-        #     print("selectors")
-        #     print(s.selector)
-        #     if hasattr(s.selector, "object"):
-        #         print(s.selector.object.name)
-        #     if hasattr(s.selector, "property"):
-        #         print(s.selector.property.name)
-        #     print(s.selector.accept(self))
-        # print("----------")
         rendered_selector = {
             sub_view.selector: sub_view.selector.accept(self) for sub_view in row.selectors
             }
@@ -215,7 +195,7 @@ class AngularGenerator(FrontendGenerator):
         print(_MSG_HEADER_INFO + " Generating app.modules.js")
 
     def _subroutes(self, view):
-        route = _get_route(view.name)
+        route = _get_route(view.name, view)
         for subview in view.subviews:
             # Don't add subview if its a basic component
             if hasattr(subview, "property") and subview.property.name not in self.builtins:
@@ -251,10 +231,6 @@ def _get_template(template_name, **kwargs):
 
 
 def _generate_basic(o, prop):
-    print("generate basic for o, prop, type")
-    print(o)
-    print(prop)
-    print(prop.type.name)
     return _get_template("{0}.html".format(prop.type),
                          o=o, prop=prop, type=prop.type.name)
 
@@ -271,11 +247,15 @@ def _get_file(path, name):
     return file
 
 
-def _get_route(name, id=False):
+def _get_route(name, page=None, id=False):
     relative_path = "app/views/" + name + "/" + name + ".html"
+    path = "/{0}".format(name)
+    if page and hasattr(page, "urlParams"):
+        for prm in page.urlParams:
+            path += "/{{{0}}}".format(prm.param)
     return {
         'name': name,
-        'path': "/{0}".format(name),
+        'path': path,
         'template': relative_path,
         'controller': "{0}".format(name),
         'sub_routes': [],
@@ -297,7 +277,17 @@ def _get_factories(view):
     factories = {}
     query = 'getAll'
 
+    if hasattr(view, "urlParams"):
+        for param in view.urlParams:
+            if param.object.name not in factories:
+                factories[param.object.name] = query
+
     for view_on_page in view.views:
+
+        if hasattr(view_on_page, 'object'):
+            if view_on_page.object.name not in factories:
+                factories[view_on_page.object.name] = query
+
         if hasattr(view_on_page, 'selector'):
             selector = view_on_page.selector
 

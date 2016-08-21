@@ -14,14 +14,14 @@ menubar mainMenu 'GenAn' @home:
 
 	    'User form' @user_form_page left
 	    'About' @about_page
-	 
+
 		 menu Links right:
 	    	'Facebook' ref='http://facebook.com'
 	    	'You tube' ref='http://youtube.com'
-	    	'Twitter' ref='http://twitter.com' 
+	    	'Twitter' ref='http://twitter.com'
 	    ;
 	    'Sign up' ref='http://google.com' right
-	    
+
 	;
 	
 sidebar mainSidebar:
@@ -277,6 +277,7 @@ view group_list_view:
 ;
 
 page group_single_page:
+    params = group:id
     title='Single group'
 	use menubar mainMenu
 	use sidebar mainSidebar
