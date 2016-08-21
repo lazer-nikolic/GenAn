@@ -1,6 +1,15 @@
+{% import 'common.jinja' as common %}
+
+template row.html
+sub_views {{ sub_views }}
+rendered_selector {{ rendered_selector }}
 <div class="row">
     {% set last_position = 1 %}
     {% for sub_view in sub_views %}
+        sub_view {{ sub_view }}
+        sub_view.selector {{ sub_view.selector }}
+        sub_view.selector__cn {{ sub_view.selector.__class__.__name__ }}
+        rendered_selector[sub_view.selector] {{ rendered_selector[sub_view.selector] }}
         {% if sub_view.position %}
             {% if last_position < sub_view.position %}
                 {% set size = ((sub_view.position - last_position)|round(2)|string()).strip('.0') %}

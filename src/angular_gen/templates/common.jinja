@@ -27,3 +27,15 @@
 
 {% macro open_bracket() %}{% raw %}{{% endraw %}{% endmacro %}
 {% macro closed_bracket() %}{% raw %}}{% endraw %}{% endmacro %}
+
+{% macro get_property_as_link(head) %}
+    {% if head.page %}
+        {% if head.linkText %}
+            <a href="#/{{head.page.name}}/{% raw %} {{ {% endraw %} single_{{head.object.name}}._id {% raw %} }} {% endraw %}">{{ head.linkText }}</a>
+        {% else %}
+            <a href="#/{{head.page.name}}/{% raw %} {{ {% endraw %} single_{{head.object.name}}._id {% raw %} }} {% endraw %}">{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</a>
+        {% endif %}
+    {% else %}
+        {% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}
+    {% endif %}
+{% endmacro %}

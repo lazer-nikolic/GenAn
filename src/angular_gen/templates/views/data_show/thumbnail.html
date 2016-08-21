@@ -8,9 +8,9 @@
                     <img src="{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}">
                 {% else -%}
                     {% if loop.first -%}
-                        <h4>{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</h4>
+                        <h4>{{ common.get_property_as_link(head) }}</h4>
                     {% else %}
-                        <p> {% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</p>
+                        <p>{{ common.get_property_as_link(head) }}</p>
                     {% endif %}
                 {% endif %}
             {% endfor %}

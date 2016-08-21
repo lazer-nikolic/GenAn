@@ -15,7 +15,7 @@
 			<tr	ng-repeat="single_{{data[0].object.name}} in ctrl.{{data[0].object.name}}_multiple">
 			 {% for head in data %}
 				 {% if head.property.type.name != 'image' -%}
-				 	<td>{% raw %} {{ {% endraw %}  single_{{head.object.name}}.{{head.property.name}}  {% raw %} }} {% endraw %}</td>
+					<td>{{ common.get_property_as_link(head) }}</td>
 				 {% endif %}
 			 {% endfor%}
 			</tr>

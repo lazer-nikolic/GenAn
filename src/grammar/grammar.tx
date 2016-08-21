@@ -63,6 +63,14 @@ SelectorObject:
 	 ('show')? object=[Object] '.' property=[Property]
 ;
 
+SelectorObjectLink:
+    object=[Object] '.' property=[Property] 'link' '@' page=[Page] ('as' linkText=STRING)?
+;
+
+SelectorObjectData:
+    sol = SelectorObjectLink | so = SelectorObject
+;
+
 Form:
 	'form' 'for' obj=[Object] 'actions' '=' actions+=FormAction
 ;
@@ -76,7 +84,7 @@ SelectorView:
 ;
 
 DataShow:
-	type=[View] 'data_show' '=' '{' data+=SelectorObject[","]  '}'
+	type=[View] 'data_show' '=' '{' data+=SelectorObjectData[","]  '}'
 ;
 
 Paragraph:

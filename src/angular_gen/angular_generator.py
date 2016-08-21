@@ -65,6 +65,10 @@ class AngularGenerator(FrontendGenerator):
         return "<div ui-view='{0}'></div>".format(view.name)
 
     def visit_selector_object(self, object, property):
+        print("visit selector object with class name {0}".format(object.__class__.__name__))
+        print(object.name)
+        print(property.name)
+        print(property.type in self.builtins)
         if property.type in self.builtins:
             return _generate_basic(object, property)
         else:
@@ -155,10 +159,25 @@ class AngularGenerator(FrontendGenerator):
         return _generate_form(self.path, object, actions)
 
     def visit_other_selector(self, name, **kwargs):
+        print("visit other selector for name: {0}".format(name))
+        print(kwargs)
         return _get_template("{0}.html".format(name), **kwargs)
 
     def visit_row(self, row):
         # print("Generating row... ")
+        # print(row)
+        # print(dir(row))
+        # for s in row.selectors:
+        #     print(s)
+        #     print(dir(s))
+        #     print("selectors")
+        #     print(s.selector)
+        #     if hasattr(s.selector, "object"):
+        #         print(s.selector.object.name)
+        #     if hasattr(s.selector, "property"):
+        #         print(s.selector.property.name)
+        #     print(s.selector.accept(self))
+        # print("----------")
         rendered_selector = {
             sub_view.selector: sub_view.selector.accept(self) for sub_view in row.selectors
             }
@@ -232,6 +251,10 @@ def _get_template(template_name, **kwargs):
 
 
 def _generate_basic(o, prop):
+    print("generate basic for o, prop, type")
+    print(o)
+    print(prop)
+    print(prop.type.name)
     return _get_template("{0}.html".format(prop.type),
                          o=o, prop=prop, type=prop.type.name)
 
@@ -277,10 +300,11 @@ def _get_factories(view):
     for view_on_page in view.views:
         if hasattr(view_on_page, 'selector'):
             selector = view_on_page.selector
-            # better solution is to catch only ShowData grammar rule
-            # that rule needs to be expanded with view type for single entity
-            # this way we keep consistency and enable to use single SelectorObject rule for constant values
-            # which are defined on model level
+
+            if hasattr(selector, 'object'):
+                if selector.object.name not in factories:
+                    factories[selector.object.name] = query
+
             if hasattr(selector, 'data'):
                 for selector_obj in selector.data:
                     if selector_obj.object.name not in factories:
