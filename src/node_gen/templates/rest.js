@@ -1,10 +1,24 @@
 var express = require('express');
-var router = express.Router();
+
+{#
+    'mergeParams : true' is a compromise solution since it would be necessary to check whether is 
+    entity's foreign key type of relation with some other entity. If it's always enabled, it is 
+    possible to make nested routes if necessary.
+#}
+var router = express.Router({ mergeParams : true });    
 
 var mongoose = require('mongoose');
 {% set model_name = o.name %}
-var {{model_name}} = require('../models/{{model_name}}.js');
-var queryOps = require('../common')
+var {{ model_name }} = require('../models/{{ model_name }}.js');
+var queryOps = require('../common');
+
+{% for fk_type in o.meta|unique_types %}
+    var {{ fk_type|router_var }} = require('./{{ fk_type }}.js');
+{% endfor %}
+
+{% for fk in o.meta %}
+    router.use('/:id/{{ fk.label }}', {{ fk.object.name|router_var }});
+{% endfor %} 
 
 /* GET /users listing. */
 router.get('/'
@@ -76,7 +90,7 @@ query.exec(function (err, post) {
 
 /* POST /users */
 router.post('/', function(req, res, next) {
-  {{model_name}}.create(req.body, function (err, post) {
+  {{ model_name }}.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
@@ -84,15 +98,16 @@ router.post('/', function(req, res, next) {
 
 /* GET /users/id */
 router.get('/:id', function(req, res, next) {
-{{model_name}}.findOne(req.params.id)
-  .exec(function (err, post) {
+  {{ model_name }}.findOne({ '_id' : req.params.id })
+    .exec(function (err, post) {
       if (err) return next(err);
       res.json(post);
     }
   );
 });
 
-{%for fk in o.meta %}
+/*
+{% for fk in o.meta %}
 //This should be changed
 router.get('/:id/{{fk.label}}', function(req, res, next) {
 {{model_name}}.findOne(req.params.id)
@@ -102,11 +117,12 @@ router.get('/:id/{{fk.label}}', function(req, res, next) {
     }
   );
 });
-{%endfor%}
+{% endfor %}
+*/
 
 /* PUT /users/:id */
 router.put('/:id', function(req, res, next) {
-  {{model_name}}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+  {{ model_name }}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
@@ -114,7 +130,7 @@ router.put('/:id', function(req, res, next) {
 
 /* DELETE /users/:id */
 router.delete('/:id', function(req, res, next) {
-  {{model_name}}.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+  {{ model_name }}.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
