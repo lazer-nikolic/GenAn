@@ -7,6 +7,10 @@
 
     {{page.name | title}}Controller.$inject = ['EventBus',{% for factory in factories %}'{{factory | title}}Factory',{% endfor %} '$filter', '$stateParams'];
 
+    /*
+    We use page controller to access single entities because, when we access single item,
+    we pass url parameters like ID which are accessible only through page controller.
+    */
     function {{page.name | title}}Controller(EventBus, {% for factory in factories %}{{factory | title}}Factory,{% endfor %} $filter, $stateParams) {
 
         var ctrl_page = this;

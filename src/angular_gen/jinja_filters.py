@@ -1,7 +1,10 @@
 def sub_routes_filter(routes):
-    all_sub_routes = routes['sub_routes']
-    for sub_route in routes['sub_routes']:
-        all_sub_routes += sub_routes_filter(sub_route)
+    if routes is not None:
+        all_sub_routes = routes['sub_routes']
+        for sub_route in routes['sub_routes']:
+            all_sub_routes += sub_routes_filter(sub_route)
+    else:
+        all_sub_routes = []
     return all_sub_routes
 
 

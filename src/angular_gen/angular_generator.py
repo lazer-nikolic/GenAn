@@ -70,6 +70,12 @@ class AngularGenerator(FrontendGenerator):
         else:
             return "<div><h4>{{{{ ctrl_page.{0}.{1} }}}}</h4></div>".format(object.name, property.name)
 
+    def visit_selector_fk_object(self, object, property):
+        # if property in self.builtins:
+        #     return _generate_basic(object, property)
+        # else:
+        return "<div><h4>fk {{{{ ctrl_page.{0}.{1} }}}}</h4></div>".format(object.name, property)
+
     def visit_view(self, view):
         # Rows for this view
         rows = [(row.number, self.visit_row(row)) for row in view.rows]
@@ -196,15 +202,22 @@ class AngularGenerator(FrontendGenerator):
 
     def _subroutes(self, view):
         route = _get_route(view.name, view)
-        for subview in view.subviews:
-            # Don't add subview if its a basic component
-            if hasattr(subview, "property") and subview.property.name not in self.builtins:
-                continue
-            if hasattr(subview, "name"):
-                sub_route = _get_route(subview.name)
-                if sub_route not in route['sub_routes']:
-                    route['sub_routes'].append(self._subroutes(subview))
-        return route
+        try:
+            for subview in view.subviews:
+                if hasattr(subview, "property") and not hasattr(subview.property, "name"):
+                    continue
+                # Don't add subview if its a basic component
+                if hasattr(subview, "property") and hasattr(subview.property, "name")\
+                        and subview.property.name not in self.builtins:
+                    continue
+                if hasattr(subview, "name"):
+                    sub_route = _get_route(subview.name)
+                    if sub_route not in route['sub_routes']:
+                        route['sub_routes'].append(self._subroutes(subview))
+            return route
+        except:
+            print(view)
+            print(dir(view))
 
 
 def _get_template(template_name, **kwargs):

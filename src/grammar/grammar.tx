@@ -57,7 +57,7 @@ Use:
 ;
 
 Selector:
-	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph|StaticLink
+	  SelectorFKObject|SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph|StaticLink
 ;
 
 StaticLink:
@@ -66,6 +66,15 @@ StaticLink:
 
 SelectorObject:
 	 ('show')? object=[Object] '.' property=[Property]
+;
+
+// property je ID jer ne FK property nije definisan kao Property vec kao label u Meta pravilu
+SelectorFKObject:
+	 ('show')? object=[Object] '.' property=ID 'by' '{' fkProperties*=PropertyLink[","] '}'
+;
+
+PropertyLink:
+    property=[Property] ('link' '@' page=[Page] ('as' linkText=STRING)?)?
 ;
 
 SelectorObjectLink:
@@ -177,7 +186,7 @@ StringConditionName:
 ;
 
 IntegerConditionName:
-    'lowerThan'|'greterThan'|'lessEqual'|'greaterEqual'|'equal'
+    'lowerThan'|'greaterThan'|'lessEqual'|'greaterEqual'|'equal'
 ;
 
 Order:

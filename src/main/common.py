@@ -5,6 +5,9 @@ class GeneratorAdapter:
     def visit_selector_object(self, object, property):
         pass
 
+    def visit_selector_fk_object(self, object, property):
+        pass
+
     def visit_view(self, view):
         pass
 

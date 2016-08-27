@@ -218,6 +218,26 @@ view test_view:
     show list_view at 1 size 1
 ;
 
+page user_single_page:
+    params = user:id
+    title='Single user'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show user_single_view position=center
+;
+
+view user_single_view:
+    !row 4
+ 	show user.username at 2 size 8
+ 	!row 5
+ 	show user.mail at 2 size 8
+ 	!row 6
+ 	show user.birthDate at 2 size 8
+ 	!row 7
+ 	show user.gender at 2 size 8
+;
+
 // Groups
 
 page group_form_page:
@@ -290,4 +310,8 @@ view group_single_view:
  	show group.name at 2 size 8
  	!row 5
  	show group.description at 2 size 8
+ 	!row 6
+ 	show group.owner by {name, mail link @user_single_page} at 2 size 8
+ 	!row 7
+ 	show group.users by {name} at 2 size 8
 ;
