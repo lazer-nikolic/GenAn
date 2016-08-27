@@ -11,8 +11,11 @@ app.config.from_pyfile(os.path.join(os.pardir, 'config.py'))
 db = SQLAlchemy(app)
 
 # Loads user code before generated code, giving it priority and enabling route overriding
-user_mods = [app.register_blueprint(getattr(user_code, field)) for field in dir(user_code)
-             if re.search('extend_mod_*', field)]
+user_mods = [getattr(user_code, field) for field in dir(user_code)
+             if type(getattr(user_code, field)) is Blueprint]
+
+for mod in user_mods:
+    app.register_blueprint(mod)
 
 {% for object in objects %}
 from app.{{object.name}}.views import mod as {{object.name}}_module

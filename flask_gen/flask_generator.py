@@ -61,7 +61,8 @@ class FlaskGenerator(BackendGenerator):
             user_code_path = os.path.join(base_path, 'user_code')
             if not os.path.exists(user_code_path):
                 os.makedirs(user_code_path)
-                # __init__ file should contain all hand written applications (mods) with 'extend_mod' prefix
+                # __init__ file should contain all hand written applications (mods)
+                # Loads all fields of type Blueprint
                 init_file = open(os.path.join(user_code_path, "__init__.py"), "w+")
                 print(render_file, file=init_file)
 
