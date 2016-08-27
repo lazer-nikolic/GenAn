@@ -57,6 +57,14 @@ class FlaskGenerator(BackendGenerator):
             target_file = open(os.path.join(base_path, "run.py"), "w+")
             print(render_file, file=target_file)
 
+            # Make user_code folder for hand written code
+            user_code_path = os.path.join(base_path, 'user_code')
+            if not os.path.exists(user_code_path):
+                os.makedirs(user_code_path)
+                # __init__ file should contain all hand written applications (mods) with 'extend_mod' prefix
+                init_file = open(os.path.join(user_code_path, "__init__.py"), "w+")
+                print(render_file, file=init_file)
+
             print(_MSG_HEADER_SUCCESS + " Finished the backend generation.")
         except Exception as e:
             print(_MSG_HEADER_FAIL + str(e))

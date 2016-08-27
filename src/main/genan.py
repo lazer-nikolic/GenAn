@@ -40,7 +40,6 @@ class GenanCore(object):
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Loading generators...")
         self._load_plugins()
 
-
     def generate(self, debug=False):
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Starting generators...")
         try:
