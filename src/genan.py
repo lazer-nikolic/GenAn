@@ -1,37 +1,46 @@
 import traceback
 
 import os
+import click
+
+import genan_env
+
 from angular_gen.angular_generator import AngularGenerator
 from interpretation.interpreter import Interpreter
 from node_gen.node_generator import NodeGenerator
 
-# @click.command()
-# @click.option('-h', '--help', is_flag=True, help='Help.')
-# @click.argument('src', nargs=1, type=click.Path(exists=True))
-# @click.argument('dest', nargs=1, type=click.Path(exists=True))
-# def main(src, dest, help):
 from main.common import BColors
 
-import genan_env
-
-def main():
-    print(genan_env.ROOT_PATH)
-
-    input_path = os.path.join(os.path.dirname(genan_env.ROOT_PATH), genan_env.TEST_DIR, 'example.gn')
-    output_path = os.path.join(os.path.dirname(genan_env.ROOT_PATH), genan_env.OUTPUT_DIR)
+@click.command()
+@click.option('--frontend', default = 'angular', 
+              type = click.Choice(['angular']), 
+              help = 'Generate frontend application using one of the provided Javascript frameworks.')
+@click.option('--backend', default = 'node', 
+              type = click.Choice(['node']), 
+              help = 'Generate backend application using one of the provided technologies')
+@click.argument('source_path', nargs = 1, 
+                default = os.path.join(os.path.dirname(genan_env.ROOT_PATH), genan_env.TEST_DIR, 'example.gn'), 
+                type = click.Path(exists = True))
+@click.argument('output_path', nargs = 1, 
+                default = os.path.join(os.path.dirname(genan_env.ROOT_PATH)),
+                type = click.Path(exists = True))
+def cli(frontend, backend, source_path, output_path):
 
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
     output_file = os.path.join(os.path.dirname(output_path))
+    file_path = os.path.join(source_path)
 
-    file_path = os.path.join(input_path)
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Loading model from file {0}".format(file_path))
+
     interpreter = Interpreter()
     model = interpreter.load_model(file_path)
 
-    frontend_generator = AngularGenerator(model, interpreter.builtins, output_file)
+    if frontend == 'angular':
+        frontend_generator = AngularGenerator(model, interpreter.builtins, output_file)
 
-    backend_generator = NodeGenerator(model, interpreter.builtins, output_file)
+    if backend == 'node':
+        backend_generator = NodeGenerator(model, interpreter.builtins, output_file)
 
     generate(frontend_generator, backend_generator, True)
     print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
@@ -53,4 +62,4 @@ def generate(frontend_generator, backend_generator=None, debug=False):
 
 
 if __name__ == '__main__':
-    main()
+    cli()
