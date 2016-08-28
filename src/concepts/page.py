@@ -44,11 +44,12 @@ class Page(object):
     classdocs
     '''
 
-    def __init__(self, object, query, name, indexPage, title, views, parent, layout, using):
-        self.name = name
+    def __init__(self, object, query, name, urlParams, indexPage, title, views, parent, layout, using):
         self.object = object
+        self.name = name
         self.query = query
         self.indexPage = indexPage
+        self.urlParams = urlParams
         self.title = title
         self.views = views
         self.layout = layout

@@ -14,14 +14,14 @@ menubar mainMenu 'GenAn' @home:
 
 	    'User form' @user_form_page left
 	    'About' @about_page
-	 
+
 		 menu Links right:
 	    	'Facebook' ref='http://facebook.com'
 	    	'You tube' ref='http://youtube.com'
-	    	'Twitter' ref='http://twitter.com' 
+	    	'Twitter' ref='http://twitter.com'
 	    ;
 	    'Sign up' ref='http://google.com' right
-	    
+
 	;
 	
 sidebar mainSidebar:
@@ -40,6 +40,15 @@ object user:
 	mail email label='Email' 
 	birthDate date label = 'Birth date' 
 	gender combobox label='Gender' parameters = { 'Male', 'Female' }
+;
+
+object group:
+    Meta:
+        single user by username, mail 'owner'
+        list user by username, mail 'users'
+    ;
+    name text label='Group name'
+    description text label='Description'
 ;
 
 object common:
@@ -211,15 +220,6 @@ view test_view:
 
 // Groups
 
-object group:
-    Meta:
-        single user by username, mail 'owner'
-        list user by username, mail 'users'
-    ;
-    name text label='Group name'
-    description text label='Description'
-;
-
 page group_form_page:
     title='Group form'
     use menubar mainMenu
@@ -243,7 +243,7 @@ view group_table_view:
 	!row 4
  	 show common.tableName at 2 size 8
  	!row 5
- 	table data_show={ group.name, group.description } at 3 size 6
+ 	table data_show={ group.name link @group_single_page, group.description } at 3 size 6
 ;
 
 page group_thumbnail_page:
@@ -258,7 +258,7 @@ view group_thumbnail_view:
 	!row 4
  	 show common.tableName at 2 size 8
  	!row 5
- 	thumbnail data_show={ group.name, group.description } at 2 size 9
+ 	thumbnail data_show={ group.name, group.name link @group_single_page as 'go to group' , group.description } at 2 size 9
 ;
 
 page group_list_page:
@@ -274,4 +274,20 @@ view group_list_view:
  	 show common.tableName at 2 size 8
  	!row 5
  	list data_show={ group.name, group.description } at 3 size 6
+;
+
+page group_single_page:
+    params = group:id
+    title='Single group'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_single_view position=center
+;
+
+view group_single_view:
+	!row 4
+ 	show group.name at 2 size 8
+ 	!row 5
+ 	show group.description at 2 size 8
 ;
