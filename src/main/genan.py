@@ -1,26 +1,23 @@
+import atexit
+import importlib
+import os
+import re
 import traceback
 
-import os
-
-import pelix.framework
+import pip
 import pkg_resources
-from pelix.ipopo.decorators import ComponentFactory, Provides, Requires, Instantiate, Validate
-import logging
 
 from interpretation.interpreter import Interpreter
-
-# @click.command()
-# @click.option('-h', '--help', is_flag=True, help='Help.')
-# @click.argument('src', nargs=1, type=click.Path(exists=True))
-# @click.argument('dest', nargs=1, type=click.Path(exists=True))
-# def main(src, dest, help):
 from main.common import BColors
 
 
 class GenanCore(object):
-    def __init__(self):
+    def __init__(self, packages=None):
         self._backend_generators = []
         self._frontend_generators = []
+        self.packages = packages
+
+        atexit.register(self.cleanup)
 
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Running GenAn...")
 
@@ -55,7 +52,18 @@ class GenanCore(object):
             print(BColors.FAIL + "ERROR:" + BColors.ENDC + " Generation failed.")
         print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Done.")
 
+    def cleanup(self):
+        print(BColors.OKBLUE + "GENAN:" + BColors.ENDC + " Cleaning up...")
+        if self.packages:
+            for package_name in self.packages:
+                pip.main(["uninstall", "-y", "-q", os.path.join(os.pardir, 'plugins', package_name)])
+
     def _load_plugins(self):
+        if self.packages:
+            for package_name in self.packages:
+                pip.main(["install", "-q", os.path.join(os.pardir, 'plugins', package_name)])
+            # Import all installed modules
+            pkg_resources._initialize_master_working_set()
         # Load frontend generators
         for entrypoint in pkg_resources.iter_entry_points("genan.frontend_generator"):
             FrontendGenerator = entrypoint.load()
@@ -70,8 +78,15 @@ class GenanCore(object):
 
 
 def main():
-    generator = GenanCore()
-    generator.generate(True)
+    try:
+        # Load all .whl, .egg and .tar.gz files
+        packages = [package_name for package_name in os.listdir(os.path.join(os.pardir, 'plugins'))
+                    if re.search('^.+\.(whl|egg|tar\.gz)$', package_name)]
+        generator = GenanCore(packages)
+        generator.generate(True)
+    except KeyboardInterrupt:
+        # Allow cleanup function to be called on forced exit
+        pass
 
 
 if __name__ == "__main__":
