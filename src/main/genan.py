@@ -12,10 +12,13 @@ from main.common import BColors
 
 
 class GenanCore(object):
-    def __init__(self, packages=None):
+    def __init__(self):
         self._backend_generators = []
         self._frontend_generators = []
-        self.packages = packages
+
+        # Load all .whl, .egg and .tar.gz files
+        self.packages = [package_name for package_name in os.listdir(os.path.join(os.pardir, 'plugins'))
+                         if re.search('^.+\.(whl|egg|tar\.gz)$', package_name)]
 
         atexit.register(self.cleanup)
 
@@ -79,10 +82,7 @@ class GenanCore(object):
 
 def main():
     try:
-        # Load all .whl, .egg and .tar.gz files
-        packages = [package_name for package_name in os.listdir(os.path.join(os.pardir, 'plugins'))
-                    if re.search('^.+\.(whl|egg|tar\.gz)$', package_name)]
-        generator = GenanCore(packages)
+        generator = GenanCore()
         generator.generate(True)
     except KeyboardInterrupt:
         # Allow cleanup function to be called on forced exit
