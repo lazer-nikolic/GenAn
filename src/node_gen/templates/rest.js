@@ -12,11 +12,11 @@ var mongoose = require('mongoose');
 var {{ model_name }} = require('../models/{{ model_name }}.js');
 var queryOps = require('../common');
 
-{% for fk_type in o.meta|unique_types %}
+{% for fk_type in o.meta|selectattr('foreignKeyType', 'equalto', 'list')|unique_types %}
     var {{ fk_type|router_var }} = require('./{{ fk_type }}.js');
 {% endfor %}
 
-{% for fk in o.meta %}
+{% for fk in o.meta|selectattr('foreignKeyType', 'equalto', 'list') %}
     router.use('/:id/{{ fk.label }}', {{ fk.object.name|router_var }});
 {% endfor %} 
 
@@ -135,5 +135,18 @@ router.delete('/:id', function(req, res, next) {
     res.json(post);
   });
 });
+
+{% for fk in o.meta|selectattr('foreignKeyType', 'equalto', 'single') %}
+router.get('/:id/{{ fk.label }}', function(req, res, next) {
+    {{ model_name }}.findOne({ '_id' : req.params.id })
+        .populate('{{ fk.label }}')
+        .exec(function(err, post) {
+            if(err) {
+                return next(err);
+            }
+            res.json(post.{{ fk.label }});
+        });
+});
+{% endfor %}
 
 module.exports = router;
