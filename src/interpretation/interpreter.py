@@ -34,6 +34,7 @@ from concepts.string_condition import StringCondition
 from concepts.integer_condition import IntegerCondition
 from textx.metamodel import metamodel_from_file
 
+import genan_env
 
 class Interpreter:
     def __init__(self):
@@ -46,7 +47,7 @@ class Interpreter:
 
         builtins.update(layouts)
 
-        self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
+        self.grammar_path = os.path.join(genan_env.ROOT_PATH, genan_env.GRAMMAR_DIR, 'grammar.tx')
         self.builtins = builtins
         self.obj_processors = {
             'SelectorObject': selector_object_processor,

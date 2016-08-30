@@ -6,6 +6,7 @@ import shutil
 from angular_gen.jinja_filters import sub_routes_filter
 from jinja2 import FileSystemLoader, Environment
 from main.common import BColors, BackendGenerator
+from node_gen.jinja_filters import *
 
 _MSG_HEADER_INFO = BColors.OKBLUE + "NODE GENERATOR:" + BColors.ENDC
 _MSG_HEADER_FAIL = BColors.FAIL + "NODE GENERATOR - ERROR:" + BColors.ENDC
@@ -119,5 +120,7 @@ def get_template(template_name, **kwargs):
     env = Environment(trim_blocks=True, lstrip_blocks=True,
                       loader=FileSystemLoader(os.path.join(module_path, "templates"), ))
     env.filters['sub_routes'] = sub_routes_filter
+    env.filters['router_var'] = router_var
+    env.filters['unique_types'] = unique_types
     template = env.get_template("{0}".format(template_name))
     return template.render(kwargs)
