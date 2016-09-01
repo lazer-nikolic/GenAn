@@ -1,5 +1,5 @@
 '''
-Created on 08.02.2016.
+Created on 27.08.2016.
 
 @author: Kupco
 '''
@@ -29,4 +29,4 @@ class SelectorFKObject(object):
         self.name = object.obj_name
 
     def accept(self, visitor):
-        return visitor.visit_selector_fk_object(self.object, self.property)
+        return visitor.visit_selector_fk_object(self.object, self.property, self.fkProperties)
