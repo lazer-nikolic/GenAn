@@ -13,6 +13,7 @@ from concepts.property import Property, property_processor
 from concepts.row import Row
 from concepts.row_separator import RowSeparator
 from concepts.selector_object import SelectorObject, selector_object_processor
+from concepts.selector_fk_object import SelectorFKObject, selector_fk_object_processor
 from concepts.selector_view import SelectorView
 from concepts.sidebar import Sidebar
 from concepts.view import View
@@ -51,6 +52,7 @@ class Interpreter:
         self.builtins = builtins
         self.obj_processors = {
             'SelectorObject': selector_object_processor,
+            'SelectorFKObject': selector_fk_object_processor,
             'Page': page_processor,
             'Property': property_processor,
             'DataShow': data_show_processor,
@@ -76,6 +78,7 @@ class Interpreter:
                                              StringCondition,
                                              IntegerCondition,
                                              SelectorObject,
+                                             SelectorFKObject,
                                              SelectorView,
                                              ViewOnPage,
                                              DataShow,
