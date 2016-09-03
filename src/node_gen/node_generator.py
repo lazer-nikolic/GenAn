@@ -39,19 +39,25 @@ class NodeGenerator(BackendGenerator):
             subprocess.check_call(["express"], cwd=base_path)
             print(_MSG_HEADER_INFO + " Installing dependencies...")
 
-            yes = ['yes', 'y', 'Y', 'Yes', 'YES', '']
+            # yes = ['yes', 'y', 'Y', 'Yes', 'YES', '']
 
-            choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
-            if choice_npm in yes:
-                subprocess.check_call(["npm", "install"], cwd=base_path)
-                subprocess.check_call(["npm", "install", "mongoose", "--save"],
+            # choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
+            # if choice_npm in yes:
+            subprocess.check_call(["npm", "install"], cwd=base_path)
+            subprocess.check_call(["npm", "install", "mongoose", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "lodash", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "debug", "--save"],
+                                  cwd=base_path)
+            subprocess.check_call(["npm", "install", "cors", "--save"],
                                       cwd=base_path)
-                subprocess.check_call(["npm", "install", "ejs", "--save"],
-                                      cwd=base_path)
-                subprocess.check_call(["npm", "install", "debug", "--save"],
-                                      cwd=base_path)
-                subprocess.check_call(["npm", "install", "cors", "--save"],
-                                      cwd=base_path)
+
+            print(_MSG_HEADER_INFO + "Removing unnecesarry Express Generator's generated files.")
+
+            subprocess.check_call(["rm", "routes/users.js"], cwd = base_path)
+            subprocess.check_call(["rm", "routes/index.js"], cwd = base_path)
+            subprocess.check_call(["rm", "-rf", "views"], cwd = base_path)
 
             print(_MSG_HEADER_INFO + " Generating backend...")
             for concept in self.model.concept:
