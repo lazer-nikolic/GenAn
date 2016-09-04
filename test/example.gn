@@ -313,5 +313,5 @@ view group_single_view:
  	!row 6
  	show group.owner by {username, mail link @user_single_page} at 2 size 8
  	!row 7
- 	show group.users by {username} at 2 size 8
+ 	show group.users by {username link @user_single_page} at 2 size 8
 ;
