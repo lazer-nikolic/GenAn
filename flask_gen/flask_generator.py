@@ -3,6 +3,9 @@ import subprocess
 
 import os
 import shutil
+
+import datetime
+
 from angular_gen.jinja_filters import sub_routes_filter
 from jinja2 import FileSystemLoader, Environment
 from main.common import BColors, BackendGenerator
@@ -63,8 +66,9 @@ class FlaskGenerator(BackendGenerator):
                 os.makedirs(user_code_path)
                 # __init__ file should contain all hand written applications (mods)
                 # Loads all fields of type Blueprint
-                init_file = open(os.path.join(user_code_path, "__init__.py"), "w+")
-                print(render_file, file=init_file)
+                if not os.path.exists(os.path.join(user_code_path, "__init__.py")):
+                    init_file = open(os.path.join(user_code_path, "__init__.py"), "w+")
+                    print("# Import all Blueprint modules here", file=init_file)
 
             print(_MSG_HEADER_SUCCESS + " Finished the backend generation.")
         except Exception as e:
@@ -115,4 +119,6 @@ def get_template(template_name, **kwargs):
     env = Environment(trim_blocks=True, lstrip_blocks=True,
                       loader=FileSystemLoader(os.path.join(module_path, "templates"), ))
     template = env.get_template("{0}".format(template_name))
+    # Add current date for date of generation
+    kwargs['date'] = datetime.datetime.now()
     return template.render(kwargs)
