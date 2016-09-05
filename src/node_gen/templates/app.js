@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Resources routes are required from separate files
 {% for object in objects %}
-var {{object.name}} = require('./routes/{{object.name}}');
+var {{object.name}} = require('./routes/{{object.name}}_route');
 {% endfor %}
 
 // MongoDB connection using Mongoose
@@ -77,6 +77,8 @@ app.use(function(req, res, next) {
 //    error: {}
 //  });
 //});
+
+console.log("Your API listens on port 3000");
 
 
 module.exports = app;

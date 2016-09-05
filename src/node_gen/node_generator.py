@@ -39,10 +39,6 @@ class NodeGenerator(BackendGenerator):
             subprocess.check_call(["express"], cwd=base_path)
             print(_MSG_HEADER_INFO + " Installing dependencies...")
 
-            # yes = ['yes', 'y', 'Y', 'Yes', 'YES', '']
-
-            # choice_npm = input(_MSG_HEADER_INFO + " Install npm [y/n] (default: yes): ")
-            # if choice_npm in yes:
             subprocess.check_call(["npm", "install"], cwd=base_path)
             subprocess.check_call(["npm", "install", "mongoose", "--save"],
                                   cwd=base_path)
@@ -89,31 +85,33 @@ class NodeGenerator(BackendGenerator):
     def visit_object(self, object):
         """
         generate_object(self, object)
-        Generates a node.js rest service, route and model for an object.
+        Generates a node.js RESTful service, routes, their default and customizable callbacks and models for an object.
         :param object:
-        :return:
+        :return object:
         """
 
         base_path = os.path.join(self.path, self.app_name)
 
-        print(_MSG_HEADER_INFO + " Generating model for {0}".format(object.name))
-        models_path = os.path.join(base_path, "models")
-        rendered_model = get_template("model.js", o=object, persistent_types=self.type_mapper)
-        if not os.path.exists(models_path):
-            os.makedirs(models_path)
-        file_model = open(os.path.join(models_path, "{0}.js".format(object.name)), 'w+')
-        print(rendered_model, file=file_model)
 
-        print(_MSG_HEADER_INFO + " Generating service for {0}".format(object.name))
-        routes_path = os.path.join(base_path, "routes")
-        rendered_rest = get_template("rest.js", o=object)
-        if not os.path.exists(routes_path):
-            os.makedirs(routes_path)
-        file_rest = open(os.path.join(routes_path, "{0}.js".format(object.name)), 'w+')
-        print(rendered_rest, file=file_rest)
+        generate_component(object, "model", "model.js", base_path, "models", persistent_types = self.type_mapper)
+        generate_component(object, "route", "route.js", base_path, "routes")
+        generate_component(object, "default route callbacks", "default_route_callbacks.js", base_path, "routes", ".default_route_callbacks")
+        generate_component(object, "overridable route callbacks", "route_callbacks.js", base_path, "routes", "route_callbacks")
 
         return object
 
+
+def generate_component(object, component_name, template_name, base_path, *args, **kwargs):
+    """
+        Generates an Express API component from its template and places it in joined base_path and args path
+    """
+    print(_MSG_HEADER_INFO + "Generating {0} for {1}".format(component_name, object.name))
+    route_callbacks_path = os.path.join(base_path, *args)
+    rendered_route_callbacks = get_template(template_name, o = object, **kwargs)
+    if not os.path.exists(route_callbacks_path):
+        os.makedirs(route_callbacks_path)
+    file_route_callbacks = open(os.path.join(route_callbacks_path, "{0}_{1}".format(object.name, template_name)), 'w+')
+    print(rendered_route_callbacks, file = file_route_callbacks)
 
 def get_template(template_name, **kwargs):
     """
