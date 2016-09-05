@@ -7,9 +7,16 @@
         .config(routes)
         .run(run);
 
-    routes.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider'];
+    routes.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider','newRoutes'];
+    var $stateProviderRef;
 
-    function routes($stateProvider, $urlRouterProvider, $httpProvider) {
+    function routes($stateProvider, $urlRouterProvider, $httpProvider, newRoutes) {
+
+            for (var stateName in newRoutes){
+                var state = newRoutes[stateName];
+                $stateProvider.state(stateName, state);
+            }
+
         $stateProvider
             .state('index', {
                 url: '/index',
@@ -28,7 +35,12 @@
                 views: {
                     'center': {
                         templateUrl: '{{routes[route].template}}',
-                        controller: '{{routes[route].controller|title}}Controller',
+                        {% if routes[route].overriden %}
+                            controller: 'User{{routes[route].controller|title}}Controller',
+                        {% else %}
+                            controller: '{{routes[route].controller|title}}Controller',
+                        {% endif %}
+
                         controllerAs: 'ctrl'
                     }
                     {% set all_routes = routes[route]|sub_routes%}
@@ -36,7 +48,11 @@
                     ,
                     '{{sub_route.name}}@{{route}}': {
                         templateUrl: '{{sub_route.template}}',
-                        controller: '{{sub_route.controller|title}}Controller',
+                        {% if sub_route.overriden %}
+                            controller: 'User{{sub_route.controller|title}}Controller',
+                        {% else %}
+                            controller: '{{sub_route.controller|title}}Controller',
+                        {% endif %}
                         controllerAs: 'ctrl'
                     }
                     {% endfor %}
