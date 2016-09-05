@@ -1,24 +1,37 @@
 # GenAn
 [![MIT](https://camo.githubusercontent.com/52ec9e2dfec7264e254fb7af5ac87f301ced9180/68747470733a2f2f696d672e736869656c64732e696f2f707970692f6c2f417270656767696f2e737667)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 
-DSL for definition of client-side application based on AngularJS.
+DSL for definition of client-side application based on AngularJS and ExpressJS backend utilizing Mongo Database, so it basically can be used as a MEAN stack application generator.
 #### Installation:
 
 git clone https://github.com/theshammy/GenAn.git
 
-Run genan.py in main package from command line: `genan -source_file -destination_folder`
+Run genan.py in src package from command line: `python genan.py source_path output_path`
+For more options, run `python genan.py --help` .
 
 #### Dependencies:
 * Arpeggio
 * textX
 * Jinja2
+* Click
+
+##### Database
+* mongoDB
+* robomongo db client
 
 ##### Backend
-* node.js and npm: https://nodejs.org/en/download/
+* node.js and npm: https://nodejs.org/en/download/  or better:
+* use nvm, follow installation manual from https://github.com/creationix/nvm and then install:
+* node.js and npm v5.12:
+`nvm install v5.12`
 * express:
 `npm install -g express`
 * express generator:
 `npm install -g express-generator`
+* express cli:
+`npm install -g express-cli`
+* gulp:
+`npm install -g gulp`
 
 ### Usage:
 

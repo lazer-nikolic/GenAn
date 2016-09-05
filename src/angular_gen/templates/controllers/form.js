@@ -5,14 +5,36 @@
     angular.module('app')
         .controller('{{name | title}}_formController', {{name | title}}formController);
 
-    {{name | title}}formController.$inject = ['EventBus','{{name | title}}Factory', '$filter', '$stateParams'];
+    {{name | title}}formController.$inject = ['EventBus','{{name | title}}Factory',
+    {%- for m in meta %} '{{m.name | title}}Factory',{% endfor %} '$filter', '$stateParams'];
 
-    function {{name | title}}formController(EventBus, {{name | title}}Factory, $filter, $stateParams) {
+    function {{name | title}}formController(EventBus, {{name | title}}Factory,
+    {%- for m in meta %} {{m.name | title}}Factory,{% endfor %} $filter, $stateParams) {
 
         var ctrl = this;
         ctrl.update = false;
         ctrl.oldObject = {};
         ctrl.{{name}} = {};
+
+        /*** meta init ***/
+
+        {% for m in meta %}
+            ctrl.meta_{{ m.name }} = {};
+        {% endfor %}
+
+        {% for m in meta %}
+            ctrl.getAll_meta_{{ m.name }} = function() {
+                {{m.name | title}}Factory.getAll().then(function(success) {
+                    ctrl.meta_{{ m.name }} = success;
+                });
+            }
+        {% endfor %}
+
+        {% for m in meta %}
+            ctrl.getAll_meta_{{ m.name }}();
+        {% endfor %}
+
+        /*******/
 
         if ($stateParams.id  !== undefined && $stateParams.id != "") {
             {{name | title}}Factory.getById($stateParams.id).then(function(success) {

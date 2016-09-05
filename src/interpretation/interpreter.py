@@ -13,6 +13,7 @@ from concepts.property import Property, property_processor
 from concepts.row import Row
 from concepts.row_separator import RowSeparator
 from concepts.selector_object import SelectorObject, selector_object_processor
+from concepts.selector_fk_object import SelectorFKObject, selector_fk_object_processor
 from concepts.selector_view import SelectorView
 from concepts.sidebar import Sidebar
 from concepts.view import View
@@ -34,6 +35,7 @@ from concepts.string_condition import StringCondition
 from concepts.integer_condition import IntegerCondition
 from textx.metamodel import metamodel_from_file
 
+import genan_env
 
 class Interpreter:
     def __init__(self):
@@ -46,10 +48,11 @@ class Interpreter:
 
         builtins.update(layouts)
 
-        self.grammar_path = os.path.join(os.pardir, 'grammar', 'grammar.tx')
+        self.grammar_path = os.path.join(genan_env.ROOT_PATH, genan_env.GRAMMAR_DIR, 'grammar.tx')
         self.builtins = builtins
         self.obj_processors = {
             'SelectorObject': selector_object_processor,
+            'SelectorFKObject': selector_fk_object_processor,
             'Page': page_processor,
             'Property': property_processor,
             'DataShow': data_show_processor,
@@ -75,6 +78,7 @@ class Interpreter:
                                              StringCondition,
                                              IntegerCondition,
                                              SelectorObject,
+                                             SelectorFKObject,
                                              SelectorView,
                                              ViewOnPage,
                                              DataShow,

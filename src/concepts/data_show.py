@@ -20,9 +20,13 @@ class DataShow(object):
     '''
 
     def __init__(self, type, parent, data):
+        self.data = []
+        for s in data:
+            selector = s.so if s.so else s.sol
+            self.data.append(selector)
         self.type = type
         self.parent = parent
-        self.data = data
+
 
     def accept(self, visitor):
         return visitor.visit_other_selector(self.type.name, data=self.data)

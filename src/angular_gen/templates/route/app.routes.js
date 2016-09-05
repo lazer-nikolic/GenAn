@@ -58,9 +58,13 @@
                     {% endfor %}
                 }
             })
-            {% endfor %};
+    {% endfor %};
 
-            $urlRouterProvider.otherwise('/index');
+            {% if customIndexRoute %}
+                $urlRouterProvider.otherwise('{{ customIndexRoute.path }}');
+            {% else %}
+                $urlRouterProvider.otherwise('/index');
+            {% endif %}
         }
 
     run.$inject = ['Routing'];

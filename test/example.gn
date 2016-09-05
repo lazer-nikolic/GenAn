@@ -4,17 +4,24 @@ menubar mainMenu 'GenAn' @home:
             'Thumbnail' @thumbnail_page
             'List' @list_page
 	    ;
-	
+
+	    menu Groups:
+            'Group form' @group_form_page
+            'Table of groups' @group_table_page
+            'Thumbnails of groups' @group_thumbnail_page
+            'List of groups' @group_list_page
+	    ;
+
 	    'User form' @user_form_page left
 	    'About' @about_page
-	 
+
 		 menu Links right:
 	    	'Facebook' ref='http://facebook.com'
 	    	'You tube' ref='http://youtube.com'
-	    	'Twitter' ref='http://twitter.com' 
+	    	'Twitter' ref='http://twitter.com'
 	    ;
 	    'Sign up' ref='http://google.com' right
-	    
+
 	;
 	
 sidebar mainSidebar:
@@ -27,10 +34,6 @@ sidebar mainSidebar:
 footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
 
 object user:
-    Meta:
-        single group by name 'owner'
-        list group by name, description 'groups'
-    ;
 	username text label='User name' class={'required'}
 	pass password label='Password'
 	age number label='Age' class={'required', 'step':'1'} 
@@ -41,6 +44,7 @@ object user:
 
 object group:
     Meta:
+        single user by username, mail 'owner'
         list user by username, mail 'users'
     ;
     name text label='Group name'
@@ -56,6 +60,7 @@ object common:
 ;
 
 page home:
+    indexPage=True
 	title='Home'
 	use menubar mainMenu
 	use sidebar mainSidebar
@@ -211,4 +216,102 @@ view list_view:
 
 view test_view:
     show list_view at 1 size 1
+;
+
+page user_single_page:
+    params = user:id
+    title='Single user'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show user_single_view position=center
+;
+
+view user_single_view:
+    !row 4
+ 	show user.username at 2 size 8
+ 	!row 5
+ 	show user.mail at 2 size 8
+ 	!row 6
+ 	show user.birthDate at 2 size 8
+ 	!row 7
+ 	show user.gender at 2 size 8
+;
+
+// Groups
+
+page group_form_page:
+    title='Group form'
+    use menubar mainMenu
+	show group_form_view position=center
+;
+
+view group_form_view:
+    !row 1
+    form for group actions=save at 3 size 6
+;
+
+page group_table_page:
+	 title='Table of groups'
+	 use menubar mainMenu
+	 use sidebar mainSidebar
+	 use footer mainFooter
+	 show group_table_view position=center
+;
+
+view group_table_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	table data_show={ group.name link @group_single_page, group.description } at 3 size 6
+;
+
+page group_thumbnail_page:
+	title = 'Thumbnails of groups'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_thumbnail_view position=left
+;
+
+view group_thumbnail_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	thumbnail data_show={ group.name, group.name link @group_single_page as 'go to group' , group.description } at 2 size 9
+;
+
+page group_list_page:
+	title = 'List of groups'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_list_view position=right
+;
+
+view group_list_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	list data_show={ group.name, group.description } at 3 size 6
+;
+
+page group_single_page:
+    params = group:id
+    title='Single group'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show group_single_view position=center
+;
+
+view group_single_view:
+	!row 4
+ 	show group.name at 2 size 8
+ 	!row 5
+ 	show group.description at 2 size 8
+ 	!row 6
+ 	show group.owner by {username, mail link @user_single_page} at 2 size 8
+ 	!row 7
+ 	show group.users by {username link @user_single_page} at 2 size 8
 ;

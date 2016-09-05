@@ -39,6 +39,8 @@ ViewInView:
 
 Page:
 	'page' name=ID ('for' object=[Object]'.'query=[Query])?':'
+		('params' '=' urlParams+=UrlParam[","])?
+		('indexPage' '=' indexPage=BOOL)?
 		'title' '=' title=STRING
 		(using *= Use)
 		(layout=Layout)*
@@ -46,12 +48,16 @@ Page:
 	';'
 ;
 
+UrlParam:
+    object=[Object] ':' param=ID
+;
+
 Use:
 	('use' 'menubar' m=[Menubar])|('use' 'sidebar' s=[Sidebar])|('use' 'footer' f=[Footer])	
 ;
 
 Selector:
-	  SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph|StaticLink
+	  SelectorFKObject|SelectorObject|SelectorView|DataShow|Form|Jumbo|Paragraph|StaticLink
 ;
 
 StaticLink:
@@ -60,6 +66,23 @@ StaticLink:
 
 SelectorObject:
 	 ('show')? object=[Object] '.' property=[Property]
+;
+
+// property je ID jer ne FK property nije definisan kao Property vec kao label u Meta pravilu
+SelectorFKObject:
+	 ('show')? object=[Object] '.' property=ID 'by' '{' fkProperties*=PropertyLink[","] '}'
+;
+
+PropertyLink:
+    property=[Property] ('link' '@' page=[Page] ('as' linkText=STRING)?)?
+;
+
+SelectorObjectLink:
+    object=[Object] '.' property=[Property] 'link' '@' page=[Page] ('as' linkText=STRING)?
+;
+
+SelectorObjectData:
+    sol = SelectorObjectLink | so = SelectorObject
 ;
 
 Form:
@@ -75,7 +98,7 @@ SelectorView:
 ;
 
 DataShow:
-	type=[View] 'data_show' '=' '{' data+=SelectorObject[","]  '}'
+	type=[View] 'data_show' '=' '{' data+=SelectorObjectData[","]  '}'
 ;
 
 Paragraph:
@@ -163,7 +186,7 @@ StringConditionName:
 ;
 
 IntegerConditionName:
-    'lowerThan'|'greterThan'|'lessEqual'|'greaterEqual'|'equal'
+    'lowerThan'|'greaterThan'|'lessEqual'|'greaterEqual'|'equal'
 ;
 
 Order:

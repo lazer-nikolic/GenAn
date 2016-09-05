@@ -16,6 +16,7 @@ class AngularGenerator(FrontendGenerator):
     def __init__(self, model, builtins, path):
         super(AngularGenerator, self).__init__(model, builtins, path)
         self.routes = {}
+        self.customIndexRoute = None
 
     def generate(self):
         print(_MSG_HEADER_INFO + " Started.")
@@ -67,7 +68,30 @@ class AngularGenerator(FrontendGenerator):
         if property.type in self.builtins:
             return _generate_basic(object, property)
         else:
-            return "<div ui-view='{0}'></div>".format(object.name)
+            return "<h4><b>{2}:</b></h4><div><h4>{{{{ ctrl_page.{0}.{1} }}}}</h4></div>"\
+                .format(object.name, property.name, property.name.capitalize())
+
+    def visit_selector_fk_object(self, object, property, fk_properties):
+
+        metas = {}
+
+        for m in object.meta:
+            metas[m.label] = m
+
+        # return foreign key property
+        result = ""
+        fk_item = "ctrl_page.{0}.{1}".format(object.name, property)
+        meta = metas[property]
+        type = meta.foreignKeyType
+        if type == "single":
+            result = form_fk_property(meta, fk_item, fk_properties, False)
+        elif type == "list":
+            row = form_fk_property(meta, fk_item, fk_properties, True)
+            result = "<li ng-repeat=\"fk_item in {0}\">{1}</li>".format(fk_item, row)
+            result = "<ul>{0}</ul>".format(result)
+
+        result = "<h4><b>{1}:</b></h4><div>{0}</div>".format(result, property.capitalize())
+        return result
 
     def visit_view(self, view):
         # Rows for this view
@@ -76,7 +100,8 @@ class AngularGenerator(FrontendGenerator):
         route = self._subroutes(view)
 
         print(_MSG_HEADER_INFO + " Generating controller for {0}".format(view.name))
-        controller_rend = _get_template("view.js", view=view, factories=_get_factories(view))
+        main_factory, factories = _get_factories(view)
+        controller_rend = _get_template("view.js", view=view, main_factory=main_factory, factories=factories)
         controller_file = _get_ctrl(self.path, view.name)
 
         print(controller_rend, file=controller_file)
@@ -96,7 +121,8 @@ class AngularGenerator(FrontendGenerator):
         route = self._subroutes(page)
 
         print(_MSG_HEADER_INFO + " Generating page {0}".format(page.name))
-        controller_rend = _get_template("page.js", page=page, factories=_get_factories(page))
+        main_factory, factories = _get_factories(page)
+        controller_rend = _get_template("page.js", page=page, main_factory=main_factory, factories=factories)
         controller_file = _get_ctrl(self.path, page.name)
 
 
@@ -143,6 +169,11 @@ class AngularGenerator(FrontendGenerator):
 
         self.routes[page.name] = route
 
+        # check if page is marked as index
+        if self.customIndexRoute is None and page.indexPage:
+            self.customIndexRoute = route
+
+
     def visit_action_selector(self, object, actions):
         view_name = object.name + '_form'
         self.routes[view_name] = _get_route(view_name, True)
@@ -153,7 +184,6 @@ class AngularGenerator(FrontendGenerator):
         return _get_template("{0}.html".format(name), **kwargs)
 
     def visit_row(self, row):
-        # print("Generating row... ")
         rendered_selector = {
             sub_view.selector: sub_view.selector.accept(self) for sub_view in row.selectors
             }
@@ -175,9 +205,8 @@ class AngularGenerator(FrontendGenerator):
 
     def generate_route_file(self):
         path = os.path.join(self.path, "app", "src", "app")
-
         self.routes = add_user_controllers(path, self.routes)
-        render_routes = _get_template("app.routes.js", routes=self.routes)
+        render_routes = _get_template("app.routes.js", routes=self.routes, customIndexRoute=self.customIndexRoute)
         render_modules = _get_template("app.modules.js", modules=self.routes)
 
         file_path_routes = "app.routes.js"
@@ -197,16 +226,23 @@ class AngularGenerator(FrontendGenerator):
         check_and_generate_route_redefine(self.path)
 
     def _subroutes(self, view):
-        route = _get_route(view.name)
-        for subview in view.subviews:
-            # Don't add subview if its a basic component
-            if hasattr(subview, "property") and subview.property.name not in self.builtins:
-                continue
-            if hasattr(subview, "name"):
-                sub_route = _get_route(subview.name)
-                if sub_route not in route['sub_routes']:
-                    route['sub_routes'].append(self._subroutes(subview))
-        return route
+        route = _get_route(view.name, view)
+        try:
+            for subview in view.subviews:
+                if hasattr(subview, "property") and not hasattr(subview.property, "name"):
+                    continue
+                # Don't add subview if its a basic component
+                if hasattr(subview, "property") and hasattr(subview.property, "name")\
+                        and subview.property.name not in self.builtins:
+                    continue
+                if hasattr(subview, "name"):
+                    sub_route = _get_route(subview.name)
+                    if sub_route not in route['sub_routes']:
+                        route['sub_routes'].append(self._subroutes(subview))
+            return route
+        except:
+            print(view)
+            print(dir(view))
 
 
 def _get_template(template_name, **kwargs):
@@ -249,11 +285,15 @@ def _get_file(path, name):
     return file
 
 
-def _get_route(name, id=False):
+def _get_route(name, page=None, id=False):
     relative_path = "app/views/" + name + "/" + name + ".html"
+    path = "/{0}".format(name)
+    if page and hasattr(page, "urlParams"):
+        for prm in page.urlParams:
+            path += "/{{{0}}}".format(prm.param)
     return {
         'name': name,
-        'path': "/{0}".format(name),
+        'path': path,
         'template': relative_path,
         'controller': "{0}".format(name),
         'sub_routes': [],
@@ -273,23 +313,73 @@ def _get_ctrl(path, name):
     return file
 
 def _get_factories(view):
-    factories = {}
+    factories_queries = {}
+    # query_params = {}
     query = 'getAll'
+    query_by_id = 'getById'
+    main_factory = None
+
+    # page with params
+    if hasattr(view, "urlParams"):
+        for param in view.urlParams:
+            if param.object.name not in factories_queries:
+                main_factory = param.object.name
+                # foreign key entities
+                if hasattr(param.object, "meta"):
+                    fk_entities = [meta.object.name for meta in param.object.meta]
+                    for fk in fk_entities:
+                        if fk not in factories_queries and fk != main_factory:
+                            factories_queries[fk] = query_by_id
+
+                # factories_queries[param.object.name] = [query_by_id]
+            #     query_params[query_by_id] = []
+            # if query_by_id in query_params:
+            #     query_params[query_by_id].append(param.param)
+
     for view_on_page in view.views:
+
+        if hasattr(view_on_page, 'object'):
+            if view_on_page.object.name not in factories_queries:
+                if view_on_page.object.name != main_factory:
+                    factories_queries[view_on_page.object.name] = query
+
         if hasattr(view_on_page, 'selector'):
             selector = view_on_page.selector
+
+            # single object property
             if hasattr(selector, 'object'):
-                if selector.object.name not in factories:
-                    factories[selector.object.name] = query
+                if selector.object.name not in factories_queries:
+                    if selector.object.name != main_factory:
+                        factories_queries[selector.object.name] = query
+
+            # data_show
+            if hasattr(selector, 'data'):
+                for selector_obj in selector.data:
+                    if selector_obj.object.name not in factories_queries:
+                        if selector_obj.object.name != main_factory:
+                                factories_queries[selector_obj.object.name] = query
+
+            # foreign key entities
+            if hasattr(selector, "object") and hasattr(selector.object, "meta"):
+                fk_entities = [meta.object.name for meta in selector.object.meta]
+                for fk in fk_entities:
+                    if fk not in factories_queries and fk != main_factory:
+                        factories_queries[fk] = query_by_id
+
+            # if hasattr(selector, 'fkProperties'):
+            #     for property in selector.fkProperties:
+            #         property
 
     if hasattr(view, 'object') and view.query:
-        factories[view.object.name] = view.query.name
+        if main_factory is not None and view.object.name != main_factory:
+            factories_queries[view.object.name] = view.query.name
 
-    return factories
+    return main_factory, factories_queries
 
 
 def _generate_form_ctrl(path, obj, actions):
     form_inputs = []
+    distinct_meta = _distinct_meta_objects(obj)
 
     for property in obj.properties:
         if property.type is 'checkbox':
@@ -299,7 +389,7 @@ def _generate_form_ctrl(path, obj, actions):
             render = _get_template("date.js", name=property.name)
             form_inputs.append(render)
 
-    controller_rend = _get_template("form.js", name=obj.name, formInputs=form_inputs, actions=actions)
+    controller_rend = _get_template("form.js", name=obj.name, meta=distinct_meta, formInputs=form_inputs, actions=actions)
     controller_file = _get_ctrl(path, obj.name + "_form")
 
     print(controller_rend, file=controller_file)
@@ -368,3 +458,30 @@ def add_user_controllers(path, routes):
         if check_user_controller(path, routes[route]['name']):
             routes[route]['overriden'] = True
     return routes
+
+def _distinct_meta_objects(obj):
+    distinct_meta = []
+    if obj.meta:
+        for m in obj.meta:
+            if m.object not in distinct_meta:
+                distinct_meta.append(m.object)
+    return distinct_meta
+
+def form_fk_property(meta, fk_item, fk_properties, multiple):
+    if multiple:
+        fk_item = "fk_item"
+    result = ""
+    for fkp in fk_properties:
+        fk_property = "{{{{ ctrl_page.loadFK_{0}({1}).{2} }}}}" \
+            .format(meta.object.name, fk_item, fkp.property.name)
+        # wrap in <a>
+        if fkp.page:
+            anchor_name = fkp.linkText if fkp.linkText else fk_property
+            fk_property = "<a href=\"#/{0}/{{{{{1}}}}}\">{2}</a>".format(fkp.page.name, fk_item, anchor_name)
+
+        # save property in result
+        result = fk_property if result == "" else "{0}, {1}".format(result, fk_property)
+
+    result = "<h4>{0}</h4>".format(result)
+    return result
+

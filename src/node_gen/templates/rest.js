@@ -1,12 +1,27 @@
 var express = require('express');
-var router = express.Router();
+var _ = require('lodash');
+
+{#
+    'mergeParams : true' is a compromise solution since it would be necessary to check whether is 
+    entity's foreign key type of relation with some other entity. If it's always enabled, it is 
+    possible to make nested routes if necessary.
+#}
+var router = express.Router({ mergeParams : true });    
 
 var mongoose = require('mongoose');
 {% set model_name = o.name %}
-var {{model_name}} = require('../models/{{model_name}}.js');
-var queryOps = require('../common')
+var {{ model_name }} = require('../models/{{ model_name }}.js');
+var queryOps = require('../common');
 
-/* GET /users listing. */
+{%+ for fk_type in o.meta|selectattr('foreignKeyType', 'equalto', 'list')|unique_types %}
+    var {{ fk_type|router_var }} = require('./{{ fk_type }}.js');
+{% endfor %}
+
+{%+ for fk in o.meta|selectattr('foreignKeyType', 'equalto', 'list') %}
+    router.use('/:{{ model_name }}_id/{{ fk.label }}', {{ fk.object.name|router_var }});
+{% endfor %} 
+
+/* GET /{{ model_name }} */
 router.get('/'
 , function(req, res, next) {
 sort_field = '';
@@ -60,7 +75,10 @@ for (query in req.query){
         queries[query] = req.query[query];
     }
 }
-query = {{model_name}}.find(queries).sort(sort);
+
+_.merge(queries, req.params);
+
+query = {{ model_name }}.find(queries).sort(sort);
 if (from > -1){
     query.limit(to);
 }
@@ -74,50 +92,52 @@ query.exec(function (err, post) {
   );
 });
 
-/* POST /users */
+/* POST /{{ model_name }} */
 router.post('/', function(req, res, next) {
-  {{model_name}}.create(req.body, function (err, post) {
+  {{ model_name }}.create(parameters, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
 })
 
-/* GET /users/id */
-router.get('/:id', function(req, res, next) {
-{{model_name}}.findOne(req.params.id)
-  .exec(function (err, post) {
+/* GET /{{ model_name }}/{{ model_name }}_id */
+router.get('/:{{ model_name }}_id', function(req, res, next) {
+  {{ model_name }}.findOne({ '_id' : req.params.{{ model_name }}_id })
+    .exec(function (err, post) {
       if (err) return next(err);
       res.json(post);
     }
   );
 });
 
-{%for fk in o.meta %}
-//This should be changed
-router.get('/:id/{{fk.label}}', function(req, res, next) {
-{{model_name}}.findOne(req.params.id)
-  .exec(function (err, post) {
-      if (err) return next(err);
-      res.json(post);
-    }
-  );
-});
-{%endfor%}
-
-/* PUT /users/:id */
-router.put('/:id', function(req, res, next) {
-  {{model_name}}.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+/* PUT /{{ model_name }}/:{{ model_name }}_id */
+router.put('/:{{ model_name }}_id', function(req, res, next) {
+  {{ model_name }}.findByIdAndUpdate(req.params.{{ model_name }}_id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
 });
 
-/* DELETE /users/:id */
-router.delete('/:id', function(req, res, next) {
-  {{model_name}}.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+/* DELETE /{{ model_name }}/:{{ model_name }}_id */
+router.delete('/:{{ model_name }}_id', function(req, res, next) {
+  {{ model_name }}.findByIdAndRemove(req.params.{{ model_name }}_id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
 });
+
+{% for fk in o.meta|selectattr('foreignKeyType', 'equalto', 'single') %}
+/* GET /{{ model_name }}/{{ model_name }}_id/{{ fk.label }} */
+router.get('/:{{ model_name }}_id/{{ fk.label }}', function(req, res, next) {
+    {{ model_name }}.findOne({ '_id' : req.params.{{ model_name }}_id })
+        .populate('{{ fk.label }}')
+        .exec(function(err, post) {
+            if(err) {
+                return next(err);
+            }
+            res.json(post.{{ fk.label }});
+        });
+});
+{% endfor %}
 
 module.exports = router;
