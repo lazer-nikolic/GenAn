@@ -1,10 +1,17 @@
 {% import 'common.jinja' as common %}
-<form name="{{obj.name}}" role="form" novalidate>
+<form id="{{obj.name}}Form" name="{{obj.name}}" role="form" novalidate>
 {% for input in formInputs %}
 	{{input}}
 {% endfor %}
 
 {% for action in actions %}
-    <button type="button" ng-click="ctrl.{{action}}()" class="btn btn-primary" translate="{{action.upper()}}"> {{action}} </button>
+    <button type="button" ng-click="ctrl.{{action}}()" onclick="onSubmit();" class="btn btn-primary" translate="{{action.upper()}}"> {{action}} </button>
 {% endfor %}
 </form>
+
+<script>
+var onSubmit = function() {
+	document.getElementById("{{obj.name}}Form").reset();
+	alert("Bravo majstore!");
+}
+</script>
