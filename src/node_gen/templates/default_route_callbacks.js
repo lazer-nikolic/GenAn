@@ -86,7 +86,7 @@ var {{ model_name }}RouteCallbacks = {};
 };
 
 {{ model_name }}RouteCallbacks.post = function(req, res, next) {
-    {{ model_name }}.create(parameters, function (err, post) {
+    {{ model_name }}.create(req.body, function (err, post) {
         if (err) { 
             return next(err);
         }
