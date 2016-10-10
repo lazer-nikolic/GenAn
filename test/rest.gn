@@ -1,27 +1,174 @@
 object Film:
     Meta:
-        list Actor 'actors'
-        single ProductionHouse 'production'
-        ;
+        list Actor by first_name, last_name 'Actors'
+        single ProductionHouse by name 'ProductionHouse'
+    ;
     title text label='Title'
-    description text label='Title'
+    description text label='Description'
     imdb_rating number label='Rating'
 ;
 
 object Actor:
-    Meta:
-        list Film 'movies'
-        ;
     first_name text label='First Name'
     last_name text label='Last Name'
     age number label='age'
-    gender multilist label='Gender' parameters = { 'Male', 'Female' }
 ;
 
 object ProductionHouse:
     Meta:
-        list Film 'movies'
-        ;
+        list Film by title, description 'Movies'
+    ;
     name text label='Name'
     budget number label='Budget'
+;
+
+object common:
+	banner1 image label='banner' ref= 'http://orig06.deviantart.net/e08c/f/2014/163/a/2/computer_programming_banner_by_nuranox-d7m1ta5.png'  class = {'width':'300', 'height':'100','margin':'auto'}
+	banner2 image label='banner' ref= 'http://prg.is.titech.ac.jp/wp-content/uploads/2013/09/prg-banner-201309.jpg'  class = {'width':'300', 'height':'100','margin':'auto'}
+
+	tableName label label='Films'
+;
+
+menubar mainMenu 'Cinema' @home:
+    'Home' @home left
+    menu Projections:
+        'New Projection' @film_form_page
+        'List Projections' @films_page
+    ;
+    menu Actors:
+        'New Actor' @actor_form_page
+        'List Actors' @actors_page
+    ;
+;
+
+sidebar mainSidebar:
+    //color=gray
+    'Home' @home
+    'Projections' @films_page
+    'Actors' @actors_page
+;
+
+footer mainFooter 'Copyright MIT, organization GenAn ©' right color=black ;
+
+page home:
+    indexPage=True
+	title='Home'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	jumbo:  heading='Welcome to cinema website'
+			text=''
+			imgPath='https://s3.amazonaws.com/codecademy-content/projects/broadway/bg.png'
+			position=top
+
+	paragraph 'Lorem ipsum dolor sit amet,
+			   consectetur adipiscing elit. Donec interdum ipsum vitae
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet,
+			   consectetur adipiscing elit. Donec interdum ipsum vitae
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center
+	link 'Read more' ref='#' position=center
+	paragraph '&nbsp; ' position=center
+	paragraph '&nbsp; ' position=center
+
+	paragraph 'Lorem ipsum dolor sit amet,
+			   consectetur adipiscing elit. Donec interdum ipsum vitae
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.
+			   Lorem ipsum dolor sit amet,
+			   consectetur adipiscing elit. Donec interdum ipsum vitae
+			   odio congue, in placerat mauris congue. Sed imperdiet sodales finibus.'
+			    position=center
+	link 'Read more' ref='#' position=center //class={'style':'float:right;'}
+;
+
+page films_page:
+	title ='Films'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show films_view position=center
+;
+
+view films_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	thumbnail data_show={ Film.title link @film_single_page as 'Go to movie',  Film.description } at 2 size 9
+;
+
+page actors_page:
+	title ='Projections'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show films_view position=center
+;
+
+view actors_view:
+	!row 4
+ 	 show common.tableName at 2 size 8
+ 	!row 5
+ 	list data_show={ Actor.first_name,  Actor.last_name} at 2 size 9
+;
+
+page film_form_page:
+	title='Film form'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+ 	show film_form_view position=center
+;
+
+view film_form_view:
+	!row 1
+	form for Film actions=save at 3 size 6
+;
+
+page actor_form_page:
+	title='Actor form'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+ 	show actor_form_view position=center
+;
+
+view actor_form_view:
+	!row 1
+	form for Actor actions=save at 3 size 6
+;
+
+page film_single_page:
+    params = Film:id
+    title='Film detail'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show film_single_view position=center
+;
+
+view film_single_view:
+	!row 4
+ 	show Film.title at 2 size 8
+ 	!row 5
+ 	show Film.description at 2 size 8
+ 	!row 6
+ 	show Film.Actors by {first_name link @actor_single_page, last_name link @actor_single_page} at 2 size 8
+;
+
+page actor_single_page:
+    params = Actor:id
+    title='Actor detail'
+	use menubar mainMenu
+	use sidebar mainSidebar
+	use footer mainFooter
+	show actor_single_view position=center
+;
+
+view actor_single_view:
+	!row 4
+ 	show Actor.first_name at 2 size 8
+ 	!row 5
+ 	show Actor.last_name at 2 size 8
+ 	!row 6
 ;
